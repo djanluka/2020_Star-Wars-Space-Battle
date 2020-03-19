@@ -7,8 +7,20 @@ ABOUT = ['This star wars game like Galaga',
          'Ognjen Stamenkovic',
          'Predrag Mitic']
 
-WINDOW_SIZE = (1000, 600)
-START_WARS_LOGO_POS = (50, 500)
+CONTROLS_TEXT = ['First player:                                                                                            Second player:',
+                 'To left : A                                                                                                                  To left : 4',
+                 'To right : D                                                                                                               To left : 6',
+                 'To shoot : space                                                                                  To shoot : enter']
+
+WINDOW_SIZE = (1300, 700)
+MENU_SIZE = (500, 450)
+START_WARS_LOGO_POS = (100, 600)
+PAUSE_ONE_PLAYER_POS = (1260, 5)
+PAUSE_TWO_PLAYERS_POS = (634, 5)
+BLACK_COLOR = (0, 0, 0)
+WALL_START_POS = (650, 700)
+WALL_END_POS = (650, 40)
+WALL_WIDTH = 15
 NUM_PLAYERS = 'ONE_PLAYER'
 
 screen = None
@@ -29,8 +41,8 @@ def start_game_one_player():
 
     while True:
         screen.blit(game_background, (0, 0))
-        screen.blit(playerImg, (250, 500))
-        screen.blit(pauseImg, (960, 4))
+        screen.blit(playerImg, (580, 600))
+        screen.blit(pauseImg, PAUSE_ONE_PLAYER_POS)
 
         events = pygame.event.get()
         for e in events:
@@ -41,7 +53,8 @@ def start_game_one_player():
                     exit()
 
             if e.type == pygame.MOUSEBUTTONDOWN and pause_menu.is_disabled():
-                if pauseImg.get_rect(topleft=(960, 4)).collidepoint(pygame.mouse.get_pos()):
+                x, y = PAUSE_ONE_PLAYER_POS
+                if pauseImg.get_rect(topleft=(x, y)).collidepoint(pygame.mouse.get_pos()):
                     pause_menu.enable()
 
         if main_menu.is_enabled():
@@ -63,10 +76,10 @@ def start_game_two_player():
 
     while True:
         screen.blit(game_background, (0, 0))
-        pygame.draw.line(screen,(0, 0, 0),(500, 600), (500, 40), 15)
-        screen.blit(playerImg, (250, 500))
-        screen.blit(playerImg, (750, 500))
-        screen.blit(pauseImg, (484, 4))
+        pygame.draw.line(screen, BLACK_COLOR, WALL_START_POS, WALL_END_POS, WALL_WIDTH)
+        screen.blit(playerImg, (280, 600))
+        screen.blit(playerImg, (950, 600))
+        screen.blit(pauseImg, PAUSE_TWO_PLAYERS_POS)
 
         events = pygame.event.get()
         for e in events:
@@ -77,7 +90,8 @@ def start_game_two_player():
                     exit()
 
             if e.type == pygame.MOUSEBUTTONDOWN and pause_menu.is_disabled():
-                if pauseImg.get_rect(topleft=(484,4)).collidepoint(pygame.mouse.get_pos()):
+                x, y = PAUSE_TWO_PLAYERS_POS
+                if pauseImg.get_rect(topleft=(x, y)).collidepoint(pygame.mouse.get_pos()):
                     pause_menu.enable()
 
         if main_menu.is_enabled():
@@ -123,29 +137,29 @@ def createMenu():
 
     #Controls submenu in Play Menu
     controls_submenu_play = pygameMenu.TextMenu(screen,
-                                            window_width=WINDOW_SIZE[0] - 500,
-                                            window_height=WINDOW_SIZE[1] - 100,
-                                            font=pygameMenu.font.FONT_FRANCHISE,
-                                            title='STAR WARS MENU',
-                                            bgfun=main_background,
-                                            menu_width=400,
-                                            menu_height=400
-                                            )
-    controls_submenu_play.add_line('First player:                                                           Second player:')
-    controls_submenu_play.add_line('To left : A                                                                                 To left : 4')
-    controls_submenu_play.add_line('To right : D                                                                              To left : 6')
-    controls_submenu_play.add_line('To shoot : space                                                To shoot : enter')
+                                                window_width=WINDOW_SIZE[0] - 600,
+                                                window_height=WINDOW_SIZE[1] - 100,
+                                                font=pygameMenu.font.FONT_FRANCHISE,
+                                                title='STAR WARS MENU',
+                                                bgfun=main_background,
+                                                menu_width= MENU_SIZE[0],
+                                                menu_height= MENU_SIZE[1]
+                                                )
+    controls_submenu_play.add_line(CONTROLS_TEXT[0])
+    controls_submenu_play.add_line(CONTROLS_TEXT[1])
+    controls_submenu_play.add_line(CONTROLS_TEXT[2])
+    controls_submenu_play.add_line(CONTROLS_TEXT[3])
     controls_submenu_play.add_option('Back', pygameMenu.events.BACK)
 
     #Play Menu
     play_menu = pygameMenu.Menu(screen,
-                                window_width=WINDOW_SIZE[0] - 500,
+                                window_width=WINDOW_SIZE[0] - 600,
                                 window_height=WINDOW_SIZE[1] - 100,
                                 font=pygameMenu.font.FONT_FRANCHISE,
                                 title='STAR WARS MENU',
                                 bgfun=main_background,
-                                menu_width=400,
-                                menu_height=400
+                                menu_width=MENU_SIZE[0],
+                                menu_height=MENU_SIZE[1]
                                 )
     play_menu.add_option('Start', start_game)
     play_menu.add_selector('',
@@ -158,13 +172,13 @@ def createMenu():
 
     #About menu
     about_menu = pygameMenu.TextMenu(screen,
-                                    window_width=WINDOW_SIZE[0] - 500,
-                                    window_height=WINDOW_SIZE[1] - 100,
-                                    font=pygameMenu.font.FONT_FRANCHISE,
-                                    title='STAR WARS MENU',
-                                    bgfun=main_background,
-                                    menu_width=400,
-                                    menu_height=400
+                                     window_width=WINDOW_SIZE[0] - 600,
+                                     window_height=WINDOW_SIZE[1] - 100,
+                                     font=pygameMenu.font.FONT_FRANCHISE,
+                                     title='STAR WARS MENU',
+                                     bgfun=main_background,
+                                     menu_width=MENU_SIZE[0],
+                                     menu_height=MENU_SIZE[1]
                                     )
     for about in ABOUT:
         about_menu.add_line(about)
@@ -173,13 +187,13 @@ def createMenu():
 
     #Main menu
     main_menu = pygameMenu.Menu(screen,
-                                window_width=WINDOW_SIZE[0] - 500,
+                                window_width=WINDOW_SIZE[0] - 600,
                                 window_height=WINDOW_SIZE[1] - 100,
                                 font=pygameMenu.font.FONT_FRANCHISE,
                                 title='STAR WARS MENU',
                                 bgfun=main_background,
-                                menu_width=400,
-                                menu_height=400
+                                menu_width=MENU_SIZE[0],
+                                menu_height=MENU_SIZE[1]
                                 )
     main_menu.add_option('Play', play_menu)
     main_menu.add_option('Settings', about_menu)
@@ -202,13 +216,13 @@ def createPauseMenu():
     global pause_menu
     # About menu
     about_menu = pygameMenu.TextMenu(screen,
-                                     window_width=WINDOW_SIZE[0] - 500,
+                                    window_width=WINDOW_SIZE[0] - 600,
                                      window_height=WINDOW_SIZE[1] - 100,
                                      font=pygameMenu.font.FONT_FRANCHISE,
                                      title='STAR WARS MENU',
                                      bgfun=main_background,
-                                     menu_width=400,
-                                     menu_height=400
+                                     menu_width=MENU_SIZE[0],
+                                     menu_height=MENU_SIZE[1]
                                      )
     for about in ABOUT:
         about_menu.add_line(about)
@@ -216,13 +230,13 @@ def createPauseMenu():
     about_menu.add_option('Return to menu', pygameMenu.events.BACK)
 
     pause_menu = pygameMenu.Menu(screen,
-                                 window_width=WINDOW_SIZE[0] - 500,
+                                window_width=WINDOW_SIZE[0] - 600,
                                  window_height=WINDOW_SIZE[1] - 100,
                                  font=pygameMenu.font.FONT_FRANCHISE,
                                  title='STAR WARS MENU',
                                  bgfun=main_background,
-                                 menu_width=400,
-                                 menu_height=400
+                                 menu_width=MENU_SIZE[0],
+                                 menu_height=MENU_SIZE[1]
                                  )
     pause_menu.add_option('Continue', continue_game)
     pause_menu.add_option('Settings', about_menu)
