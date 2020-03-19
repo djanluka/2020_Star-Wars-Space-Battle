@@ -29,21 +29,63 @@ star_wars_logo = None
 main_menu = None
 pause_menu = None
 
+class Rocket(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface([5,10])
+        self.rect = self.image.get_rect()
+
+    def show_rocket(self, rocket):
+        screen.blit(rocket, (self.rect.x, self.rect.y))
+        
+    def update(self):
+        self.rect.y -= 4
+
+class Destroyer(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface([100,50])
+        self.rect = self.image.get_rect()
+        self.health = 100
+
+    def show(self, img):
+        screen.blit(img, (self.rect.x, self.rect.y))
+
+
+rockets_list = pygame.sprite.Group()
+all_sprites_list = pygame.sprite.Group()
+
 
 def start_game_one_player():
     global screen
     global main_menu
     global pause_menu
 
-    game_background = pygame.image.load('game_background.png')
-    playerImg = pygame.image.load('player.png')
-    pauseImg = pygame.image.load('pause.png')
+    game_background = pygame.image.load('images/game_background.png')
+    playerImg = pygame.image.load('images/player.png')
+    pauseImg = pygame.image.load('images/pause.png')
+    rocketImg = pygame.image.load('images/rocket-launch.png')
+    destroyerImg = pygame.image.load('images/destroyer.png')
+
+    plane_position_y = 500
+    plane_position_x = 250
+    left_margin = 0 + 10
+    right_margin = WINDOW_SIZE[0] - 70  #Ovo je zavisno od sirine slike aviona
+    time = 0 # timer za animaciju sa raketicama
+    destroyer = Destroyer()
 
     while True:
+        time += 1
         screen.blit(game_background, (0, 0))
-        screen.blit(playerImg, (580, 600))
         screen.blit(pauseImg, PAUSE_ONE_PLAYER_POS)
 
+        destroyer.rect.x = WINDOW_SIZE[0]/2 - 50
+        destroyer.rect.y =(int(time/5)-150 if time < 1000 else 50)
+        if destroyer.health > 0:
+            destroyer.show(destroyerImg)
+            if time > 1000:  # 
+                pygame.draw.rect(screen, (200,10,10), (150,20,destroyer.health*10, 20))
+       
         events = pygame.event.get()
         for e in events:
             if e.type == pygame.QUIT:
@@ -51,17 +93,56 @@ def start_game_one_player():
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_ESCAPE:
                     exit()
-
+            
             if e.type == pygame.MOUSEBUTTONDOWN and pause_menu.is_disabled():
-                x, y = PAUSE_ONE_PLAYER_POS
-                if pauseImg.get_rect(topleft=(x, y)).collidepoint(pygame.mouse.get_pos()):
+                if pauseImg.get_rect(topleft=(960, 4)).collidepoint(pygame.mouse.get_pos()):
                     pause_menu.enable()
 
+        '''Za kretanje ne mogu koristi events jer treba da se krece i kada se samo drzi taster'''
+        pressed = pygame.key.get_pressed()
+        movement = 2
+
+        if pressed[ord('a')] and plane_position_x > left_margin:
+            plane_position_x -= movement
+
+        if pressed[ord('d')] and plane_position_x < right_margin:
+            plane_position_x += movement
+
+        if pressed[ord('w')] and time % 10 is 0 and time > 1000:
+            rocket = Rocket()
+
+            rocket.rect.x = plane_position_x + 16 #razlika u velicina slika
+            rocket.rect.y = plane_position_y 
+
+            all_sprites_list.add(rocket)
+            rockets_list.add(rocket)
+
+
+        for r in rockets_list:
+            r.show_rocket(rocketImg)
+
+            ''' Obrada kolizije '''
+            if r.rect.x in range(destroyer.rect.x, destroyer.rect.x + 110):
+                dist = 110 - r.rect.x + destroyer.rect.x
+                if r.rect.y < destroyer.rect.y+dist :
+                    rockets_list.remove(r)
+                    all_sprites_list.remove(r)
+                    destroyer.health -= 1
+
+            if r.rect.y < -20:
+                rockets_list.remove(r)
+                all_sprites_list.remove(r)
+
+        # Ovde iscrtavamo avion zbog toga sto raketa izlazi (pre) ispod njega
+        screen.blit(playerImg, (plane_position_x, plane_position_y))
+
+        
         if main_menu.is_enabled():
             main_menu.mainloop(events)
         elif pause_menu.is_enabled():
             pause_menu.mainloop(events)
 
+        all_sprites_list.update()
         pygame.display.update()
 
 
@@ -70,9 +151,9 @@ def start_game_two_player():
     global main_menu
     global pause_menu
 
-    game_background = pygame.image.load('game_background.png')
-    playerImg = pygame.image.load('player.png')
-    pauseImg = pygame.image.load('pause.png')
+    game_background = pygame.image.load('images/game_background.png')
+    playerImg = pygame.image.load('images/player.png')
+    pauseImg = pygame.image.load('images/pause.png')
 
     while True:
         screen.blit(game_background, (0, 0))
@@ -119,9 +200,9 @@ def main_background():
     global star_wars_logo
 
     if star_wars_logo.get_rect(topleft=START_WARS_LOGO_POS).collidepoint(pygame.mouse.get_pos()):
-        star_wars_logo = pygame.image.load('yellow.png')
+        star_wars_logo = pygame.image.load('images/yellow.png')
     else:
-        star_wars_logo = pygame.image.load('blue.jpg')
+        star_wars_logo = pygame.image.load('images/blue.jpg')
 
     screen.blit(background, (0, 0))
     screen.blit(star_wars_logo, START_WARS_LOGO_POS)
@@ -254,8 +335,9 @@ def main():
     pygame.init()
 
     screen = pygame.display.set_mode(WINDOW_SIZE)
-    background = pygame.image.load('background.jpg')
-    star_wars_logo = pygame.image.load('blue.jpg')
+    background = pygame.image.load('images/background.jpg')
+
+    star_wars_logo = pygame.image.load('images/blue.jpg')
     pygame.display.set_caption('STAR WARS GAME')
 
     createPauseMenu()
