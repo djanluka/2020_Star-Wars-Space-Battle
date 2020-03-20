@@ -122,7 +122,7 @@ def start_game_one_player():
     global main_menu
     global pause_menu
 
-    game_background = pygame.image.load('images/game_background.png')
+    game_background = pygame.image.load('images/game_background.jpg')
     playerImg = pygame.image.load('images/player.png')
     pauseImg = pygame.image.load('images/pause.png')
     rocketImg = pygame.image.load('images/rocket-launch.png')
@@ -220,7 +220,7 @@ def start_game_one_player():
                 rocket_sound.play()
 
                 rocket = Rocket()
-                rocket.rect.x = player.position_x + 16  # razlika u velicina slika
+                rocket.rect.x = player.position_x + 26  # razlika u velicina slika
                 rocket.rect.y = player.position_y
 
                 all_sprites_list.add(rocket)
