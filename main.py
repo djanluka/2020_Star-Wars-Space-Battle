@@ -2,17 +2,30 @@ import pygame
 import pygameMenu
 from pygame import mixer
 
-ABOUT = ['This star wars game like Galaga',
-         'is made by MATF students:',
-         'Boris Cvitak',
-         'Ognjen Stamenkovic',
-         'Predrag Mitic']
+ABOUT = [
+        'This star wars game like Galaga',
+        'is made by MATF students:',
+        'Boris Cvitak',
+        'Ognjen Stamenkovic',
+        'Predrag Mitic'
+        ]
 
 CONTROLS_TEXT = [
-    'First player:                                                                                            Second player:',
-    'To left : A                                                                                                                  To left : 4',
-    'To right : D                                                                                                               To left : 6',
-    'To shoot : W                                                                                                        To shoot : 8']
+                'First player:                                                                                            Second player:',
+                'To left : A                                                                                                                  To left : 4',
+                'To right : D                                                                                                               To left : 6',
+                'To shoot : W                                                                                                        To shoot : 8'
+                ]
+
+VOLUME_VALUES = {
+                '10_PERCENT': 0.1,
+                '30_PERCENT': 0.3,
+                '50_PERCENT': 0.5,
+                '70_PERCENT': 0.7,
+                '100_PERCENT': 1,
+                }
+GAME_VOLUME = 0.5
+MENU_VOLUME = 0.5
 
 WINDOW_SIZE = (1300, 700)
 MENU_SIZE = (500, 450)
@@ -101,7 +114,6 @@ def start_game_one_player():
             #Ukoliko smo kliknuli na pauzu, otvaramo pause_meni i zaustavljamo muziku
             if e.type == pygame.MOUSEBUTTONDOWN and pause_menu.is_disabled():
                 if pauseImg.get_rect(topleft=PAUSE_ONE_PLAYER_POS).collidepoint(pygame.mouse.get_pos()):
-                    mixer.music.pause()
                     pause_menu.enable()
 
         #Za kretanje ne mogu koristi events jer treba da se krece i kada se samo drzi taster
@@ -201,18 +213,21 @@ def start_game_two_player():
 def start_game():
 
     global main_menu
+    global GAME_VOLUME
 
     if NUM_PLAYERS == 'ONE_PLAYER':
         mixer.music.stop() #zaustavljamo muziku menija
         main_menu.disable()
         mixer.music.load('sounds/background.wav')
-        mixer.music.play() #pustamo muziku igrice
+        mixer.music.play(-1) #pustamo muziku igrice
+        mixer.music.set_volume(GAME_VOLUME)
         start_game_one_player()
     else:
         mixer.music.stop() #zaustavljamo muziku menija
         main_menu.disable()
         mixer.music.load('sounds/background.wav')
-        mixer.music.play() #pustamo muziku igrice
+        mixer.music.play(-1) #pustamo muziku igrice
+        mixer.music.set_volume(GAME_VOLUME)
         start_game_two_player()
 
 
@@ -239,25 +254,42 @@ def change_player(value, player):
     global NUM_PLAYERS
     NUM_PLAYERS = player
 
+def change_volume_menu(value, vol):
+    '''
+    Funckija koja  interaktivno odredjuje jacinu zvuka koju korisnik zeli iz main_menu
+    '''
+
+    global MENU_VOLUME
+    mixer.music.set_volume(VOLUME_VALUES[vol])
+    MENU_VOLUME = VOLUME_VALUES[vol]
+
+def change_volume_game(value, vol):
+    '''
+    Funckija koja  interaktivno odredjuje jacinu zvuka koju korisnik zeli iz pause_menu
+    '''
+    global GAME_VOLUME
+    mixer.music.set_volume(VOLUME_VALUES[vol])
+    GAME_VOLUME = VOLUME_VALUES[vol]
+
 
 def createMenu():
     global main_menu
 
     # Controls (spisak kontrola)
-    controls_submenu_play = pygameMenu.TextMenu(screen,
-                                                window_width=WINDOW_SIZE[0] - 600,
-                                                window_height=WINDOW_SIZE[1] - 100,
-                                                font=pygameMenu.font.FONT_FRANCHISE,
-                                                title='STAR WARS MENU',
-                                                bgfun=main_background,
-                                                menu_width=MENU_SIZE[0],
-                                                menu_height=MENU_SIZE[1]
-                                                )
-    controls_submenu_play.add_line(CONTROLS_TEXT[0])
-    controls_submenu_play.add_line(CONTROLS_TEXT[1])
-    controls_submenu_play.add_line(CONTROLS_TEXT[2])
-    controls_submenu_play.add_line(CONTROLS_TEXT[3])
-    controls_submenu_play.add_option('Back', pygameMenu.events.BACK)
+    controls_submenu = pygameMenu.TextMenu(screen,
+                                           window_width=WINDOW_SIZE[0] - 600,
+                                           window_height=WINDOW_SIZE[1] - 100,
+                                           font=pygameMenu.font.FONT_FRANCHISE,
+                                           title='STAR WARS MENU',
+                                           bgfun=main_background,
+                                           menu_width=MENU_SIZE[0],
+                                           menu_height=MENU_SIZE[1]
+                                           )
+    controls_submenu.add_line(CONTROLS_TEXT[0])
+    controls_submenu.add_line(CONTROLS_TEXT[1])
+    controls_submenu.add_line(CONTROLS_TEXT[2])
+    controls_submenu.add_line(CONTROLS_TEXT[3])
+    controls_submenu.add_option('Back', pygameMenu.events.BACK)
 
     # Play menu (START , 1/2 PLAYER, CONTROLS, BACK)
     play_menu = pygameMenu.Menu(screen,
@@ -275,8 +307,31 @@ def createMenu():
                             ('2-players', 'TWO_PLAYERS')],
                            onchange=change_player
                            )
-    play_menu.add_option('Controls', controls_submenu_play)
+    play_menu.add_option('Controls', controls_submenu)
     play_menu.add_option('Back', pygameMenu.events.BACK)
+
+    #Settings menu(SOUND, CONTROLS)
+    settings_menu = pygameMenu.Menu(screen,
+                                    window_width=WINDOW_SIZE[0] - 600,
+                                    window_height=WINDOW_SIZE[1] - 100,
+                                    font=pygameMenu.font.FONT_FRANCHISE,
+                                    title='STAR WARS MENU',
+                                    bgfun=main_background,
+                                    menu_width=MENU_SIZE[0],
+                                    menu_height=MENU_SIZE[1]
+                                    )
+    settings_menu.add_selector('Sound volume',
+                               [('50 %', '50_PERCENT'),
+                                ('70 %', '70_PERCENT'),
+                                ('100 %', '100_PERCENT'),
+                                ('10 %', '10_PERCENT'),
+                                ('30 %', '30_PERCENT'),
+                                ],
+                               onchange=change_volume_menu
+                               )
+    settings_menu.add_option('Controls', controls_submenu)
+    settings_menu.add_option('Back', pygameMenu.events.BACK)
+
 
     # About menu
     about_menu = pygameMenu.TextMenu(screen,
@@ -304,46 +359,72 @@ def createMenu():
                                 menu_height=MENU_SIZE[1]
                                 )
     main_menu.add_option('Play', play_menu)
-    main_menu.add_option('Settings', about_menu)
+    main_menu.add_option('Settings', settings_menu)
     main_menu.add_option('About', about_menu)
     main_menu.add_option('Exit', pygameMenu.events.EXIT)
 
 
 def continue_game():
     global pause_menu
-    #vracamo se u igricu i pustamo muziku u pozadini
-    mixer.music.unpause()
     pause_menu.disable()
 
 
 def reset_game():
     global pause_menu
     global main_menu
+    global MENU_VOLUME
+
     #zaustavljamo muziku u pozadini igrice
     mixer.music.stop()
     pause_menu.disable()
-    #vracamo se main_menu i pustamo muziku menija
+    #vracamo se u main_menu i pustamo muziku menija
     mixer.music.load('sounds/menu_music.mp3')
-    mixer.music.play()
+    mixer.music.play(-1)
+    mixer.music.set_volume(MENU_VOLUME)
     main_menu.enable()
 
 
 def createPauseMenu():
     global pause_menu
-    # About menu
-    about_menu = pygameMenu.TextMenu(screen,
-                                     window_width=WINDOW_SIZE[0] - 600,
-                                     window_height=WINDOW_SIZE[1] - 100,
-                                     font=pygameMenu.font.FONT_FRANCHISE,
-                                     title='STAR WARS MENU',
-                                     bgfun=main_background,
-                                     menu_width=MENU_SIZE[0],
-                                     menu_height=MENU_SIZE[1]
-                                     )
-    for about in ABOUT:
-        about_menu.add_line(about)
-    about_menu.add_line(pygameMenu.locals.TEXT_NEWLINE)
-    about_menu.add_option('Return to menu', pygameMenu.events.BACK)
+
+    #Controls subemenu u settings
+    controls_submenu = pygameMenu.TextMenu(screen,
+                                           window_width=WINDOW_SIZE[0] - 600,
+                                           window_height=WINDOW_SIZE[1] - 100,
+                                           font=pygameMenu.font.FONT_FRANCHISE,
+                                           title='STAR WARS MENU',
+                                           bgfun=main_background,
+                                           menu_width=MENU_SIZE[0],
+                                           menu_height=MENU_SIZE[1]
+                                           )
+    controls_submenu.add_line(CONTROLS_TEXT[0])
+    controls_submenu.add_line(CONTROLS_TEXT[1])
+    controls_submenu.add_line(CONTROLS_TEXT[2])
+    controls_submenu.add_line(CONTROLS_TEXT[3])
+    controls_submenu.add_option('Back', pygameMenu.events.BACK)
+
+    # Settings menu(SOUND, CONTROLS)
+    settings_menu = pygameMenu.Menu(screen,
+                                    window_width=WINDOW_SIZE[0] - 600,
+                                    window_height=WINDOW_SIZE[1] - 100,
+                                    font=pygameMenu.font.FONT_FRANCHISE,
+                                    title='STAR WARS MENU',
+                                    bgfun=main_background,
+                                    menu_width=MENU_SIZE[0],
+                                    menu_height=MENU_SIZE[1]
+                                    )
+    settings_menu.add_selector('Sound volume',
+                               [('50 %', '50_PERCENT'),
+                                ('70 %', '70_PERCENT'),
+                                ('100 %', '100_PERCENT'),
+                                ('10 %', '10_PERCENT'),
+                                ('30 %', '30_PERCENT'),
+                                ],
+                               onchange=change_volume_game
+                               )
+    settings_menu.add_option('Controls', controls_submenu)
+    settings_menu.add_option('Back', pygameMenu.events.BACK)
+
 
     pause_menu = pygameMenu.Menu(screen,
                                  window_width=WINDOW_SIZE[0] - 600,
@@ -355,7 +436,7 @@ def createPauseMenu():
                                  menu_height=MENU_SIZE[1]
                                  )
     pause_menu.add_option('Continue', continue_game)
-    pause_menu.add_option('Settings', about_menu)
+    pause_menu.add_option('Settings', settings_menu)
     pause_menu.add_option('Reset', reset_game)
 
 
@@ -379,9 +460,10 @@ def main():
     createMenu()
     main_menu.enable()
 
-    #Pustamo muziku menija
+    #pustamo menu_music
     mixer.music.load('sounds/menu_music.mp3')
-    mixer.music.play()
+    mixer.music.set_volume(0.5)
+    mixer.music.play(-1)
 
     while True:
         # menu.screen.blit(menu.background, (0, 0))
