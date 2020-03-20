@@ -1,6 +1,8 @@
 import pygame
 import pygameMenu
 from pygame import mixer
+import math
+import random
 
 ABOUT = [
         'This star wars game like Galaga',
@@ -141,7 +143,7 @@ def start_game_one_player():
 
     make_enemies(9)
     while True:
-         time += 3
+        time += 3
         screen.blit(game_background, (0, 0))
         screen.blit(pauseImg, PAUSE_ONE_PLAYER_POS)
 
@@ -205,11 +207,11 @@ def start_game_one_player():
         pressed = pygame.key.get_pressed()
         movement = 4
 
-        if pressed[pygame.K_a] and plane_position_x > left_margin:
-            plane_position_x -= movement
+        if pressed[pygame.K_a] and player.position_x > left_margin:
+            player.position_x -= movement
 
-        if pressed[pygame.K_d] and plane_position_x < right_margin:
-            plane_position_x += movement
+        if pressed[pygame.K_d] and player.position_x < right_margin:
+            player.position_x += movement
         
         if pressed[pygame.K_w]: 
             if rafal_timer % 50 is 0:     
@@ -227,7 +229,7 @@ def start_game_one_player():
         else:
             rafal_timer = 0
         
-         for r in rockets_list:
+        for r in rockets_list:
             r.show_rocket(rocketImg)
             
             # Obrada kolizije player vs enemies
