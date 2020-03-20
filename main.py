@@ -45,10 +45,19 @@ main_menu = None
 pause_menu = None
 
 
+class Player():
+    def __init__(self):
+        self.position_x = 0
+        self.position_x = 0
+        self.score = 100
+
+    def show(self, img):
+        screen.blit(img, (self.position_x, self.position_y))
+
 class Rocket(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface([5, 10])
+        self.image = pygame.Surface([5, 100])
         self.rect = self.image.get_rect()
 
     def show_rocket(self, rocket):
@@ -56,7 +65,6 @@ class Rocket(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.y -= 4
-
 
 class Destroyer(pygame.sprite.Sprite):
     def __init__(self):
@@ -68,10 +76,44 @@ class Destroyer(pygame.sprite.Sprite):
     def show(self, img):
         screen.blit(img, (self.rect.x, self.rect.y))
 
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface([40,40])
+        self.rect = self.image.get_rect()
 
+    def show(self, img):
+        screen.blit(img, (self.rect.x, self.rect.y))
+
+class BulletEnemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface([8, 8])
+        self.image.fill((100,200,255))
+        self.rect = self.image.get_rect()
+        self.direction = [0, 6]
+   
+    def show_rocket(self, rocket):
+        screen.blit(rocket, (self.rect.x, self.rect.y))
+
+    def update(self):
+        self.rect.x += self.direction[0] * 8
+        self.rect.y += self.direction[1] * 8
+
+
+bullets_enm_list = pygame.sprite.Group()
 rockets_list = pygame.sprite.Group()
+enemies_list = pygame.sprite.Group()
 all_sprites_list = pygame.sprite.Group()
 
+def make_enemies(number):
+    for n in range(number):
+        enm = Enemy()
+        enm.rect.y = 60
+        distance = WINDOW_SIZE[0]/number
+        enm.rect.x = n * distance  + distance / 2 
+        enemies_list.add(enm)
+        all_sprites_list.add(enm)
 
 def start_game_one_player():
     global screen
@@ -83,25 +125,68 @@ def start_game_one_player():
     pauseImg = pygame.image.load('images/pause.png')
     rocketImg = pygame.image.load('images/rocket-launch.png')
     destroyerImg = pygame.image.load('images/destroyer.png')
+    enemyImg = pygame.image.load('images/enemy1.png')
 
-    plane_position_y = 500
-    plane_position_x = 250
+    player = Player()
+
+    player.position_y = 600
+    player.position_x = 250
+    player.score = 100
     left_margin = 0 + 10
     right_margin = WINDOW_SIZE[0] - 70  # Ovo je zavisno od sirine slike aviona
     time = 0  # timer za animaciju sa raketicama
+    timer_destroyer = 0
     destroyer = Destroyer()
+    rafal_timer = 0
 
+    make_enemies(9)
     while True:
-        time += 10
+         time += 3
         screen.blit(game_background, (0, 0))
         screen.blit(pauseImg, PAUSE_ONE_PLAYER_POS)
 
-        destroyer.rect.x = WINDOW_SIZE[0] / 2 - 50
-        destroyer.rect.y = (int(time / 5) - 150 if time < 1000 else 50)
-        if destroyer.health > 0:
-            destroyer.show(destroyerImg)
-            if time > 1000:  #
-                pygame.draw.rect(screen, (200, 10, 10), (150, 20, destroyer.health * 10, 20))
+
+        for enm in enemies_list:
+            enm.rect.x
+            enm.show(enemyImg)
+        
+        num_enemies = len(enemies_list.sprites())
+            
+        if num_enemies > 0:
+            rand_enm = random.choice(enemies_list.sprites())        
+            
+            if time % 80/num_enemies == 0: # Napad neprijatelja: 80 ucestalost paljbe 
+                bul = BulletEnemy()
+                bul.rect.x = rand_enm.rect.x + 20
+                bul.rect.y = rand_enm.rect.y + 20
+                seanse = math.sqrt( (bul.rect.x - player.position_x)**2 + (bul.rect.y - player.position_y)**2)
+                bul.direction[0] = (player.position_x - bul.rect.x) / seanse + 0.1  
+                bul.direction[1] = (player.position_y - bul.rect.y) / seanse + 0.1  
+                bullets_enm_list.add(bul)
+                all_sprites_list.add(bul)
+
+            bullets_enm_list.draw(screen)
+
+        else:
+            timer_destroyer += 3
+            destroyer.rect.x = WINDOW_SIZE[0] / 2 - 50
+            destroyer.rect.y = (int(timer_destroyer/ 5) - 150 if timer_destroyer < 1000 else 50)
+            if destroyer.health > 0:
+                destroyer.show(destroyerImg)
+                if time > 1000:  #
+                    pygame.draw.rect(screen, (200, 10, 10), (150, 10, destroyer.health * 10, 20))
+                
+
+        for bullet in bullets_enm_list:
+            #kolizija sa playerom
+            if bullet.rect.x in range(player.position_x, player.position_x + 64):
+                if bullet.rect.y in range(player.position_y+20, player.position_y + 64):
+                    bullets_enm_list.remove(bullet) 
+                    player.score -= 10
+
+
+            if bullet.rect.y > 1000:
+                bullets_enm_list.remove(bullet)
 
         events = pygame.event.get()
         for e in events:
@@ -118,33 +203,44 @@ def start_game_one_player():
 
         #Za kretanje ne mogu koristi events jer treba da se krece i kada se samo drzi taster
         pressed = pygame.key.get_pressed()
-        movement = 2
+        movement = 4
 
         if pressed[pygame.K_a] and plane_position_x > left_margin:
             plane_position_x -= movement
 
         if pressed[pygame.K_d] and plane_position_x < right_margin:
             plane_position_x += movement
+        
+        if pressed[pygame.K_w]: 
+            if rafal_timer % 50 is 0:     
+                #Zvuk pri ispaljivanju metaka
+                rocket_sound = mixer.Sound('sounds/laser.wav')
+                rocket_sound.play()
 
-        if pressed[pygame.K_w] and time % 10 is 0 and time > 1000:
+                rocket = Rocket()
+                rocket.rect.x = player.position_x + 16  # razlika u velicina slika
+                rocket.rect.y = player.position_y
 
-            #Zvuk pri ispaljivanju metaka
-            rocket_sound = mixer.Sound('sounds/laser.wav')
-            rocket_sound.play()
-
-            rocket = Rocket()
-            rocket.rect.x = plane_position_x + 16  # razlika u velicina slika
-            rocket.rect.y = plane_position_y
-
-            all_sprites_list.add(rocket)
-            rockets_list.add(rocket)
-
-        for r in rockets_list:
+                all_sprites_list.add(rocket)
+                rockets_list.add(rocket)
+            rafal_timer += 1
+        else:
+            rafal_timer = 0
+        
+         for r in rockets_list:
             r.show_rocket(rocketImg)
+            
+            # Obrada kolizije player vs enemies
+            
+            enemy_hit_list = pygame.sprite.spritecollide(r, enemies_list, True)
 
-            #Obrada kolizije
+            for enm in enemy_hit_list:
+                rockets_list.remove(r)
+                all_sprites_list.remove(r)
+                enemies_list.remove(enm)
+
+                # Obrada kolizije player vs destroyer
             if r.rect.x in range(destroyer.rect.x, destroyer.rect.x + 110):
-
                 dist = 110 - r.rect.x + destroyer.rect.x
                 if r.rect.y < destroyer.rect.y + dist:
                     rockets_list.remove(r)
@@ -154,14 +250,16 @@ def start_game_one_player():
                     explosion_sound = mixer.Sound('sounds/explosion.wav')
                     explosion_sound.play()
 
-                    destroyer.health -= 1
+                    destroyer.health -= 5
 
             if r.rect.y < -20:
                 rockets_list.remove(r)
                 all_sprites_list.remove(r)
 
-        # Ovde iscrtavamo avion zbog toga sto raketa izlazi (pre) ispod njega
-        screen.blit(playerImg, (plane_position_x, plane_position_y))
+        # Ovde iscrtavamo x-wing zbog toga sto raketa izlazi (pre) ispod njega
+        if player.score > 0:
+            player.show(playerImg)
+            pygame.draw.rect(screen, (0,100,100), (150, WINDOW_SIZE[1]-30, player.score * 10, 20))
 
         if main_menu.is_enabled():
             main_menu.mainloop(events)
