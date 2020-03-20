@@ -1,5 +1,6 @@
 import pygame
 import pygameMenu
+from pygame import mixer
 
 ABOUT = ['This star wars game like Galaga',
          'is made by MATF students:',
@@ -7,10 +8,11 @@ ABOUT = ['This star wars game like Galaga',
          'Ognjen Stamenkovic',
          'Predrag Mitic']
 
-CONTROLS_TEXT = ['First player:                                                                                            Second player:',
-                 'To left : A                                                                                                                  To left : 4',
-                 'To right : D                                                                                                               To left : 6',
-                 'To shoot : space                                                                                  To shoot : enter']
+CONTROLS_TEXT = [
+    'First player:                                                                                            Second player:',
+    'To left : A                                                                                                                  To left : 4',
+    'To right : D                                                                                                               To left : 6',
+    'To shoot : W                                                                                                        To shoot : 8']
 
 WINDOW_SIZE = (1300, 700)
 MENU_SIZE = (500, 450)
@@ -29,22 +31,24 @@ star_wars_logo = None
 main_menu = None
 pause_menu = None
 
+
 class Rocket(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface([5,10])
+        self.image = pygame.Surface([5, 10])
         self.rect = self.image.get_rect()
 
     def show_rocket(self, rocket):
         screen.blit(rocket, (self.rect.x, self.rect.y))
-        
+
     def update(self):
         self.rect.y -= 4
+
 
 class Destroyer(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface([100,50])
+        self.image = pygame.Surface([100, 50])
         self.rect = self.image.get_rect()
         self.health = 100
 
@@ -70,22 +74,22 @@ def start_game_one_player():
     plane_position_y = 500
     plane_position_x = 250
     left_margin = 0 + 10
-    right_margin = WINDOW_SIZE[0] - 70  #Ovo je zavisno od sirine slike aviona
-    time = 0 # timer za animaciju sa raketicama
+    right_margin = WINDOW_SIZE[0] - 70  # Ovo je zavisno od sirine slike aviona
+    time = 0  # timer za animaciju sa raketicama
     destroyer = Destroyer()
 
     while True:
-        time += 1
+        time += 10
         screen.blit(game_background, (0, 0))
         screen.blit(pauseImg, PAUSE_ONE_PLAYER_POS)
 
-        destroyer.rect.x = WINDOW_SIZE[0]/2 - 50
-        destroyer.rect.y =(int(time/5)-150 if time < 1000 else 50)
+        destroyer.rect.x = WINDOW_SIZE[0] / 2 - 50
+        destroyer.rect.y = (int(time / 5) - 150 if time < 1000 else 50)
         if destroyer.health > 0:
             destroyer.show(destroyerImg)
-            if time > 1000:  # 
-                pygame.draw.rect(screen, (200,10,10), (150,20,destroyer.health*10, 20))
-       
+            if time > 1000:  #
+                pygame.draw.rect(screen, (200, 10, 10), (150, 20, destroyer.health * 10, 20))
+
         events = pygame.event.get()
         for e in events:
             if e.type == pygame.QUIT:
@@ -93,40 +97,51 @@ def start_game_one_player():
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_ESCAPE:
                     exit()
-            
+
+            #Ukoliko smo kliknuli na pauzu, otvaramo pause_meni i zaustavljamo muziku
             if e.type == pygame.MOUSEBUTTONDOWN and pause_menu.is_disabled():
-                if pauseImg.get_rect(topleft=(960, 4)).collidepoint(pygame.mouse.get_pos()):
+                if pauseImg.get_rect(topleft=PAUSE_ONE_PLAYER_POS).collidepoint(pygame.mouse.get_pos()):
+                    mixer.music.pause()
                     pause_menu.enable()
 
-        '''Za kretanje ne mogu koristi events jer treba da se krece i kada se samo drzi taster'''
+        #Za kretanje ne mogu koristi events jer treba da se krece i kada se samo drzi taster
         pressed = pygame.key.get_pressed()
         movement = 2
 
-        if pressed[ord('a')] and plane_position_x > left_margin:
+        if pressed[pygame.K_a] and plane_position_x > left_margin:
             plane_position_x -= movement
 
-        if pressed[ord('d')] and plane_position_x < right_margin:
+        if pressed[pygame.K_d] and plane_position_x < right_margin:
             plane_position_x += movement
 
-        if pressed[ord('w')] and time % 10 is 0 and time > 1000:
-            rocket = Rocket()
+        if pressed[pygame.K_w] and time % 10 is 0 and time > 1000:
 
-            rocket.rect.x = plane_position_x + 16 #razlika u velicina slika
-            rocket.rect.y = plane_position_y 
+            #Zvuk pri ispaljivanju metaka
+            rocket_sound = mixer.Sound('sounds/laser.wav')
+            rocket_sound.play()
+
+            rocket = Rocket()
+            rocket.rect.x = plane_position_x + 16  # razlika u velicina slika
+            rocket.rect.y = plane_position_y
 
             all_sprites_list.add(rocket)
             rockets_list.add(rocket)
 
-
         for r in rockets_list:
             r.show_rocket(rocketImg)
 
-            ''' Obrada kolizije '''
+            #Obrada kolizije
             if r.rect.x in range(destroyer.rect.x, destroyer.rect.x + 110):
+
                 dist = 110 - r.rect.x + destroyer.rect.x
-                if r.rect.y < destroyer.rect.y+dist :
+                if r.rect.y < destroyer.rect.y + dist:
                     rockets_list.remove(r)
                     all_sprites_list.remove(r)
+
+                    #Zvuk eksplozije kada metak pogodi protivnika
+                    explosion_sound = mixer.Sound('sounds/explosion.wav')
+                    explosion_sound.play()
+
                     destroyer.health -= 1
 
             if r.rect.y < -20:
@@ -136,7 +151,6 @@ def start_game_one_player():
         # Ovde iscrtavamo avion zbog toga sto raketa izlazi (pre) ispod njega
         screen.blit(playerImg, (plane_position_x, plane_position_y))
 
-        
         if main_menu.is_enabled():
             main_menu.mainloop(events)
         elif pause_menu.is_enabled():
@@ -170,9 +184,10 @@ def start_game_two_player():
                 if e.key == pygame.K_ESCAPE:
                     exit()
 
+            #Ukoliko smo kliknuli na pauzu, otvaramo pause_meni i zaustavljamo muziku
             if e.type == pygame.MOUSEBUTTONDOWN and pause_menu.is_disabled():
-                x, y = PAUSE_TWO_PLAYERS_POS
-                if pauseImg.get_rect(topleft=(x, y)).collidepoint(pygame.mouse.get_pos()):
+                if pauseImg.get_rect(topleft=PAUSE_TWO_PLAYERS_POS).collidepoint(pygame.mouse.get_pos()):
+                    mixer.music.pause()
                     pause_menu.enable()
 
         if main_menu.is_enabled():
@@ -184,18 +199,27 @@ def start_game_two_player():
 
 
 def start_game():
+
     global main_menu
 
     if NUM_PLAYERS == 'ONE_PLAYER':
+        mixer.music.stop() #zaustavljamo muziku menija
         main_menu.disable()
+        mixer.music.load('sounds/background.wav')
+        mixer.music.play() #pustamo muziku igrice
         start_game_one_player()
     else:
+        mixer.music.stop() #zaustavljamo muziku menija
         main_menu.disable()
+        mixer.music.load('sounds/background.wav')
+        mixer.music.play() #pustamo muziku igrice
         start_game_two_player()
 
 
 def main_background():
-
+    '''
+    Funckija koja iscrtava pozadinu dok je main(pause)_menu ukljucen
+    '''
     global screen
     global star_wars_logo
 
@@ -207,24 +231,27 @@ def main_background():
     screen.blit(background, (0, 0))
     screen.blit(star_wars_logo, START_WARS_LOGO_POS)
 
+
 def change_player(value, player):
+    '''
+    Funckija koja interaktivno gleda promenu u biranju one_player/two_players u main_menu
+    '''
     global NUM_PLAYERS
     NUM_PLAYERS = player
 
 
 def createMenu():
-
     global main_menu
 
-    #Controls submenu in Play Menu
+    # Controls (spisak kontrola)
     controls_submenu_play = pygameMenu.TextMenu(screen,
                                                 window_width=WINDOW_SIZE[0] - 600,
                                                 window_height=WINDOW_SIZE[1] - 100,
                                                 font=pygameMenu.font.FONT_FRANCHISE,
                                                 title='STAR WARS MENU',
                                                 bgfun=main_background,
-                                                menu_width= MENU_SIZE[0],
-                                                menu_height= MENU_SIZE[1]
+                                                menu_width=MENU_SIZE[0],
+                                                menu_height=MENU_SIZE[1]
                                                 )
     controls_submenu_play.add_line(CONTROLS_TEXT[0])
     controls_submenu_play.add_line(CONTROLS_TEXT[1])
@@ -232,7 +259,7 @@ def createMenu():
     controls_submenu_play.add_line(CONTROLS_TEXT[3])
     controls_submenu_play.add_option('Back', pygameMenu.events.BACK)
 
-    #Play Menu
+    # Play menu (START , 1/2 PLAYER, CONTROLS, BACK)
     play_menu = pygameMenu.Menu(screen,
                                 window_width=WINDOW_SIZE[0] - 600,
                                 window_height=WINDOW_SIZE[1] - 100,
@@ -244,14 +271,14 @@ def createMenu():
                                 )
     play_menu.add_option('Start', start_game)
     play_menu.add_selector('',
-                            [('1-player', 'ONE_PLAYER'),
+                           [('1-player', 'ONE_PLAYER'),
                             ('2-players', 'TWO_PLAYERS')],
-                            onchange=change_player
+                           onchange=change_player
                            )
     play_menu.add_option('Controls', controls_submenu_play)
     play_menu.add_option('Back', pygameMenu.events.BACK)
 
-    #About menu
+    # About menu
     about_menu = pygameMenu.TextMenu(screen,
                                      window_width=WINDOW_SIZE[0] - 600,
                                      window_height=WINDOW_SIZE[1] - 100,
@@ -260,13 +287,13 @@ def createMenu():
                                      bgfun=main_background,
                                      menu_width=MENU_SIZE[0],
                                      menu_height=MENU_SIZE[1]
-                                    )
+                                     )
     for about in ABOUT:
         about_menu.add_line(about)
     about_menu.add_line(pygameMenu.locals.TEXT_NEWLINE)
     about_menu.add_option('Return to menu', pygameMenu.events.BACK)
 
-    #Main menu
+    # Main menu (PLAY, SETTINGS, ABOUT, EXIT)
     main_menu = pygameMenu.Menu(screen,
                                 window_width=WINDOW_SIZE[0] - 600,
                                 window_height=WINDOW_SIZE[1] - 100,
@@ -284,20 +311,28 @@ def createMenu():
 
 def continue_game():
     global pause_menu
+    #vracamo se u igricu i pustamo muziku u pozadini
+    mixer.music.unpause()
     pause_menu.disable()
+
 
 def reset_game():
     global pause_menu
     global main_menu
+    #zaustavljamo muziku u pozadini igrice
+    mixer.music.stop()
     pause_menu.disable()
+    #vracamo se main_menu i pustamo muziku menija
+    mixer.music.load('sounds/menu_music.mp3')
+    mixer.music.play()
     main_menu.enable()
 
-def createPauseMenu():
 
+def createPauseMenu():
     global pause_menu
     # About menu
     about_menu = pygameMenu.TextMenu(screen,
-                                    window_width=WINDOW_SIZE[0] - 600,
+                                     window_width=WINDOW_SIZE[0] - 600,
                                      window_height=WINDOW_SIZE[1] - 100,
                                      font=pygameMenu.font.FONT_FRANCHISE,
                                      title='STAR WARS MENU',
@@ -311,7 +346,7 @@ def createPauseMenu():
     about_menu.add_option('Return to menu', pygameMenu.events.BACK)
 
     pause_menu = pygameMenu.Menu(screen,
-                                window_width=WINDOW_SIZE[0] - 600,
+                                 window_width=WINDOW_SIZE[0] - 600,
                                  window_height=WINDOW_SIZE[1] - 100,
                                  font=pygameMenu.font.FONT_FRANCHISE,
                                  title='STAR WARS MENU',
@@ -322,7 +357,6 @@ def createPauseMenu():
     pause_menu.add_option('Continue', continue_game)
     pause_menu.add_option('Settings', about_menu)
     pause_menu.add_option('Reset', reset_game)
-
 
 
 def main():
@@ -345,15 +379,18 @@ def main():
     createMenu()
     main_menu.enable()
 
-    running = True
-    while running:
-        #menu.screen.blit(menu.background, (0, 0))
-        #menu.screen.blit(menu.star_wars_logo, menu.START_WARS_LOGO_POS)
+    #Pustamo muziku menija
+    mixer.music.load('sounds/menu_music.mp3')
+    mixer.music.play()
+
+    while True:
+        # menu.screen.blit(menu.background, (0, 0))
+        # menu.screen.blit(menu.star_wars_logo, menu.START_WARS_LOGO_POS)
 
         events = pygame.event.get()
         for e in events:
             if e.type == pygame.QUIT:
-                running = False
+                exit()
 
         if main_menu.is_enabled():
             main_menu.mainloop(events)
