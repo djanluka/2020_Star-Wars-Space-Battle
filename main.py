@@ -21,7 +21,7 @@ CONTROLS_TEXT = [
                 ]
 
 VOLUME_VALUES = {
-                '0_PERCENT':0,
+                '0_PERCENT': 0,
                 '10_PERCENT': 0.1,
                 '30_PERCENT': 0.3,
                 '50_PERCENT': 0.5,
@@ -249,7 +249,7 @@ def start_game_one_player():
         if pressed[pygame.K_d] and player.position_x < right_margin:
             player.position_x += movement
 
-        if pressed[pygame.K_v]:
+        if pressed[pygame.K_w]:
             #IZMENJENO ovde sam umesto rafal_timer preimenovao u rafal (boolean promenljivu)
             if rafal:
                 #Zvuk pri ispaljivanju metaka
