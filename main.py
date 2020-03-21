@@ -3,6 +3,7 @@ import pygameMenu
 from pygame import mixer
 import math
 import random
+import time as TIME #DODATO da bi se uspavala slika prilikom prelaska na sledeci level
 
 ABOUT = [
         'This star wars game like Galaga',
@@ -20,12 +21,17 @@ CONTROLS_TEXT = [
                 ]
 
 VOLUME_VALUES = {
+                '0_PERCENT':0,
                 '10_PERCENT': 0.1,
                 '30_PERCENT': 0.3,
                 '50_PERCENT': 0.5,
                 '70_PERCENT': 0.7,
                 '100_PERCENT': 1,
                 }
+#DODATO lista slika koje ce biti aktivirane kada se predje na sledeci nivo
+LEVEL_IMAGES = ['images/one.png', 'images/two.png', 'images/three.png']
+LEVEL = 0
+
 GAME_VOLUME = 0.5
 MENU_VOLUME = 0.5
 
@@ -74,7 +80,7 @@ class Destroyer(pygame.sprite.Sprite):
         self.image = pygame.Surface([100, 50])
         self.rect = self.image.get_rect()
         self.health = 100
-        self.is_ready = False
+        self.is_ready = False #DODATO
 
     def show(self, img):
         screen.blit(img, (self.rect.x, self.rect.y))
@@ -123,13 +129,15 @@ def start_game_one_player():
     global screen
     global main_menu
     global pause_menu
+    global LEVEL_IMAGES
+    global LEVEL
 
     game_background = pygame.image.load('images/game_background.jpg')
-    playerImg = pygame.image.load('images/player.png')
-    pauseImg = pygame.image.load('images/pause.png')
-    rocketImg = pygame.image.load('images/rocket-launch.png')
-    destroyerImg = pygame.image.load('images/destroyer.png')
-    enemyImg = pygame.image.load('images/enemy1.png')
+    player_img = pygame.image.load('images/player.png')
+    pause_img = pygame.image.load('images/pause.png')
+    rocket_img = pygame.image.load('images/rocket-launch.png')
+    destroyer_img = pygame.image.load('images/destroyer.png')
+    enemy_img = pygame.image.load('images/enemy1.png')
 
     player = Player()
 
@@ -143,29 +151,41 @@ def start_game_one_player():
     destroyer = Destroyer()
     rafal = True
 
+    next_level = True #DODATO da znamo da li igramo igricu ili isrctavamo prelazak nivoa
+
     make_enemies(9)
     while True:
         time += 3
         screen.blit(game_background, (0, 0))
-        screen.blit(pauseImg, PAUSE_ONE_PLAYER_POS)
+        screen.blit(pause_img, PAUSE_ONE_PLAYER_POS)
 
+        if next_level:
+            #DODATO
+            #ako smo preli nivo, iscratavamo prelazak i presakcemo sve ostale funckije
+            #jedino moramo da pozovemo update() da bi se postavile slike
+            next_level = False
+            screen.blit(pygame.image.load('images/up-level.png'), (50, 225))
+            screen.blit(pygame.image.load(LEVEL_IMAGES[LEVEL]), (50+256, 225))
+            pygame.display.update()
+            TIME.sleep(2)
+            continue
 
         for enm in enemies_list:
             enm.rect.x
-            enm.show(enemyImg)
-        
+            enm.show(enemy_img)
+
         num_enemies = len(enemies_list.sprites())
-            
+
         if num_enemies > 0:
-            rand_enm = random.choice(enemies_list.sprites())        
-            
-            if time % 80/num_enemies == 0: # Napad neprijatelja: 80 ucestalost paljbe 
+            rand_enm = random.choice(enemies_list.sprites())
+
+            if time % 80/num_enemies == 0: # Napad neprijatelja: 80 ucestalost paljbe
                 bul = BulletEnemy()
                 bul.rect.x = rand_enm.rect.x + 20
                 bul.rect.y = rand_enm.rect.y + 20
                 seanse = math.sqrt( (bul.rect.x - player.position_x)**2 + (bul.rect.y - player.position_y)**2)
-                bul.direction[0] = (player.position_x - bul.rect.x) / seanse + 0.1  
-                bul.direction[1] = (player.position_y - bul.rect.y) / seanse + 0.1  
+                bul.direction[0] = (player.position_x - bul.rect.x) / seanse + 0.1
+                bul.direction[1] = (player.position_y - bul.rect.y) / seanse + 0.1
                 bullets_enm_list.add(bul)
                 all_sprites_list.add(bul)
 
@@ -176,17 +196,30 @@ def start_game_one_player():
             destroyer.rect.x = WINDOW_SIZE[0] / 2 - 50
             destroyer.rect.y = (int(timer_destroyer / 5) - 150 if timer_destroyer < 1000 else 50)
             if destroyer.health > 0:
-                destroyer.show(destroyerImg)
+                destroyer.show(destroyer_img)
                 if timer_destroyer > 1000:
                     pygame.draw.rect(screen, (200, 10, 10), (150, 10, destroyer.health * 10, 20))
-                    destroyer.is_ready = True
-                
+                    destroyer.is_ready = True #DODATO
+            else:
+                #DODATA cela else grana, ako je destroyer.health = 0, onda prelazimo na veci nivo
+                #i brisemo sve iz listi kako ne bi ostali upamceni metkovi
+                #ponovo pozivamo start_game_one_player
+                if LEVEL == 3:
+                    exit()
+                LEVEL += 1
+                for r in rockets_list:
+                    rockets_list.remove(r)
+                    all_sprites_list.remove(r)
+
+                all_sprites_list.update()
+                start_game_one_player()
+
 
         for bullet in bullets_enm_list:
             #kolizija sa playerom
             if bullet.rect.x in range(player.position_x, player.position_x + 64):
                 if bullet.rect.y in range(player.position_y+20, player.position_y + 64):
-                    bullets_enm_list.remove(bullet) 
+                    bullets_enm_list.remove(bullet)
                     player.score -= 10
 
 
@@ -203,7 +236,7 @@ def start_game_one_player():
 
             #Ukoliko smo kliknuli na pauzu, otvaramo pause_meni i zaustavljamo muziku
             if e.type == pygame.MOUSEBUTTONDOWN and pause_menu.is_disabled():
-                if pauseImg.get_rect(topleft=PAUSE_ONE_PLAYER_POS).collidepoint(pygame.mouse.get_pos()):
+                if pause_img.get_rect(topleft=PAUSE_ONE_PLAYER_POS).collidepoint(pygame.mouse.get_pos()):
                     pause_menu.enable()
 
         #Za kretanje ne mogu koristi events jer treba da se krece i kada se samo drzi taster
@@ -215,8 +248,9 @@ def start_game_one_player():
 
         if pressed[pygame.K_d] and player.position_x < right_margin:
             player.position_x += movement
-        
-        if pressed[pygame.K_w]:
+
+        if pressed[pygame.K_v]:
+            #IZMENJENO ovde sam umesto rafal_timer preimenovao u rafal (boolean promenljivu)
             if rafal:
                 #Zvuk pri ispaljivanju metaka
                 rocket_sound = mixer.Sound('sounds/laser.wav')
@@ -231,10 +265,10 @@ def start_game_one_player():
             rafal = False
         else:
             rafal = True
-        
+
         for r in rockets_list:
-            r.show_rocket(rocketImg)
-            
+            r.show_rocket(rocket_img)
+
             # Obrada kolizije player vs enemies
             enemy_hit_list = pygame.sprite.spritecollide(r, enemies_list, True)
 
@@ -243,7 +277,7 @@ def start_game_one_player():
                 all_sprites_list.remove(r)
                 enemies_list.remove(enm)
 
-
+            #DODATO ako je destroyer spreman onda mozemo da pucamo na njega i da mu skidamo health-e
             if destroyer.is_ready:
                 # Obrada kolizije player vs destroyer
                 if r.rect.x in range(destroyer.rect.x, destroyer.rect.x + 110):
@@ -264,7 +298,7 @@ def start_game_one_player():
 
         # Ovde iscrtavamo x-wing zbog toga sto raketa izlazi (pre) ispod njega
         if player.score > 0:
-            player.show(playerImg)
+            player.show(player_img)
             pygame.draw.rect(screen, (0,100,100), (150, WINDOW_SIZE[1]-30, player.score * 10, 20))
 
         if main_menu.is_enabled():
@@ -282,15 +316,15 @@ def start_game_two_player():
     global pause_menu
 
     game_background = pygame.image.load('images/game_background.png')
-    playerImg = pygame.image.load('images/player.png')
-    pauseImg = pygame.image.load('images/pause.png')
+    player_img = pygame.image.load('images/player.png')
+    pause_img = pygame.image.load('images/pause.png')
 
     while True:
         screen.blit(game_background, (0, 0))
         pygame.draw.line(screen, BLACK_COLOR, WALL_START_POS, WALL_END_POS, WALL_WIDTH)
-        screen.blit(playerImg, (280, 600))
-        screen.blit(playerImg, (950, 600))
-        screen.blit(pauseImg, PAUSE_TWO_PLAYERS_POS)
+        screen.blit(player_img, (280, 600))
+        screen.blit(player_img, (950, 600))
+        screen.blit(pause_img, PAUSE_TWO_PLAYERS_POS)
 
         events = pygame.event.get()
         for e in events:
@@ -302,7 +336,7 @@ def start_game_two_player():
 
             #Ukoliko smo kliknuli na pauzu, otvaramo pause_meni i zaustavljamo muziku
             if e.type == pygame.MOUSEBUTTONDOWN and pause_menu.is_disabled():
-                if pauseImg.get_rect(topleft=PAUSE_TWO_PLAYERS_POS).collidepoint(pygame.mouse.get_pos()):
+                if pause_img.get_rect(topleft=PAUSE_TWO_PLAYERS_POS).collidepoint(pygame.mouse.get_pos()):
                     mixer.music.pause()
                     pause_menu.enable()
 
@@ -428,6 +462,7 @@ def createMenu():
                                [('50 %', '50_PERCENT'),
                                 ('70 %', '70_PERCENT'),
                                 ('100 %', '100_PERCENT'),
+                                ('0 %', '0_PERCENT'),
                                 ('10 %', '10_PERCENT'),
                                 ('30 %', '30_PERCENT'),
                                 ],
@@ -521,6 +556,7 @@ def createPauseMenu():
                                [('50 %', '50_PERCENT'),
                                 ('70 %', '70_PERCENT'),
                                 ('100 %', '100_PERCENT'),
+                                ('0 %', '0_PERCENT'),
                                 ('10 %', '10_PERCENT'),
                                 ('30 %', '30_PERCENT'),
                                 ],
@@ -580,8 +616,6 @@ def main():
 
         if main_menu.is_enabled():
             main_menu.mainloop(events)
-        elif pause_menu.is_enabled():
-            pause_menu.mainloop(events)
 
         pygame.display.update()
 
