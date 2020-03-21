@@ -149,7 +149,7 @@ def start_game_one_player():
     time = 0  # timer za animaciju sa raketicama
     timer_destroyer = 0
     destroyer = Destroyer()
-    rafal = True
+    rafal = 0
 
     next_level = True #DODATO da znamo da li igramo igricu ili isrctavamo prelazak nivoa
 
@@ -251,7 +251,7 @@ def start_game_one_player():
 
         if pressed[pygame.K_w]:
             #IZMENJENO ovde sam umesto rafal_timer preimenovao u rafal (boolean promenljivu)
-            if rafal:
+            if rafal % 50 is 0:
                 #Zvuk pri ispaljivanju metaka
                 rocket_sound = mixer.Sound('sounds/laser.wav')
                 rocket_sound.play()
@@ -262,9 +262,9 @@ def start_game_one_player():
 
                 all_sprites_list.add(rocket)
                 rockets_list.add(rocket)
-            rafal = False
+            rafal += 1
         else:
-            rafal = True
+            rafal = 0
 
         for r in rockets_list:
             r.show_rocket(rocket_img)
