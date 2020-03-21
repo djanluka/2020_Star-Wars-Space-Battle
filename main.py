@@ -74,14 +74,16 @@ class Destroyer(pygame.sprite.Sprite):
         self.image = pygame.Surface([100, 50])
         self.rect = self.image.get_rect()
         self.health = 100
+        self.is_ready = False
 
     def show(self, img):
         screen.blit(img, (self.rect.x, self.rect.y))
 
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface([40,40])
+        self.image = pygame.Surface([40, 40])
         self.rect = self.image.get_rect()
 
     def show(self, img):
@@ -91,7 +93,7 @@ class BulletEnemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface([8, 8])
-        self.image.fill((100,200,255))
+        self.image.fill((100, 200, 255))
         self.rect = self.image.get_rect()
         self.direction = [0, 6]
    
@@ -139,7 +141,7 @@ def start_game_one_player():
     time = 0  # timer za animaciju sa raketicama
     timer_destroyer = 0
     destroyer = Destroyer()
-    rafal_timer = 0
+    rafal = True
 
     make_enemies(9)
     while True:
@@ -172,11 +174,12 @@ def start_game_one_player():
         else:
             timer_destroyer += 3
             destroyer.rect.x = WINDOW_SIZE[0] / 2 - 50
-            destroyer.rect.y = (int(timer_destroyer/ 5) - 150 if timer_destroyer < 1000 else 50)
+            destroyer.rect.y = (int(timer_destroyer / 5) - 150 if timer_destroyer < 1000 else 50)
             if destroyer.health > 0:
                 destroyer.show(destroyerImg)
-                if time > 1000:  #
+                if timer_destroyer > 1000:
                     pygame.draw.rect(screen, (200, 10, 10), (150, 10, destroyer.health * 10, 20))
+                    destroyer.is_ready = True
                 
 
         for bullet in bullets_enm_list:
@@ -213,8 +216,8 @@ def start_game_one_player():
         if pressed[pygame.K_d] and player.position_x < right_margin:
             player.position_x += movement
         
-        if pressed[pygame.K_w]: 
-            if rafal_timer % 50 is 0:     
+        if pressed[pygame.K_w]:
+            if rafal:
                 #Zvuk pri ispaljivanju metaka
                 rocket_sound = mixer.Sound('sounds/laser.wav')
                 rocket_sound.play()
@@ -225,15 +228,14 @@ def start_game_one_player():
 
                 all_sprites_list.add(rocket)
                 rockets_list.add(rocket)
-            rafal_timer += 1
+            rafal = False
         else:
-            rafal_timer = 0
+            rafal = True
         
         for r in rockets_list:
             r.show_rocket(rocketImg)
             
             # Obrada kolizije player vs enemies
-            
             enemy_hit_list = pygame.sprite.spritecollide(r, enemies_list, True)
 
             for enm in enemy_hit_list:
@@ -241,18 +243,20 @@ def start_game_one_player():
                 all_sprites_list.remove(r)
                 enemies_list.remove(enm)
 
+
+            if destroyer.is_ready:
                 # Obrada kolizije player vs destroyer
-            if r.rect.x in range(destroyer.rect.x, destroyer.rect.x + 110):
-                dist = 110 - r.rect.x + destroyer.rect.x
-                if r.rect.y < destroyer.rect.y + dist:
-                    rockets_list.remove(r)
-                    all_sprites_list.remove(r)
+                if r.rect.x in range(destroyer.rect.x, destroyer.rect.x + 110):
+                    dist = 110 - r.rect.x + destroyer.rect.x
+                    if r.rect.y < destroyer.rect.y + dist:
+                        rockets_list.remove(r)
+                        all_sprites_list.remove(r)
 
-                    #Zvuk eksplozije kada metak pogodi protivnika
-                    explosion_sound = mixer.Sound('sounds/explosion.wav')
-                    explosion_sound.play()
+                        #Zvuk eksplozije kada metak pogodi protivnika
+                        explosion_sound = mixer.Sound('sounds/explosion.wav')
+                        explosion_sound.play()
 
-                    destroyer.health -= 5
+                        destroyer.health -= 5
 
             if r.rect.y < -20:
                 rockets_list.remove(r)
