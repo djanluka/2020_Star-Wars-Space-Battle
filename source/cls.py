@@ -13,6 +13,10 @@ class Player():
         self.image = pygame.image.load('images/player.png')
    
     def show_score(self):
+
+        if gui.main_menu.is_enabled():
+            return None
+
         for i in range(self.lifes_number):
             gui.screen.blit(self.image, (10 + i*70, glob.WINDOW_SIZE[1]-60))
         	
@@ -20,6 +24,10 @@ class Player():
         glob.WINDOW_SIZE[1]-40, -self.score * 10, 20))
     
     def show(self):
+
+        if gui.main_menu.is_enabled():
+            return None
+
         gui.screen.blit(self.image, (self.position_x, self.position_y))
         self.show_score()
 

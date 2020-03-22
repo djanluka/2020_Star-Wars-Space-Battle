@@ -22,13 +22,13 @@ def check_menu_events():
             if glob.pause_img.get_rect(topleft=glob.PAUSE_ONE_PLAYER_POS).collidepoint(pygame.mouse.get_pos()):
                 gui.pause_menu.enable()
 
-    # Ako je kliknuto na pause, zaaustavi
+    #ako su ukljuceni meniji, prikupljamo dogadjaje u njima
     if gui.main_menu.is_enabled():
         gui.main_menu.mainloop(events)
     elif gui.pause_menu.is_enabled():
         gui.pause_menu.mainloop(events)
 
-def check_player_events(player,burst_fire):
+def check_player_events(player, burst_fire):
     cont = cls.Controler()
     movement = 4
     left_margin = 0 + 10
@@ -72,7 +72,7 @@ def make_enemies(number):
 def draw_player(player): 
     if player.score > 0:
         player.show()
-    else :
+    else:
         if player.lifes_number > 0:
             player.lifes_number -= 1
             player.score = 100
@@ -94,10 +94,11 @@ def draw_destroyer(destroyer, timer_destroyer):
     return timer_destroyer
 
 def enemies_fire_to_player(player, game_timer):
+
     rand_enm = random.choice(glob.enemies_list.sprites())
     num_enemies = len(glob.enemies_list.sprites())
 
-    if game_timer % int(200/num_enemies) == 0: # Napad neprijatelja: 160 ucestalost paljbe
+    if game_timer % int(200/num_enemies) == 0: #Napad neprijatelja: 160 ucestalost paljbe
         bul = cls.BulletEnemy()
         bul.rect.x = rand_enm.rect.x + 20
         bul.rect.y = rand_enm.rect.y + 20
@@ -110,6 +111,7 @@ def enemies_fire_to_player(player, game_timer):
     glob.bullets_enm_list.draw(gui.screen)
 
 def check_bullets_player_collide(player):
+
     for bullet in glob.bullets_enm_list:
         if bullet.rect.x in range(player.position_x, player.position_x + 64):
             if bullet.rect.y in range(player.position_y+20, player.position_y + 64):
@@ -228,16 +230,16 @@ def start_game_one_player():
 
 def start_game_two_player():
 
-    game_gui.background = pygame.image.load('images/game_gui.background.png')
+    gui.background = pygame.image.load('images/game_background.jpg')
     player_img = pygame.image.load('images/player.png')
     pause_img = pygame.image.load('images/pause.png')
 
     while True:
-        gui.screen.blit(game_gui.background, (0, 0))
-        pygame.draw.line(gui.screen, BLACK_COLOR, WALL_START_POS, WALL_END_POS, WALL_WIDTH)
+        gui.screen.blit(gui.background, (0, 0))
+        pygame.draw.line(gui.screen, glob.BLACK_COLOR, glob.WALL_START_POS, glob.WALL_END_POS, glob.WALL_WIDTH)
         gui.screen.blit(player_img, (280, 600))
         gui.screen.blit(player_img, (950, 600))
-        gui.screen.blit(pause_img, PAUSE_TWO_PLAYERS_POS)
+        gui.screen.blit(pause_img, glob.PAUSE_TWO_PLAYERS_POS)
 
         events = pygame.event.get()
         for e in events:
@@ -249,8 +251,7 @@ def start_game_two_player():
 
             #Ukoliko smo kliknuli na pauzu, otvaramo pause_meni i zaustavljamo muziku
             if e.type == pygame.MOUSEBUTTONDOWN and gui.pause_menu.is_disabled():
-                if pause_img.get_rect(topleft=PAUSE_TWO_PLAYERS_POS).collidepoint(pygame.mouse.get_pos()):
-                    mixer.music.pause()
+                if pause_img.get_rect(topleft=glob.PAUSE_TWO_PLAYERS_POS).collidepoint(pygame.mouse.get_pos()):
                     gui.pause_menu.enable()
 
         if gui.main_menu.is_enabled():
@@ -273,8 +274,8 @@ def start_game():
     else:
         mixer.music.stop() #zaustavljamo muziku menija
         gui.main_menu.disable()
-        mixer.music.load('sounds/gui.background.wav')
+        mixer.music.load('sounds/background.wav')
         mixer.music.play(-1) #pustamo muziku igrice
-        mixer.music.set_volume(glob.glob.GAME_VOLUME)
+        mixer.music.set_volume(glob.GAME_VOLUME)
         start_game_two_player()
 
