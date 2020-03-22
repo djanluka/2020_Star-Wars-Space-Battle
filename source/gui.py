@@ -1,5 +1,6 @@
 from source import glob
 from source import start
+from pygame import mixer
 import pygame
 import pygameMenu
 
