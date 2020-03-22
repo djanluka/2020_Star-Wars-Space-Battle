@@ -19,7 +19,7 @@ def check_menu_events():
 
         #Ukoliko smo kliknuli na pauzu, otvaramo pause_meni i zaustavljamo muziku
         if e.type == pygame.MOUSEBUTTONDOWN and gui.pause_menu.is_disabled():
-            if pause_img.get_rect(topleft=PAUSE_ONE_PLAYER_POS).collidepoint(pygame.mouse.get_pos()):
+            if glob.pause_img.get_rect(topleft=glob.PAUSE_ONE_PLAYER_POS).collidepoint(pygame.mouse.get_pos()):
                 gui.pause_menu.enable()
 
     # Ako je kliknuto na pause, zaaustavi
