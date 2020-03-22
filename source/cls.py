@@ -1,8 +1,8 @@
+from source import glob
+from source import gui
 import math
 import random
 import pygame
-from source import glob
-from source import gui
 
 class Player():
     def __init__(self):
