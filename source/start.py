@@ -63,9 +63,9 @@ def check_player_events(player, burst_fire):
 def make_enemies(number):
     for n in range(number):
         enm = cls.Enemy()
-        enm.rect.y = 60
+        enm.rect.y = 0
         distance = glob.WINDOW_SIZE[0]/number
-        enm.rect.x = n * distance  + distance / 2 
+        enm.rect.x = n * distance   
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
 
@@ -82,8 +82,8 @@ def draw_player(player):
 
 def draw_destroyer(destroyer, timer_destroyer):
     timer_destroyer += 3
-    destroyer.rect.x = glob.WINDOW_SIZE[0] / 2 - 50
-    destroyer.rect.y = (int(timer_destroyer / 5) - 150 if timer_destroyer < 1000 else 50)
+    destroyer.rect.x = glob.WINDOW_SIZE[0] / 2 - 64
+    destroyer.rect.y = (int(timer_destroyer / 5) - 240 if timer_destroyer < 1400 else 40)
     
     if destroyer.health > 0:
         destroyer.show()
@@ -94,6 +94,9 @@ def draw_destroyer(destroyer, timer_destroyer):
     return timer_destroyer
 
 def enemies_fire_to_player(player, game_timer):
+    
+    if game_timer < 1200:
+        return
 
     rand_enm = random.choice(glob.enemies_list.sprites())
     num_enemies = len(glob.enemies_list.sprites())
@@ -138,9 +141,10 @@ def check_rocket_to_enemise_colide(destroyer):
          #DODATO ako je destroyer spreman onda mozemo da pucamo na njega i da mu skidamo health-e
          if destroyer.is_ready:
              # Obrada kolizije player vs destroyer
-             if r.rect.x in range(destroyer.rect.x, destroyer.rect.x + 110):
-                 dist = 110 - r.rect.x + destroyer.rect.x
-                 if r.rect.y < destroyer.rect.y + dist:
+             if r.rect.x in range(destroyer.rect.x, destroyer.rect.x + 120):
+                 dist = 120 - r.rect.x + destroyer.rect.x
+                 dist = dist if dist < 64 else 120 - dist
+                 if r.rect.y < destroyer.rect.y + 3*dist + 40:
                      glob.rockets_list.remove(r)
                      glob.all_sprites_list.remove(r)
 
@@ -154,11 +158,26 @@ def check_rocket_to_enemise_colide(destroyer):
              glob.rockets_list.remove(r)
              glob.all_sprites_list.remove(r)
 
+def move_enemies(game_timer):
+    # Primer kretanja neprijatelja
+    i = 0
+    for enm in glob.enemies_list:
+        i += 1
+        if game_timer < 1000:
+            enm.rect.x += 0
+            enm.rect.y = int(game_timer/10) - 80
+            if i % 2 == 0 : 
+                enm.rect.y += 100
+
+        if game_timer > 3000:
+            enm.rect.y = 100 + 100 * math.cos(game_timer/100+i*30)
+            enm.rect.x = math.sin(game_timer/100)*400 + 100 * math.sin(game_timer/100+i*30) + 600
+
 def start_game_one_player():
 
     player = cls.Player()
     destroyer = cls.Destroyer()
-    make_enemies(9)
+    make_enemies(15)
     
     game_timer = 0  # Tajmer igrice
     timer_destroyer = 0 # Tajmer postavljanja destrojera
@@ -180,6 +199,9 @@ def start_game_one_player():
             pygame.display.update()
             TIME.sleep(2)
             continue
+
+        # Funkcija koja pravi animaciju kretanja
+        move_enemies(game_timer)
 
         # Iscrtaj EMI figter-e
         for enm in glob.enemies_list:
