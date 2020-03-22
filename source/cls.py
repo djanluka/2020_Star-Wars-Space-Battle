@@ -73,6 +73,9 @@ class BulletEnemy(pygame.sprite.Sprite):
         self.rect.x += self.direction[0] * 8
         self.rect.y += self.direction[1] * 8
 
+# Contlorel postavljen da bismo jednostavno podesavali komande 
+# koje nece zavisiti od konkretnog tastera
+# IDEJA: U meniju dodati deo za podesavanje komandi
 class Controler():
     def __init__(self):
         self.control = {}
