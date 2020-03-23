@@ -8,11 +8,19 @@ ABOUT = [
         'Predrag Mitic'
         ]
 
+#DODATO promenljive koje pamte kontrole
+CONTROL_LEFT_ORD = ord('a')
+CONTROL_LEFT = 'a'
+CONTROL_RIGHT_ORD = ord('d')
+CONTROL_RIGHT = 'd'
+CONTROL_SHOOT_ORD = ord('w')
+CONTROL_SHOOT = 'w'
+
 CONTROLS_TEXT = [
                 'First player:                                                                                            Second player:',
-                'To left : A                                                                                                                  To left : 4',
-                'To right : D                                                                                                               To left : 6',
-                'To shoot : W                                                                                                        To shoot : 8'
+                f'To left : {CONTROL_LEFT}                                                                                                                  To left : 4',
+                f'To right : {CONTROL_RIGHT}                                                                                                               To left : 6',
+                f'To shoot : {CONTROL_SHOOT}                                                                                                        To shoot : 8'
                 ]
 
 VOLUME_VALUES = {
@@ -23,7 +31,7 @@ VOLUME_VALUES = {
                 '70_PERCENT': 0.7,
                 '100_PERCENT': 1,
                 }
-#DODATO lista slika koje ce biti aktivirane kada se predje na: sledeci nivo
+
 LEVEL_IMAGES = ['images/one.png', 'images/two.png', 'images/three.png']
 LEVEL = 0
 
@@ -49,4 +57,3 @@ all_sprites_list = pygame.sprite.Group()
 
 game_background = pygame.image.load('images/game_background.jpg')
 pause_img = pygame.image.load('images/pause.png')
-

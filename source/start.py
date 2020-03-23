@@ -1,10 +1,9 @@
-import time as TIME #DODATO da bi se uspavala slika prilikom prelaska na sledeci level
+import time as TIME
 from source import cls
 from source import gui
 from source import glob
 from pygame import mixer
 import pygame
-import pygameMenu
 import math
 import random
 
@@ -89,7 +88,7 @@ def draw_destroyer(destroyer, timer_destroyer):
         destroyer.show()
         if timer_destroyer > 1000:
             pygame.draw.rect(gui.screen, (200, 10, 10), (150, 10, destroyer.health * 10, 20))
-            destroyer.is_ready = True #DODATO
+            destroyer.is_ready = True
     
     return timer_destroyer
 
@@ -135,7 +134,7 @@ def check_rocket_to_enemise_colide(destroyer):
              glob.all_sprites_list.remove(r)
              glob.enemies_list.remove(enm)
 
-         #DODATO ako je destroyer spreman onda mozemo da pucamo na njega i da mu skidamo health-e
+         #ako je destroyer spreman onda mozemo da pucamo na njega i da mu skidamo health-e
          if destroyer.is_ready:
              # Obrada kolizije player vs destroyer
              if r.rect.x in range(destroyer.rect.x, destroyer.rect.x + 110):
@@ -163,7 +162,7 @@ def start_game_one_player():
     game_timer = 0  # Tajmer igrice
     timer_destroyer = 0 # Tajmer postavljanja destrojera
     burst_fire = 0 # Tajmer rafala
-    next_level = True #DODATO da znamo da li igramo igricu ili isrctavamo prelazak nivoa
+    next_level = True # da znamo da li igramo igricu ili isrctavamo prelazak nivoa
 
     while True:
         game_timer += 3
@@ -171,7 +170,6 @@ def start_game_one_player():
         gui.screen.blit(glob.pause_img, glob.PAUSE_ONE_PLAYER_POS)
 
         if next_level:
-            #DODATO
             #ako smo presli nivo, iscratavamo prelazak i presakcemo sve ostale funckije
             #jedino moramo da pozovemo update() da bi se postavile slike
             next_level = False

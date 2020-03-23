@@ -1,7 +1,5 @@
 from source import glob
 from source import gui
-import math
-import random
 import pygame
 
 class Player():
@@ -14,7 +12,7 @@ class Player():
    
     def show_score(self):
 
-        if gui.main_menu.is_enabled():
+        if gui.main_menu.is_enabled() or gui.pause_menu.is_enabled():
             return None
 
         for i in range(self.lifes_number):
@@ -25,7 +23,7 @@ class Player():
     
     def show(self):
 
-        if gui.main_menu.is_enabled():
+        if gui.main_menu.is_enabled() or gui.pause_menu.is_enabled():
             return None
 
         gui.screen.blit(self.image, (self.position_x, self.position_y))
@@ -39,6 +37,10 @@ class Rocket(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def show_rocket(self):
+
+        if gui.main_menu.is_enabled() or gui.pause_menu.is_enabled():
+            return None
+
         gui.screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def update(self):
@@ -50,10 +52,14 @@ class Destroyer(pygame.sprite.Sprite):
         self.image = pygame.Surface([100, 50])
         self.rect = self.image.get_rect()
         self.health = 100
-        self.is_ready = False #DODATO
+        self.is_ready = False
         self.image = pygame.image.load('images/destroyer.png')
 
     def show(self):
+
+        if gui.main_menu.is_enabled() or gui.pause_menu.is_enabled():
+            return None
+
         gui.screen.blit(self.image, (self.rect.x, self.rect.y))
 
 
@@ -64,6 +70,10 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def show(self):
+
+        if gui.main_menu.is_enabled() or gui.pause_menu.is_enabled():
+            return None
+
         gui.screen.blit(self.image, (self.rect.x, self.rect.y))
 
 class BulletEnemy(pygame.sprite.Sprite):
@@ -75,24 +85,25 @@ class BulletEnemy(pygame.sprite.Sprite):
         self.direction = [0, 6]
    
     def show_rocket(self, rocket):
+
+        if gui.main_menu.is_enabled() or gui.pause_menu.is_enabled():
+            return None
+
         gui.screen.blit(rocket, (self.rect.x, self.rect.y))
 
     def update(self):
         self.rect.x += self.direction[0] * 8
         self.rect.y += self.direction[1] * 8
 
-# Contlorel postavljen da bismo jednostavno podesavali komande 
-# koje nece zavisiti od konkretnog tastera
-# IDEJA: U meniju dodati deo za podesavanje komandi
 class Controler():
     def __init__(self):
         self.control = {}
         self.set_controls()
 
     def set_controls(self):
-        self.control['Left'] = ord('a')
-        self.control['Right'] = ord('d')
-        self.control['Fire'] = ord('w')
+        self.control['Left'] = glob.CONTROL_LEFT_ORD
+        self.control['Right'] = glob.CONTROL_RIGHT_ORD
+        self.control['Fire'] = glob.CONTROL_SHOOT_ORD
 
     def get_control(self, eve):
         return self.control[eve]
