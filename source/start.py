@@ -26,8 +26,8 @@ def check_menu_events():
         gui.main_menu.mainloop(events)
     elif gui.pause_menu.is_enabled():
         gui.pause_menu.mainloop(events)
-
-def check_player_events(player, burst_fire):
+# DODATO nema pucanja dok se neprijatelji ne postave
+def check_player_events(player, burst_fire, game_taimer):
     cont = cls.Controler()
     movement = 4
     left_margin = 0 + 10
@@ -40,7 +40,7 @@ def check_player_events(player, burst_fire):
     if pressed[cont.get_control('Right')] and player.position_x < right_margin:
         player.position_x += movement
 
-    if pressed[cont.get_control('Fire')]:
+    if pressed[cont.get_control('Fire')] and game_taimer > 1000:
         # Metak se ispaljuje u svakom 50-tom ciklusu
         if burst_fire % 50 is 0:
             #Zvuk pri ispaljivanju metaka
@@ -64,18 +64,18 @@ def make_enemies(number):
         enm = cls.Enemy()
         enm.rect.y = 0
         distance = glob.WINDOW_SIZE[0]/number
-        enm.rect.x = n * distance   
+        enm.rect.x = n * distance + (distance - 64)/2
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
 
 def draw_player(player): 
-    if player.score > 0:
+    if player.health > 0:
         player.show()
     else:
         if player.lifes_number > 0:
             player.lifes_number -= 1
-            player.score = 100
-            player.show_score()
+            player.health = 100
+            player.show_health()
             pygame.display.update()
             TIME.sleep(0.5)
 
@@ -93,20 +93,31 @@ def draw_destroyer(destroyer, timer_destroyer):
     return timer_destroyer
 
 def enemies_fire_to_player(player, game_timer):
-    
-    if game_timer < 1200:
+    # DODATO Ako nema player, ne pucati vise
+    if game_timer < 1200 or player.health <= 0:
         return
 
     rand_enm = random.choice(glob.enemies_list.sprites())
     num_enemies = len(glob.enemies_list.sprites())
+    
+    # DODATO da ne gadjaju svi metkovi direktno u playera
+    frequency = int(400/num_enemies)
+    fire_mode = game_timer % frequency 
 
-    if game_timer % int(200/num_enemies) == 0: #Napad neprijatelja: 160 ucestalost paljbe
+    if fire_mode == 0: #Napad neprijatelja: 400 ucestalost paljbe
         bul = cls.BulletEnemy()
-        bul.rect.x = rand_enm.rect.x + 20
-        bul.rect.y = rand_enm.rect.y + 20
+        bul.rect.x = rand_enm.rect.x + 32
+        bul.rect.y = rand_enm.rect.y + 32
         seanse = math.sqrt( (bul.rect.x - player.position_x)**2 + (bul.rect.y - player.position_y)**2)
         bul.direction[0] = (player.position_x - bul.rect.x) / seanse + 0.1
         bul.direction[1] = (player.position_y - bul.rect.y) / seanse + 0.1
+        glob.bullets_enm_list.add(bul)
+        glob.all_sprites_list.add(bul)
+   # Svaki drugi ispaljuje metka u pravcu (0,1) 
+    if fire_mode == int(frequency/2) : 
+        bul = cls.BulletEnemy()
+        bul.rect.x = rand_enm.rect.x + 32
+        bul.rect.y = rand_enm.rect.y + 32
         glob.bullets_enm_list.add(bul)
         glob.all_sprites_list.add(bul)
 
@@ -118,7 +129,7 @@ def check_bullets_player_collide(player):
         if bullet.rect.x in range(player.position_x, player.position_x + 64):
             if bullet.rect.y in range(player.position_y+20, player.position_y + 64):
                 glob.bullets_enm_list.remove(bullet)
-                player.score -= 20
+                player.health -= 20
 
 
         if bullet.rect.y > 1000:
@@ -157,26 +168,58 @@ def check_rocket_to_enemise_colide(destroyer):
              glob.rockets_list.remove(r)
              glob.all_sprites_list.remove(r)
 
-def move_enemies(game_timer):
-    # Primer kretanja neprijatelja
+
+def fight_1(game_timer):
+
     i = 0
     for enm in glob.enemies_list:
         i += 1
         if game_timer < 1000:
             enm.rect.x += 0
             enm.rect.y = int(game_timer/10) - 80
-            if i % 2 == 0 : 
-                enm.rect.y += 100
 
-        if game_timer > 3000:
+
+def fight_2(game_timer):
+
+    i = 0
+    for enm in glob.enemies_list:
+        i += 1
+        if game_timer < 1080:
+            enm.rect.x = math.cos(game_timer/100)*200  + i* 100
+            enm.rect.y = int(game_timer/10) - 80
+            if i % 2 == 0 : 
+                enm.rect.y += 80
+        else :
+            enm.rect.x = math.cos(game_timer/100)*200  + i* 100
+def fight_3(game_timer):
+    # Postoji eventualni BAG oko preformulacije flote tokom borbe
+    # Moze se otkloniti tako sto ce se kretanje racunati u odnosu na trenutni
+    # polozaj
+    i = 0
+    for enm in glob.enemies_list:
+        i += 1
+        if game_timer < 1080:
+            enm.rect.y = game_timer/4 + 100 * math.cos(game_timer/100+i*30) -170
+            enm.rect.x = -400 + 100 * math.sin(game_timer/100+i*30) + 600
+        else :
             enm.rect.y = 100 + 100 * math.cos(game_timer/100+i*30)
             enm.rect.x = math.sin(game_timer/100)*400 + 100 * math.sin(game_timer/100+i*30) + 600
+
+# DODATO Podelio sam borbe! 
+def move_enemies(game_timer):
+    if glob.FIGHT == 1 :
+        fight_1(game_timer)
+
+    if glob.FIGHT == 2 :
+        fight_2(game_timer)
+
+    if glob.FIGHT == 3 :
+        fight_3(game_timer)
 
 def start_game_one_player():
 
     player = cls.Player()
     destroyer = cls.Destroyer()
-    make_enemies(15)
     
     game_timer = 0  # Tajmer igrice
     timer_destroyer = 0 # Tajmer postavljanja destrojera
@@ -198,35 +241,38 @@ def start_game_one_player():
             TIME.sleep(2)
             continue
 
+
+        # Ako ima nepriajtelja, neka ispaljuju metkove
+        num_enemies = len(glob.enemies_list.sprites())
+        if num_enemies > 0:
+            enemies_fire_to_player(player, game_timer)
+        else:
+            # DODATO Ako nema nepriajatelja pravimo novu flotu u zavisnosti od fighta
+            if glob.FIGHT < 3 :
+                game_timer = 0
+                glob.FIGHT += 1
+                make_enemies(6*glob.FIGHT + 1)
+            else:
+                timer_destroyer = draw_destroyer(destroyer, timer_destroyer)
+                
+                if destroyer.health <= 0:
+                    if glob.LEVEL == 3:
+                        exit()
+                    glob.LEVEL += 1
+                    glob.FIGHT = 0
+                    for r in glob.rockets_list:
+                        glob.rockets_list.remove(r)
+                        glob.all_sprites_list.remove(r)
+
+                    glob.all_sprites_list.update()
+                    start_game_one_player()
+        
         # Funkcija koja pravi animaciju kretanja
         move_enemies(game_timer)
 
         # Iscrtaj EMI figter-e
         for enm in glob.enemies_list:
             enm.show()
-
-        # Ako ima nepriajtelja, neka ispaljuju metkove
-        num_enemies = len(glob.enemies_list.sprites())
-        if num_enemies > 0:
-            # Ispaljivanje metkova od strane nepriajtelja
-            enemies_fire_to_player(player, game_timer)
-
-        else:
-            timer_destroyer = draw_destroyer(destroyer, timer_destroyer)
-            
-            if destroyer.health <= 0:
-                #DODATA cela else grana, ako je destroyer.health = 0, onda prelazimo na veci nivo
-                #i brisemo sve iz listi kako ne bi ostali upamceni metkovi
-                #ponovo pozivamo start_game_one_player
-                if glob.LEVEL == 3:
-                    exit()
-                glob.LEVEL += 1
-                for r in glob.rockets_list:
-                    glob.rockets_list.remove(r)
-                    glob.all_sprites_list.remove(r)
-
-                glob.all_sprites_list.update()
-                start_game_one_player()
 
         # Funkcija koja proverava da li je pogodjen player
         check_bullets_player_collide(player)
@@ -235,7 +281,7 @@ def start_game_one_player():
         check_menu_events()
 
         # Funkcija za proveru dogadjaja nad player-om
-        burst_fire = check_player_events(player, burst_fire)
+        burst_fire = check_player_events(player, burst_fire, game_timer)
 
         # Funkcija za proveru pogotka u (sve) neprijatelje
         check_rocket_to_enemise_colide(destroyer)

@@ -34,6 +34,7 @@ VOLUME_VALUES = {
 
 LEVEL_IMAGES = ['images/one.png', 'images/two.png', 'images/three.png']
 LEVEL = 0
+FIGHT = 0
 
 GAME_VOLUME = 0.5
 MENU_VOLUME = 0.5
