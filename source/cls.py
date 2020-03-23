@@ -18,8 +18,7 @@ class Player():
         for i in range(self.lifes_number):
             gui.screen.blit(self.image, (10 + i*70, glob.WINDOW_SIZE[1]-60))
         	
-        pygame.draw.rect(gui.screen, (0,100,100), (glob.WINDOW_SIZE[0]-20 ,
-        glob.WINDOW_SIZE[1]-40, -self.health * 10, 20))
+        pygame.draw.rect(gui.screen, (0, 100, 100), (glob.WINDOW_SIZE[0]-20, glob.WINDOW_SIZE[1]-40, -self.health * 10,20))
     
     def show(self):
 
@@ -44,7 +43,7 @@ class Rocket(pygame.sprite.Sprite):
         gui.screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def update(self):
-        self.rect.y -= 4
+        self.rect.y -= 10
 
 class Destroyer(pygame.sprite.Sprite):
     def __init__(self):
@@ -103,7 +102,7 @@ class Controler():
     def set_controls(self):
         self.control['Left'] = glob.CONTROL_LEFT_ORD
         self.control['Right'] = glob.CONTROL_RIGHT_ORD
-        self.control['Fire'] = glob.CONTROL_SHOOT_ORD
+        self.control['Fire'] = glob.CONTROL_FIRE_ORD
 
     def get_control(self, eve):
         return self.control[eve]

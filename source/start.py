@@ -26,6 +26,7 @@ def check_menu_events():
         gui.main_menu.mainloop(events)
     elif gui.pause_menu.is_enabled():
         gui.pause_menu.mainloop(events)
+
 # DODATO nema pucanja dok se neprijatelji ne postave
 def check_player_events(player, burst_fire, game_taimer):
     cont = cls.Controler()
@@ -69,6 +70,7 @@ def make_enemies(number):
         glob.all_sprites_list.add(enm)
 
 def draw_player(player): 
+
     if player.health > 0:
         player.show()
     else:
@@ -80,6 +82,7 @@ def draw_player(player):
             TIME.sleep(0.5)
 
 def draw_destroyer(destroyer, timer_destroyer):
+
     timer_destroyer += 3
     destroyer.rect.x = glob.WINDOW_SIZE[0] / 2 - 64
     destroyer.rect.y = (int(timer_destroyer / 5) - 240 if timer_destroyer < 1400 else 40)
@@ -108,13 +111,14 @@ def enemies_fire_to_player(player, game_timer):
         bul = cls.BulletEnemy()
         bul.rect.x = rand_enm.rect.x + 32
         bul.rect.y = rand_enm.rect.y + 32
-        seanse = math.sqrt( (bul.rect.x - player.position_x)**2 + (bul.rect.y - player.position_y)**2)
+        seanse = math.sqrt((bul.rect.x - player.position_x)**2 + (bul.rect.y - player.position_y)**2)
         bul.direction[0] = (player.position_x - bul.rect.x) / seanse + 0.1
         bul.direction[1] = (player.position_y - bul.rect.y) / seanse + 0.1
         glob.bullets_enm_list.add(bul)
         glob.all_sprites_list.add(bul)
+
    # Svaki drugi ispaljuje metka u pravcu (0,1) 
-    if fire_mode == int(frequency/2) : 
+    if fire_mode == int(frequency/2):
         bul = cls.BulletEnemy()
         bul.rect.x = rand_enm.rect.x + 32
         bul.rect.y = rand_enm.rect.y + 32
@@ -137,6 +141,7 @@ def check_bullets_player_collide(player):
 
 
 def check_rocket_to_enemise_colide(destroyer):
+
      for r in glob.rockets_list:
          r.show_rocket()
 
@@ -171,9 +176,7 @@ def check_rocket_to_enemise_colide(destroyer):
 
 def fight_1(game_timer):
 
-    i = 0
     for enm in glob.enemies_list:
-        i += 1
         if game_timer < 1000:
             enm.rect.x += 0
             enm.rect.y = int(game_timer/10) - 80
@@ -185,12 +188,13 @@ def fight_2(game_timer):
     for enm in glob.enemies_list:
         i += 1
         if game_timer < 1080:
-            enm.rect.x = math.cos(game_timer/100)*200  + i* 100
+            enm.rect.x = math.cos(game_timer/100)*200 + i * 100
             enm.rect.y = int(game_timer/10) - 80
-            if i % 2 == 0 : 
+            if i % 2 == 0:
                 enm.rect.y += 80
-        else :
-            enm.rect.x = math.cos(game_timer/100)*200  + i* 100
+        else:
+            enm.rect.x = math.cos(game_timer/100)*200 + i * 100
+
 def fight_3(game_timer):
     # Postoji eventualni BAG oko preformulacije flote tokom borbe
     # Moze se otkloniti tako sto ce se kretanje racunati u odnosu na trenutni
@@ -201,19 +205,19 @@ def fight_3(game_timer):
         if game_timer < 1080:
             enm.rect.y = game_timer/4 + 100 * math.cos(game_timer/100+i*30) -170
             enm.rect.x = -400 + 100 * math.sin(game_timer/100+i*30) + 600
-        else :
+        else:
             enm.rect.y = 100 + 100 * math.cos(game_timer/100+i*30)
             enm.rect.x = math.sin(game_timer/100)*400 + 100 * math.sin(game_timer/100+i*30) + 600
 
 # DODATO Podelio sam borbe! 
 def move_enemies(game_timer):
-    if glob.FIGHT == 1 :
+    if glob.FIGHT == 1:
         fight_1(game_timer)
 
-    if glob.FIGHT == 2 :
+    if glob.FIGHT == 2:
         fight_2(game_timer)
 
-    if glob.FIGHT == 3 :
+    if glob.FIGHT == 3:
         fight_3(game_timer)
 
 def start_game_one_player():
@@ -248,7 +252,7 @@ def start_game_one_player():
             enemies_fire_to_player(player, game_timer)
         else:
             # DODATO Ako nema nepriajatelja pravimo novu flotu u zavisnosti od fighta
-            if glob.FIGHT < 3 :
+            if glob.FIGHT < 3:
                 game_timer = 0
                 glob.FIGHT += 1
                 make_enemies(6*glob.FIGHT + 1)

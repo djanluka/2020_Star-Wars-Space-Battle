@@ -13,14 +13,14 @@ CONTROL_LEFT_ORD = ord('a')
 CONTROL_LEFT = 'a'
 CONTROL_RIGHT_ORD = ord('d')
 CONTROL_RIGHT = 'd'
-CONTROL_SHOOT_ORD = ord('w')
-CONTROL_SHOOT = 'w'
+CONTROL_FIRE_ORD = ord('w')
+CONTROL_FIRE = 'w'
 
 CONTROLS_TEXT = [
                 'First player:                                                                                            Second player:',
                 f'To left : {CONTROL_LEFT}                                                                                                                  To left : 4',
                 f'To right : {CONTROL_RIGHT}                                                                                                               To left : 6',
-                f'To shoot : {CONTROL_SHOOT}                                                                                                        To shoot : 8'
+                f'To shoot : {CONTROL_FIRE}                                                                                                        To shoot : 8'
                 ]
 
 VOLUME_VALUES = {

@@ -57,8 +57,8 @@ def change_control_right(right):
 
 def change_control_shoot(shoot):
     if len(shoot) > 0:
-        glob.CONTROL_SHOOT_ORD = ord(shoot[0])
-        glob.CONTROL_SHOOT = shoot[0]
+        glob.CONTROL_FIRE_ORD = ord(shoot[0])
+        glob.CONTROL_FIRE = shoot[0]
 
 '''
 mozda bude zatrebalo ako budemo nasli resenje za dinamicko ispisivanje komandi
