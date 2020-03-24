@@ -5,7 +5,7 @@ ___
 
 Igrica nalik na Galagu implementirana koristeći Python i biblioteku Pygame.
 Uzivajte u igri!
-__
+___
 
 ### :video_game: Komande igrice:
 
@@ -14,7 +14,7 @@ __
 <kbd>d</kbd> idi desno <br>
 
 Sve komande se mogu mejnati!
-__
+___
 
 ### :wrench: Pokretanje igrice:
 
@@ -24,6 +24,6 @@ git clone https://github.com/matf-pp/2020_Star-Wars-Space-Battle.git
 cd 2020_Star-Wars-Space-Battle
 python3 main.py
 ```
-__
+___
 
 ![](https://github.com/matf-pp/2020_Star-Wars-Space-Battle/blob/master/Screenshots/version-01-2.png)
