@@ -91,8 +91,8 @@ class BulletEnemy(pygame.sprite.Sprite):
         gui.screen.blit(rocket, (self.rect.x, self.rect.y))
 
     def update(self):
-        self.rect.x += self.direction[0] * 6
-        self.rect.y += self.direction[1] * 6
+        self.rect.x += self.direction[0] * 10
+        self.rect.y += self.direction[1] * 10
 
 class Controler():
     def __init__(self):

@@ -41,9 +41,12 @@ def check_player_events(player, burst_fire, game_taimer):
     if pressed[cont.get_control('Right')] and player.position_x < right_margin:
         player.position_x += movement
 
+    # IZMENJENO burst fire je nejmanje vreme izmedju dve rakete
+    burst_fire += 1
+
     if pressed[cont.get_control('Fire')] and game_taimer > 1000:
         # Metak se ispaljuje u svakom 50-tom ciklusu
-        if burst_fire % 50 is 0:
+        if burst_fire > 40 :
             #Zvuk pri ispaljivanju metaka
             rocket_sound = mixer.Sound('sounds/laser.wav')
             rocket_sound.play()
@@ -54,18 +57,16 @@ def check_player_events(player, burst_fire, game_taimer):
 
             glob.all_sprites_list.add(rocket)
             glob.rockets_list.add(rocket)
-        burst_fire += 1
-    else:
-        burst_fire = 0
+            burst_fire = 0
 
     return burst_fire
 
 def make_enemies(number):
     for n in range(number):
         enm = cls.Enemy()
-        enm.rect.y = 0
+        enm.rect.y = 0.0
         distance = glob.WINDOW_SIZE[0]/number
-        enm.rect.x = n * distance + (distance - 64)/2
+        enm.rect.x = float(n * distance + (distance - 64)/2)
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
 
@@ -98,22 +99,27 @@ def draw_destroyer(destroyer, timer_destroyer):
 def enemies_fire_to_player(player, game_timer):
     # DODATO Ako nema player, ne pucati vise
     if game_timer < 1200 or player.health <= 0:
+        glob.bullets_enm_list.draw(gui.screen)
         return
 
     rand_enm = random.choice(glob.enemies_list.sprites())
     num_enemies = len(glob.enemies_list.sprites())
-    
+
     # DODATO da ne gadjaju svi metkovi direktno u playera
-    frequency = int(400/num_enemies)
+    frequency = int(500/num_enemies)
+
+    # DODATO Ogranicnje frekvencije paljbe
+    if frequency < 100:
+        frequency = 100
     fire_mode = game_timer % frequency 
 
     if fire_mode == 0: #Napad neprijatelja: 400 ucestalost paljbe
         bul = cls.BulletEnemy()
         bul.rect.x = rand_enm.rect.x + 32
         bul.rect.y = rand_enm.rect.y + 32
-        seanse = math.sqrt((bul.rect.x - player.position_x)**2 + (bul.rect.y - player.position_y)**2)
-        bul.direction[0] = (player.position_x - bul.rect.x) / seanse + 0.1
-        bul.direction[1] = (player.position_y - bul.rect.y) / seanse + 0.1
+        intensity = math.sqrt((bul.rect.x - player.position_x)**2 + (bul.rect.y - player.position_y)**2)
+        bul.direction[0] = (player.position_x - bul.rect.x) / intensity + 0.1
+        bul.direction[1] = (player.position_y - bul.rect.y) / intensity + 0.1
         glob.bullets_enm_list.add(bul)
         glob.all_sprites_list.add(bul)
 
@@ -196,18 +202,23 @@ def fight_2(game_timer):
             enm.rect.x = math.cos(game_timer/100)*200 + i * 100
 
 def fight_3(game_timer):
-    # Postoji eventualni BAG oko preformulacije flote tokom borbe
-    # Moze se otkloniti tako sto ce se kretanje racunati u odnosu na trenutni
-    # polozaj
+    # Nije dobra raspodela u krugu
+    # ne znam sta je problem
+
+    n = len(glob.enemies_list.sprites())
+    r = 120
     i = 0
     for enm in glob.enemies_list:
         i += 1
-        if game_timer < 1080:
-            enm.rect.y = game_timer/4 + 100 * math.cos(game_timer/100+i*30) -170
-            enm.rect.x = -400 + 100 * math.sin(game_timer/100+i*30) + 600
+        angle_param =  i*(360/n) + game_timer/100.0
+        if game_timer < 1000:
+            enm.rect.y = r * math.sin(angle_param) + game_timer/10 
+            enm.rect.x = r * math.cos(angle_param) + 200.0
         else:
-            enm.rect.y = 100 + 100 * math.cos(game_timer/100+i*30)
-            enm.rect.x = math.sin(game_timer/100)*400 + 100 * math.sin(game_timer/100+i*30) + 600
+            enm.rect.y = r * math.sin(angle_param) + 100.0
+            enm.rect.x = r * math.cos(angle_param) + math.cos(game_timer/100)*400 + 600.0
+
+        #print ((enm.rect.x, enm.rect.y))
 
 # DODATO Podelio sam borbe! 
 def move_enemies(game_timer):
@@ -255,7 +266,8 @@ def start_game_one_player():
             if glob.FIGHT < 3:
                 game_timer = 0
                 glob.FIGHT += 1
-                make_enemies(6*glob.FIGHT + 1)
+                # IZMENA broj neprijatelja po borbi
+                make_enemies(random.randrange(8,16))
             else:
                 timer_destroyer = draw_destroyer(destroyer, timer_destroyer)
                 
