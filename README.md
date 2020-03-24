@@ -1,10 +1,10 @@
-# :plane 2020_Star-Wars-Space-Battle-
-__
+# 2020_Star-Wars-Space-Battle-
+____
 
 ### :memo: Opis igrice:
 
 Igrica nalik na Galagu implementirana koristeći Python i biblioteku Pygame.
-Pratite Uputstva i uzivajte u igri!
+Uzivajte u igri!
 ___
 
 ### :video_game: Komande igrice:
