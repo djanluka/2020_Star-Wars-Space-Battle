@@ -74,6 +74,7 @@ def draw_player(player):
 
     if player.health > 0:
         player.show()
+        player.show_health()
     else:
         if player.lifes_number > 0:
             player.lifes_number -= 1
@@ -310,37 +311,159 @@ def start_game_one_player():
         pygame.display.update()
 
 
-def start_game_two_player():
+def two_check_menu_events():
+    events = pygame.event.get()
+    for e in events:
+        if e.type == pygame.QUIT:
+            exit()
+        if e.type == pygame.KEYDOWN:
+            if e.key == pygame.K_ESCAPE:
+                exit()
 
-    gui.background = pygame.image.load('images/game_background.jpg')
-    player_img = pygame.image.load('images/player.png')
-    pause_img = pygame.image.load('images/pause.png')
+        #Ukoliko smo kliknuli na pauzu, otvaramo pause_meni i zaustavljamo muziku
+        if e.type == pygame.MOUSEBUTTONDOWN and gui.pause_menu.is_disabled():
+            if glob.pause_img.get_rect(topleft=glob.PAUSE_ONE_PLAYER_POS).collidepoint(pygame.mouse.get_pos()):
+                gui.pause_menu.enable()
+
+    #ako su ukljuceni meniji, prikupljamo dogadjaje u njima
+    if gui.main_menu.is_enabled():
+        gui.main_menu.mainloop(events)
+    elif gui.pause_menu.is_enabled():
+        gui.pause_menu.mainloop(events)
+
+
+def two_draw_player(player, num_player): 
+    if player.health > 0:
+        player.show()
+        player.show_health(num_player)    
+
+def two_init_players():
+    player1 = cls.twoPlayer()
+    player1.image = pygame.transform.rotate(glob.emi_fighter, 90)
+    player1.position_x = 50
+    player1.position_y = glob.WINDOW_SIZE[1]/2
+    player2 = cls.twoPlayer()
+    player2.image = pygame.transform.rotate(glob.x_wing, 90)
+    player2.position_x = glob.WINDOW_SIZE[0] - 50 - 128
+    player2.position_y = glob.WINDOW_SIZE[1]/2
+
+    return player1, player2
+
+
+def two_check_player_events(player1, player2 , burst_fire1, burst_fire2 , game_taimer):
+    cont = cls.Controler()
+    movement = 4
+
+    left_margin = 0 + 10
+    right_margin = glob.WINDOW_SIZE[1] - 120
+    
+    
+    pressed = pygame.key.get_pressed()
+
+    if pressed[cont.get_control('Left1')] and player1.position_y > left_margin:
+        player1.position_y -= movement
+
+    if pressed[cont.get_control('Right1')] and player1.position_y < right_margin:
+        player1.position_y += movement
+
+
+    burst_fire1 += 1
+
+    if pressed[cont.get_control('Fire1')] and game_taimer > 100:
+        # Metak se ispaljuje u svakom 50-tom ciklusu
+        if burst_fire1 > 40 :
+            #Zvuk pri ispaljivanju metaka
+            rocket_sound = mixer.Sound('sounds/laser.wav')
+            rocket_sound.play()
+
+            rocket = cls.leftRocket()
+            rocket.rect.x = player1.position_x + 20            
+            rocket.rect.y = player1.position_y + 30
+
+            glob.all_sprites_list.add(rocket)
+            glob.left_rockets_list.add(rocket)
+            burst_fire1 = 0
+
+    if pressed[cont.get_control('Left2')] and player2.position_y > left_margin:
+        player2.position_y -= movement
+
+    if pressed[cont.get_control('Right2')] and player2.position_y < right_margin:
+        player2.position_y += movement
+
+    burst_fire2 += 1
+
+    if pressed[cont.get_control('Fire2')] and game_taimer > 100:
+        if burst_fire2 > 40 :
+            rocket_sound = mixer.Sound('sounds/laser.wav')
+            rocket_sound.play()
+
+            rocket = cls.rightRocket()
+            rocket.rect.x = player2.position_x  
+            rocket.rect.y = player2.position_y + 26
+
+            glob.all_sprites_list.add(rocket)
+            glob.right_rockets_list.add(rocket)
+            burst_fire2 = 0
+
+    return burst_fire1, burst_fire2
+
+
+def two_check_rocket_colide(player1, player2):
+
+    for bullet in glob.left_rockets_list:
+        bullet.show_rocket()
+        if bullet.rect.x in range(int(player2.position_x),int(player2.position_x + 64)):
+            if bullet.rect.y in range(int (player2.position_y),int(player2.position_y + 64)):
+                glob.left_rockets_list.remove(bullet)
+                glob.all_sprites_list.remove(bullet)
+                player2.health -= 20
+
+
+        if bullet.rect.x > 1400:
+            glob.left_rockets_list.remove(bullet)
+            glob.all_sprites_list.remove(bullet)
+   
+    for bullet in glob.right_rockets_list:
+        bullet.show_rocket()
+        if bullet.rect.x in range(int(player1.position_x), int(player1.position_x +64)):
+            if bullet.rect.y in range(int (player1.position_y),int(player1.position_y + 64)):
+                glob.right_rockets_list.remove(bullet)
+                glob.all_sprites_list.remove(bullet)
+                player1.health -= 20
+
+
+        if bullet.rect.x < -100:
+            glob.right_rockets_list.remove(bullet)
+            glob.all_sprites_list.remove(bullet)
+
+
+
+
+def start_game_two_player():
+    player1, player2 = two_init_players()
+    
+    game_timer = 0  # Tajmer igrice
+    timer_destroyer = 0 # Tajmer postavljanja destrojera
+    burst_fire1 = 0 # Tajmer rafala
+    burst_fire2 = 0 # Tajmer rafala
 
     while True:
-        gui.screen.blit(gui.background, (0, 0))
-        pygame.draw.line(gui.screen, glob.BLACK_COLOR, glob.WALL_START_POS, glob.WALL_END_POS, glob.WALL_WIDTH)
-        gui.screen.blit(player_img, (280, 600))
-        gui.screen.blit(player_img, (950, 600))
-        gui.screen.blit(pause_img, glob.PAUSE_TWO_PLAYERS_POS)
+        game_timer += 3
+        gui.screen.blit(glob.game_background, (0, 0))
+        gui.screen.blit(glob.pause_img, glob.PAUSE_TWO_PLAYERS_POS)
+        
+        # Popravi da reaguje na klik pause posto ga detektije u uglu a ne gde
+        # je sad
+        two_check_menu_events()
+        
+        burst_fire1, burst_fire2 = two_check_player_events(player1, player2, burst_fire1, burst_fire2, game_timer )
+        
+        two_check_rocket_colide(player1, player2)
 
-        events = pygame.event.get()
-        for e in events:
-            if e.type == pygame.QUIT:
-                exit()
-            if e.type == pygame.KEYDOWN:
-                if e.key == pygame.K_ESCAPE:
-                    exit()
-
-            #Ukoliko smo kliknuli na pauzu, otvaramo pause_meni i zaustavljamo muziku
-            if e.type == pygame.MOUSEBUTTONDOWN and gui.pause_menu.is_disabled():
-                if pause_img.get_rect(topleft=glob.PAUSE_TWO_PLAYERS_POS).collidepoint(pygame.mouse.get_pos()):
-                    gui.pause_menu.enable()
-
-        if gui.main_menu.is_enabled():
-            gui.main_menu.mainloop(events)
-        elif gui.pause_menu.is_enabled():
-            gui.pause_menu.mainloop(events)
-
+        two_draw_player(player1,1)
+        two_draw_player(player2,2)
+        
+        glob.all_sprites_list.update()
         pygame.display.update()
 
 

@@ -16,6 +16,21 @@ CONTROL_RIGHT = 'd'
 CONTROL_FIRE_ORD = ord('w')
 CONTROL_FIRE = 'w'
 
+
+TWO_CONTROL_LEFT_ORD1 = ord('a')
+TWO_CONTROL_LEFT1 = 'a'
+TWO_CONTROL_RIGHT_ORD1 = ord('d')
+TWO_CONTROL_RIGHT1 = 'd'
+TWO_CONTROL_FIRE_ORD1 = ord('w')
+TWO_CONTROL_FIRE1 = 'w'
+
+TWO_CONTROL_LEFT_ORD2 = pygame.K_RIGHT
+TWO_CONTROL_LEFT2 = 'KEY_RIGHT'
+TWO_CONTROL_RIGHT_ORD2 = pygame.K_LEFT
+TWO_CONTROL_RIGHT2 = 'KEY_LEFT'
+TWO_CONTROL_FIRE_ORD2 = pygame.K_UP
+TWO_CONTROL_FIRE2 = 'KEY_UP'
+
 CONTROLS_TEXT = [
                 'First player:                                                                                            Second player:',
                 f'To left : {CONTROL_LEFT}                                                                                                                  To left : 4',
@@ -55,6 +70,12 @@ bullets_enm_list = pygame.sprite.Group()
 rockets_list = pygame.sprite.Group()
 enemies_list = pygame.sprite.Group()
 all_sprites_list = pygame.sprite.Group()
+left_rockets_list = pygame.sprite.Group()
+right_rockets_list = pygame.sprite.Group()
 
 game_background = pygame.image.load('images/game_background.jpg')
 pause_img = pygame.image.load('images/pause.png')
+
+x_wing = pygame.image.load('images/player.png')
+emi_fighter = pygame.image.load('images/enemy1.png')
+rocket = pygame.image.load('images/rocket-launch.png')
