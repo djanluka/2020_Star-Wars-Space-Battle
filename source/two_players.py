@@ -1,3 +1,6 @@
+from datetime import datetime
+import datetime
+import pygameMenu
 from source import cls
 from source import gui
 from source import glob
@@ -83,10 +86,10 @@ def init_players():
     else:
         player1.image = pygame.transform.rotate(PLAYER_1_IMG_64px[NUM_IMG_PLAYER1], 90)
 
+
     player2 = cls.twoPlayer()
     player2.position_x = glob.WINDOW_SIZE[0] - 50 - 64
     player2.position_y = glob.WINDOW_SIZE[1] / 2
-
     if NUM_IMG_PLAYER2 == 3:
         player2.image = PLAYER_2_IMG_64px[NUM_IMG_PLAYER2]
     elif NUM_IMG_PLAYER2 == 5:
@@ -186,7 +189,6 @@ def choose_players():
 
     global NUM_IMG_PLAYER1, NUM_IMG_PLAYER2
 
-    cont = cls.Controler()
     left1 = pygame.image.load('images/left.png')
     right1 = pygame.image.load('images/right.png')
     left2 = pygame.image.load('images/left.png')
@@ -254,6 +256,7 @@ def start_game_two_player():
 
     global player1, player2
 
+    #DODATO
     choose_players()
 
     init_players()
@@ -262,12 +265,35 @@ def start_game_two_player():
     burst_fire1 = 0  # Tajmer rafala
     burst_fire2 = 0  # Tajmer rafala
 
+    #DODATO
+    #tajmer za icrtavanje sekundi, pronasao sam kod na netu
+    #ovo FPS i dt oznacavaju frekvenciju
+    #timer je broj sekundi koji imamo da zavrsimo igru
+    FPS = 60
+    timer = 60
+    dt = 1.0 / FPS
+    timer_font = pygameMenu.font.get_font(pygameMenu.font.FONT_NEVIS, 50)
+
     while True:
+
+        #DODATO
+        #oduzimamo evreme po svakom prolasku
+        #dodacemo obradu sta bude kad se zavrsi igrica
+        timer -= dt
+        if timer <= 0:
+            exit()
+
         game_timer += 3
         gui.screen.blit(glob.game_background, (0, 0))
         gui.screen.blit(glob.pause_img, glob.PAUSE_TWO_PLAYERS_POS)
         gui.screen.blit(player_1_health_bar_img, (20, 630))
         gui.screen.blit(player_2_health_bar_img, (glob.WINDOW_SIZE[0] - 20 - 64, 630))
+
+        #DODATO
+        #ispis stoperice
+        time_string = str(int(datetime.timedelta(seconds=int(timer)).total_seconds()))
+        time_blit = timer_font.render(time_string, 1, (255, 255, 255))
+        gui.screen.blit(time_blit, (630, 640))
 
         check_menu_events()
 
