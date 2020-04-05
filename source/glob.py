@@ -76,6 +76,6 @@ right_rockets_list = pygame.sprite.Group()
 game_background = pygame.image.load('images/game_background.jpg')
 pause_img = pygame.image.load('images/pause.png')
 
-x_wing = pygame.image.load('images/player.png')
+x_wing = pygame.image.load('images/ply6.png')
 emi_fighter = pygame.image.load('images/enemy1.png')
 rocket = pygame.image.load('images/rocket-launch.png')

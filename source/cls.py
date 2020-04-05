@@ -34,15 +34,15 @@ class twoPlayer():
         self.health = 100
         self.image = glob.x_wing
    
-    def show_health(self, num_plyer):
+    def show_health(self, num_player):
 
         if gui.main_menu.is_enabled() or gui.pause_menu.is_enabled():
             return None
 
-        if num_plyer == 2 :
-            pygame.draw.rect(gui.screen, (0, 100, 100), (glob.WINDOW_SIZE[0]-20, glob.WINDOW_SIZE[1]-40, -self.health * 4,20))
-        if num_plyer == 1 :
-            pygame.draw.rect(gui.screen, (100, 0, 100), (20, glob.WINDOW_SIZE[1]-40, self.health * 4,20))
+        if num_player == 2:
+            pygame.draw.rect(gui.screen, (0, 0, 255), (glob.WINDOW_SIZE[0]-20-64, glob.WINDOW_SIZE[1]-40, -self.health * 4,20))
+        if num_player == 1:
+            pygame.draw.rect(gui.screen, (180, 0, 0), (20+64, glob.WINDOW_SIZE[1]-40, self.health * 4,20))
     
     def show(self):
 
