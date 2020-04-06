@@ -47,6 +47,29 @@ VOLUME_VALUES = {
                 '100_PERCENT': 1,
                 }
 
+num_enemies =  [
+                [8,10,12],
+                [6,10,14],
+                [8,12,16]
+                ]
+
+emi_fighter = [
+                pygame.image.load('images/enemy1.png'),
+                pygame.image.load('images/ply5.png'),
+                pygame.image.load('images/ply2.png')
+               ] 
+
+destroyers = [
+                pygame.image.load('images/destroyer.png'),
+                pygame.image.load('images/destroyer.png'),
+                pygame.image.load('images/destroyer.png')
+             ]
+
+stories = [
+            pygame.image.load('images/story1.png'),
+            pygame.image.load('images/story2.png'),
+            pygame.image.load('images/story3.png')
+          ]
 LEVEL_IMAGES = ['images/one.png', 'images/two.png', 'images/three.png']
 LEVEL = 0
 FIGHT = 0
@@ -77,5 +100,4 @@ game_background = pygame.image.load('images/game_background.jpg')
 pause_img = pygame.image.load('images/pause.png')
 
 x_wing = pygame.image.load('images/ply6.png')
-emi_fighter = pygame.image.load('images/enemy1.png')
 rocket = pygame.image.load('images/rocket-launch.png')

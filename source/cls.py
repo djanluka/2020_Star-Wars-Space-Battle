@@ -102,11 +102,12 @@ class rightRocket(pygame.sprite.Sprite):
 class Destroyer(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
+        self.dstType = 0
         self.image = pygame.Surface([100, 50])
         self.rect = self.image.get_rect()
         self.health = 100
         self.is_ready = False
-        self.image = pygame.image.load('images/destroyer.png')
+        self.image = glob.destroyers[self.dstType]
 
     def show(self):
 
@@ -117,9 +118,10 @@ class Destroyer(pygame.sprite.Sprite):
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, enmType):
         super().__init__()
-        self.image = glob.emi_fighter
+        self.enmType = enmType
+        self.image = glob.emi_fighter[enmType]
         self.rect = self.image.get_rect()
 
     def show(self):
