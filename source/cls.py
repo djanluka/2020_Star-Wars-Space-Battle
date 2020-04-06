@@ -1,5 +1,6 @@
 from source import glob
 from source import gui
+import random
 import pygame
 
 class Player():
@@ -123,13 +124,18 @@ class Enemy(pygame.sprite.Sprite):
         self.enmType = enmType
         self.image = glob.emi_fighter[enmType]
         self.rect = self.image.get_rect()
+        self.hidden = False
+
+    def is_hidden(self):
+        return self.hidden
 
     def show(self):
 
         if gui.main_menu.is_enabled() or gui.pause_menu.is_enabled():
             return None
-
-        gui.screen.blit(self.image, (self.rect.x, self.rect.y))
+        #DODATO
+        if not self.hidden:
+            gui.screen.blit(self.image, (self.rect.x, self.rect.y))
 
 class BulletEnemy(pygame.sprite.Sprite):
     def __init__(self):

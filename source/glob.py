@@ -1,4 +1,7 @@
-import pygame 
+import pygame
+from pygame import mixer
+from source import gui
+from source import glob
 
 ABOUT = [
         'This star wars game like Galaga',
@@ -47,10 +50,10 @@ VOLUME_VALUES = {
                 '100_PERCENT': 1,
                 }
 
-num_enemies =  [
-                [8,10,12],
-                [6,10,14],
-                [8,12,16]
+num_enemies = [
+                [8, 10, 12],
+                [6, 10, 14],
+                [8, 12, 16]
                 ]
 
 emi_fighter = [
@@ -70,8 +73,11 @@ stories = [
             pygame.image.load('images/story2.png'),
             pygame.image.load('images/story3.png')
           ]
-LEVEL_IMAGES = ['images/one.png', 'images/two.png', 'images/three.png']
-LEVEL = 0
+
+#IZMENJENO
+#postavio sam LEVEL odmah na 1, da bi se lepo uklopilo sa make_enemies1,2,3
+LEVEL_IMAGES = ['', 'images/one.png', 'images/two.png', 'images/three.png']
+LEVEL = 1
 FIGHT = 0
 
 GAME_VOLUME = 0.5
@@ -101,3 +107,11 @@ pause_img = pygame.image.load('images/pause.png')
 
 x_wing = pygame.image.load('images/ply6.png')
 rocket = pygame.image.load('images/rocket-launch.png')
+
+
+def return_to_main_menu():
+    mixer.music.stop()
+    gui.main_menu.enable()
+    mixer.music.load('sounds/menu_music.mp3')
+    mixer.music.play(-1)
+    mixer.music.set_volume(glob.MENU_VOLUME)

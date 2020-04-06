@@ -7,7 +7,6 @@ def main():
     pygame.init()
     
     gui.play()
-    
 
     #pustamo menu_music
     mixer.music.load('sounds/menu_music.mp3')

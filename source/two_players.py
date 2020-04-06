@@ -230,11 +230,7 @@ def choose_players():
                     NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 + 1 + size) % size
 
                 elif back.get_rect(topleft=(618, 253)).collidepoint(pygame.mouse.get_pos()):
-                    mixer.music.stop()
-                    mixer.music.load('sounds/menu_music.mp3')
-                    mixer.music.play(-1)
-                    mixer.music.set_volume(glob.GAME_VOLUME)
-                    gui.main_menu.enable()
+                    glob.return_to_main_menu()
                     return
                 elif play.get_rect(topleft=(618, 403)).collidepoint(pygame.mouse.get_pos()):
                     return
