@@ -53,7 +53,7 @@ def check_menu_events():
 
         # Ukoliko smo kliknuli na pauzu, otvaramo pause_meni i zaustavljamo muziku
         if e.type == pygame.MOUSEBUTTONDOWN and gui.pause_menu.is_disabled():
-            if glob.pause_img.get_rect(topleft=glob.PAUSE_TWO_PLAYERS_POS).collidepoint(pygame.mouse.get_pos()):
+            if glob.pause_img_2.get_rect(topleft=glob.PAUSE_TWO_PLAYERS_POS).collidepoint(pygame.mouse.get_pos()):
                 gui.pause_menu.enable()
 
     # ako su ukljuceni meniji, prikupljamo dogadjaje u njima
@@ -193,10 +193,12 @@ def choose_players():
     right1 = pygame.image.load('images/right.png')
     left2 = pygame.image.load('images/left.png')
     right2 = pygame.image.load('images/right.png')
-    play = pygame.image.load('images/play.png')
-    back = pygame.image.load('images/back.png')
-
+    play_img = pygame.image.load('images/play.png')
+    back_img = pygame.image.load('images/back.png')
+    play = True
     size = len(PLAYER_1_IMG_256px)
+
+
 
     while True:
 
@@ -205,8 +207,11 @@ def choose_players():
         gui.screen.blit(left2, (660, 318))
         gui.screen.blit(right1, (576, 318))
         gui.screen.blit(right2, (1000, 318))
-        gui.screen.blit(play, (618, 403))
-        gui.screen.blit(back, (618, 253))
+
+        if play:
+            gui.screen.blit(play_img, (500, 480))
+        else:
+            gui.screen.blit(back_img, (500, 480))
 
         gui.screen.blit(PLAYER_1_IMG_256px[NUM_IMG_PLAYER1], (310, 222))
         gui.screen.blit(PLAYER_2_IMG_256px[NUM_IMG_PLAYER2], (734, 222))
@@ -229,12 +234,6 @@ def choose_players():
                 elif right2.get_rect(topleft=(1000, 318)).collidepoint(pygame.mouse.get_pos()):
                     NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 + 1 + size) % size
 
-                elif back.get_rect(topleft=(618, 253)).collidepoint(pygame.mouse.get_pos()):
-                    glob.return_to_main_menu()
-                    return
-                elif play.get_rect(topleft=(618, 403)).collidepoint(pygame.mouse.get_pos()):
-                    return
-
             if e.type == pygame.KEYDOWN:
                 if e.key == glob.TWO_CONTROL_LEFT_ORD1:
                     NUM_IMG_PLAYER1 = (NUM_IMG_PLAYER1 - 1 + size) % size
@@ -244,7 +243,18 @@ def choose_players():
                     NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 - 1 + size) % size
                 elif e.key == glob.TWO_CONTROL_RIGHT_ORD2:
                     NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 + 1 + size) % size
-        
+                elif e.key == pygame.K_DOWN:
+                    play = False
+                elif e.key == pygame.K_UP:
+                    play = True
+                elif pygame.K_RETURN:
+                    if play is not True:
+                        print('menu')
+                        glob.return_to_main_menu()
+                        return
+                    else:
+                        return
+
         pygame.display.update()
         
      
@@ -265,7 +275,7 @@ def start_game_two_player():
     while True:
         game_timer += 3
         gui.screen.blit(glob.game_background, (0, 0))
-        gui.screen.blit(glob.pause_img, glob.PAUSE_TWO_PLAYERS_POS)
+        gui.screen.blit(glob.pause_img_2, glob.PAUSE_TWO_PLAYERS_POS)
         gui.screen.blit(player_1_health_bar_img, (20, 630))
         gui.screen.blit(player_2_health_bar_img, (glob.WINDOW_SIZE[0] - 20 - 64, 630))
 

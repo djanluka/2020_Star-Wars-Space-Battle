@@ -175,7 +175,7 @@ def createPauseMenu():
     pause_menu.add_option('Continue', continue_game)
     pause_menu.add_option('Settings', settings_menu)
     pause_menu.add_option('Reset', reset_game)
-                                 
+
 def createMenu():
     global main_menu
     global pause_menu
@@ -294,8 +294,6 @@ def createMenu():
     main_menu.add_option('Settings', settings_menu)
     main_menu.add_option('About', about_menu)
     main_menu.add_option('Exit', pygameMenu.events.EXIT)
-
-
 
 def play():
     global main_menu

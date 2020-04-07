@@ -17,9 +17,9 @@ class Player():
             return None
 
         for i in range(self.lifes_number):
-            gui.screen.blit(self.image, (10 + i*70, glob.WINDOW_SIZE[1]-60))
-        	
-        pygame.draw.rect(gui.screen, (0, 100, 100), (glob.WINDOW_SIZE[0]-20, glob.WINDOW_SIZE[1]-40, -self.health * 10,20))
+            gui.screen.blit(pygame.image.load('images/life.png'), (150 + i*35, glob.WINDOW_SIZE[1]-40))
+
+        pygame.draw.rect(gui.screen, (180, 180, 0), (glob.WINDOW_SIZE[0]-50, glob.WINDOW_SIZE[1]-35, -self.health * 9, 20))
     
     def show(self):
 

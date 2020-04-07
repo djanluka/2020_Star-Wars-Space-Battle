@@ -86,7 +86,7 @@ MENU_VOLUME = 0.5
 WINDOW_SIZE = (1300, 700)
 MENU_SIZE = (500, 450)
 START_WARS_LOGO_POS = (100, 600)
-PAUSE_ONE_PLAYER_POS = (1260, 5)
+PAUSE_ONE_PLAYER_POS = (1265, 665)
 PAUSE_TWO_PLAYERS_POS = (634, 5)
 BLACK_COLOR = (0, 0, 0)
 WALL_START_POS = (650, 700)
@@ -103,7 +103,8 @@ left_rockets_list = pygame.sprite.Group()
 right_rockets_list = pygame.sprite.Group()
 
 game_background = pygame.image.load('images/game_background.jpg')
-pause_img = pygame.image.load('images/pause.png')
+pause_img_1 = pygame.image.load('images/pause1.png')
+pause_img_2 = pygame.image.load('images/pause2.png')
 
 x_wing = pygame.image.load('images/ply6.png')
 rocket = pygame.image.load('images/rocket-launch.png')

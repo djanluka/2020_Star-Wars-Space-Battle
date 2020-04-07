@@ -1,4 +1,5 @@
 import time as TIME
+import pygameMenu
 from source import cls
 from source import gui
 from source import glob
@@ -26,7 +27,7 @@ def check_menu_events():
 
         # Ukoliko smo kliknuli na pauzu, otvaramo pause_meni i zaustavljamo muziku
         if e.type == pygame.MOUSEBUTTONDOWN and gui.pause_menu.is_disabled():
-            if glob.pause_img.get_rect(topleft=glob.PAUSE_ONE_PLAYER_POS).collidepoint(pygame.mouse.get_pos()):
+            if glob.pause_img_1.get_rect(topleft=glob.PAUSE_ONE_PLAYER_POS).collidepoint(pygame.mouse.get_pos()):
                 gui.pause_menu.enable()
 
     # ako su ukljuceni meniji, prikupljamo dogadjaje u njima
@@ -395,6 +396,19 @@ def move_enemies3():
 # 6) napraviti i zameniti story slike
 # 7) napistai ovde sta jos treba!
 
+def set_background():
+    gui.screen.blit(glob.game_background, (0, 0))
+
+    #DODATO
+    #health bar
+    gui.screen.blit(pygame.image.load('images/black.png'), (0, 650))
+    gui.screen.blit(pygame.image.load('images/yellow1.png'), (10, 650))
+    gui.screen.blit(glob.pause_img_1, glob.PAUSE_ONE_PLAYER_POS)
+    font = pygameMenu.font.get_font(pygameMenu.font.FONT_PT_SERIF, 30)
+    life = font.render('Lifes:', 1, (150, 150, 0))
+    gui.screen.blit(life, (75, 655))
+
+
 def start_game_one_player():
 
     global player, game_timer, burst_fire
@@ -409,8 +423,8 @@ def start_game_one_player():
 
     while True:
         game_timer += 3
-        gui.screen.blit(glob.game_background, (0, 0))
-        gui.screen.blit(glob.pause_img, glob.PAUSE_ONE_PLAYER_POS)
+
+        set_background()
 
         if next_level:
             # TO DO potrebno je obezbediti da se po zavrsetku igre vrati umeni!!
