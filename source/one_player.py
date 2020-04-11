@@ -55,8 +55,8 @@ def check_player_events():
     burst_fire += 1
 
     if pressed[cont.get_control('Fire')] and game_timer > 1000:
-        # Metak se ispaljuje u svakom 50-tom ciklusu
-        if burst_fire > 40:
+        # Metak se ispaljuje u svakom 20-tom ciklusu
+        if burst_fire > 10:
             # Zvuk pri ispaljivanju metaka
             rocket_sound = mixer.Sound('sounds/laser.wav')
             rocket_sound.play()
@@ -101,7 +101,7 @@ def enemies_fire_to_player():
     global timer_hidden, hidden_enemy
 
     #Ako nema neprijatelja ne pucamo
-    if game_timer < 1200 or player.health <= 0:
+    if game_timer < 1000 or player.health <= 0:
         glob.bullets_enm_list.draw(gui.screen)
         return
 
@@ -138,7 +138,7 @@ def enemies_fire_to_player():
         glob.all_sprites_list.add(bul)
 
     glob.bullets_enm_list.draw(gui.screen)
-
+    '''
     # DODATO
     # mogucnost da enemy bude nevidljiv
     # kada je veci nivo veca je verovatnoca jer je tezi level
@@ -155,15 +155,30 @@ def enemies_fire_to_player():
     else:
         timer_hidden = 0
         hidden_enemy.hidden = False
+    '''
 
-
+    #OVO JE KOD GDE MI SVI ENEMYJI POSTAJU NEVIDLJIVI NA 150 MILISEKUDNI
+    #KOD IZNAD OVOG JE KAD MI SMAO JEDAN ENEMY POSTAJE NEVIDLJIV
+    #OVO NE MORAJU DA BUDU KONACNE FUNCKIJE
+    #IDEJA MI JE DA NAPRAVIMO JEDNU POSEBNU FUNKCIJU GDE CEMO U ZAVISNOSTI OD LEVELA I FIGHTA
+    #DA BIRAMO NA KOJI CE NACIN ENEMY-JI DA BUDU NEVIDLJIVI
+    if timer_hidden == 0:
+        for enm in glob.enemies_list:
+            enm.hidden = True
+            timer_hidden += 1
+    elif timer_hidden < 150:  # odokativna duzina koliko je nevidljiv
+        timer_hidden += 1
+    else:
+        timer_hidden = -150
+        for enm in glob.enemies_list:
+            enm.hidden = False
 
 def check_bullets_player_collide():
     for bullet in glob.bullets_enm_list:
         if bullet.rect.x in range(player.position_x, player.position_x + 64):
             if bullet.rect.y in range(player.position_y + 20, player.position_y + 64):
                 glob.bullets_enm_list.remove(bullet)
-                player.health -= 20
+                player.health -= 10
 
         if bullet.rect.y > 1000:
             glob.bullets_enm_list.remove(bullet)
@@ -175,6 +190,8 @@ def check_rocket_to_enemise_colide(destroyer):
     for r in glob.rockets_list:
         r.show_rocket()
 
+        if glob.ENEMYS_IS_READY is False:
+            continue
         # Obrada kolizije player vs enemies
         enemy_hit_list = pygame.sprite.spritecollide(r, glob.enemies_list, True)
 
@@ -182,9 +199,9 @@ def check_rocket_to_enemise_colide(destroyer):
             #DODATO
             #ako smo uspeli da pogodimo nevidljivog, moramo da ga izbrisemo
             #i da ostavimo mogucnost za biranje sledeceg
-            if enm.is_hidden():
-                timer_hidden = 0
-                hidden_enemy = None
+            #if enm.is_hidden():
+             #   timer_hidden = 0
+             #   hidden_enemy = None
             glob.rockets_list.remove(r)
             glob.all_sprites_list.remove(r)
             glob.enemies_list.remove(enm)
@@ -261,12 +278,28 @@ def make_enemies3(number):
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
 
-def fight_1():
-    for enm in glob.enemies_list:
-        if game_timer < 1000:
-            enm.rect.x += 0
-            enm.rect.y = int(game_timer / 10) - 80
+def make_enemies4(number):
 
+    for i in range(1, 5):
+        for n in range(1, 20):
+            if i % 2 == 0:
+                enm = cls.Enemy(3)
+            else:
+                enm = cls.Enemy(4)
+            enm.rect.y = -(30 * i + 60 * (i-1))
+            distance = int((glob.WINDOW_SIZE[0] - 20*40) / 21)
+            enm.rect.x = float(n * distance + n*40)
+            glob.enemies_list.add(enm)
+            glob.all_sprites_list.add(enm)
+
+
+def fight_1():
+    if game_timer < 1000:
+        for enm in glob.enemies_list:
+                enm.rect.x += 0
+                enm.rect.y = int(game_timer / 10) - 80
+    else:
+        glob.ENEMYS_IS_READY = True
 
 def fight_2():
     i = 0
@@ -277,7 +310,9 @@ def fight_2():
             if i % 2 == 0:
                 enm.rect.y += 80
         else:
-            enm.rect.x = (enm.rect.x+4) % 1500 
+            enm.rect.x = (enm.rect.x+4) % 1500
+
+    glob.ENEMYS_IS_READY = True
 
 
 def fight_3():
@@ -293,12 +328,16 @@ def fight_3():
         else:
             enm.rect.y = r * math.sin(angle_param) + 100.0
             enm.rect.x = r * math.cos(angle_param) + math.cos(game_timer / 100) * 400 + 600.0
+    glob.ENEMYS_IS_READY = True
+
 
 def fight_4():
-    for enm in glob.enemies_list:
-        if game_timer < 600:
-            enm.rect.x += 0
-            enm.rect.y = enm.rect.y + 1
+    if game_timer < 600:
+        for enm in glob.enemies_list:
+                enm.rect.x += 0
+                enm.rect.y = enm.rect.y + 1
+    else:
+        glob.ENEMYS_IS_READY = True
 
 
 def fight_5():
@@ -310,6 +349,7 @@ def fight_5():
                 enm.rect.x = (enm.rect.x + 4) % 1500
             else :
                 enm.rect.x = (enm.rect.x - 4) % 1500
+    glob.ENEMYS_IS_READY = True
 
 
 def fight_6():
@@ -324,12 +364,14 @@ def fight_6():
             else :
                 enm.rect.x = (enm.rect.x - 4) % 1500
                 enm.rect.y = (340 - enm.rect.x/4) % 400
+    glob.ENEMYS_IS_READY = True
 
 def fight_7():
     for enm in glob.enemies_list:
         if game_timer < 600:
             enm.rect.x += 0
             enm.rect.y = enm.rect.y + 1
+    glob.ENEMYS_IS_READY = True
 
 
 def fight_8():
@@ -341,6 +383,7 @@ def fight_8():
                 enm.rect.x = (enm.rect.x + 4) % 1500
             elif enm.enmType == 2 :
                 enm.rect.x = (enm.rect.x - 4) % 1500
+    glob.ENEMYS_IS_READY = True
 
 def fight_9():
     for enm in glob.enemies_list:
@@ -356,6 +399,35 @@ def fight_9():
             elif enm.enmType == 2:
                 enm.rect.x = (enm.rect.x - 4) % 1500
                 enm.rect.y = (400 - enm.rect.x/4) % 400
+    glob.ENEMYS_IS_READY = True
+
+def fight_10():
+    if game_timer < 1000:
+        for enm in glob.enemies_list:
+            enm.rect.y += 1
+    else:
+        glob.ENEMYS_IS_READY = True
+
+
+def fight_11():
+
+    if game_timer < 1000:
+        for enm in glob.enemies_list:
+            enm.rect.y += 1
+    else:
+        glob.ENEMYS_IS_READY = True
+        for enm in glob.enemies_list:
+            if enm.enmType == 3:
+                enm.rect.x = (enm.rect.x-4) % glob.WINDOW_SIZE[0]
+            elif enm.enmType == 4:
+                enm.rect.x = (enm.rect.x+4) % glob.WINDOW_SIZE[0]
+
+def fight_12():
+    if game_timer < 1000:
+        for enm in glob.enemies_list:
+            enm.rect.y += 1
+    else:
+        glob.ENEMYS_IS_READY = True
 
 def move_enemies1():
     if glob.FIGHT == 1:
@@ -387,14 +459,16 @@ def move_enemies3():
     if glob.FIGHT == 3:
         fight_9()
 
-# TO DO: 
-# 1) izmeniti kretnja fight_8 fight_9 eventualno i fight_6
-# 2) napraviti slike destroyer-a i ubaciti ih u glob
-# 3) dodati pucnje za destroyera
-# 4) postaviti automatsko vracanje u meni nakon kraja igre
-# 5) promeniti background muziku
-# 6) napraviti i zameniti story slike
-# 7) napistai ovde sta jos treba!
+
+def move_enemies4():
+    if glob.FIGHT == 1:
+        fight_10()
+
+    if glob.FIGHT == 2:
+        fight_11()
+
+    if glob.FIGHT == 3:
+        fight_12()
 
 def set_background():
     gui.screen.blit(glob.game_background, (0, 0))
@@ -405,9 +479,41 @@ def set_background():
     gui.screen.blit(pygame.image.load('images/yellow1.png'), (10, 650))
     gui.screen.blit(glob.pause_img_1, glob.PAUSE_ONE_PLAYER_POS)
     font = pygameMenu.font.get_font(pygameMenu.font.FONT_PT_SERIF, 30)
-    life = font.render('Lifes:', 1, (150, 150, 0))
-    gui.screen.blit(life, (75, 655))
+    lifes = font.render('Lifes:', 1, (150, 150, 0))
+    gui.screen.blit(lifes, (75, 655))
 
+
+def set_background_num_enemies():
+    #DODATO
+    #iscrtavanje koliko nam je enmija ostalo da bismo presli na naredbi fight
+    font = pygameMenu.font.get_font(pygameMenu.font.FONT_PT_SERIF, 30)
+    enm3 = 0
+    enm4 = 0
+    for enm in glob.enemies_list:
+        if enm.enmType == 3:
+            enm3 += 1
+        elif enm.enmType == 4:
+            enm4 +=1
+    enm3 = font.render(f':{enm3}', 1, (150,150, 0))
+    enm4 = font.render(f':{enm4}', 1, (150,150, 0))
+    gui.screen.blit(enm3, (1130, 655))
+    gui.screen.blit(enm4, (1210, 655))
+    gui.screen.blit(pygame.image.load('images/enm1_30px.png'), (1095, 660))
+    gui.screen.blit(pygame.image.load('images/enm2_30px.png'), (1175, 660))
+
+# TO DO:
+# 1) izmeniti kretnja fight_8 fight_9 eventualno i fight_6
+# 2) napraviti slike destroyer-a i ubaciti ih u glob
+# 3) dodati pucnje za destroyera
+# 4) postaviti automatsko vracanje u meni nakon kraja igre
+# 5) promeniti background muziku
+# 6) napraviti i zameniti story slike
+# 7) napistai ovde sta jos treba!
+# GORE SAM OSTAVIO KOMENTAR ZA NEVIDLJIVOST ENEMYJA
+# ALI TAKODJE MISLIM DA  UMESTO SAMO JEDNOG RANDOOM ENEMYJA BIRAMO VISE NJIH DA PUCA ISTOVREMENO
+# DODAO SAM DVE NOVE SLIKE ENM1_40PX, ENM2_40PX JER SA MANJIM ENEYJIMA MOZE DOSTA VISE DA IH BUDE
+#ZATO SAM I NAPRAVIO MAKE_ENEMIES_4 DA VIDIMO KOLIKO JE BOLJE KAD IMAMO VISE PROTIVNIKA
+#PROBAO SAM I SLIAKAMA OD 30PX ALI TU SU MI ONDA NEKAKO PREVISE SITNI
 
 def start_game_one_player():
 
@@ -423,7 +529,6 @@ def start_game_one_player():
 
     while True:
         game_timer += 3
-
         set_background()
 
         if next_level:
@@ -458,12 +563,13 @@ def start_game_one_player():
         if num_enemies > 0:
             enemies_fire_to_player()
         else:
+            glob.ENEMYS_IS_READY = False
             # DODATO Ako nema nepriajatelja pravimo novu flotu u zavisnosti od fighta
             if glob.FIGHT < 3:
                 game_timer = 0
 
                 if glob.LEVEL == 1:
-                    make_enemies1(glob.num_enemies[glob.LEVEL][glob.FIGHT])
+                    make_enemies4(glob.num_enemies[glob.LEVEL][glob.FIGHT])
                 elif glob.LEVEL == 2:
                     make_enemies2(glob.num_enemies[glob.LEVEL][glob.FIGHT])
                 elif glob.LEVEL == 3:
@@ -488,7 +594,7 @@ def start_game_one_player():
 
         # Funkcije koje prave animaciju kretanja
         if glob.LEVEL == 1:
-            move_enemies1()
+            move_enemies4()
         elif glob.LEVEL == 2:
             move_enemies2()
         elif glob.LEVEL == 3:
@@ -497,6 +603,9 @@ def start_game_one_player():
         # Iscrtaj neprijatelje
         for enm in glob.enemies_list:
             enm.show()
+
+        #ispisuje broj preostalih enemyja
+        set_background_num_enemies()
 
         # Funkcija koja proverava da li je pogodjen player
         check_bullets_player_collide()

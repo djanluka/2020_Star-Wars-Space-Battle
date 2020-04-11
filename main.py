@@ -1,5 +1,6 @@
 from pygame import mixer
 from source import gui
+from source import glob
 import pygame
 import pygameMenu
 
@@ -10,7 +11,7 @@ def main():
 
     #pustamo menu_music
     mixer.music.load('sounds/menu_music.mp3')
-    mixer.music.set_volume(0.5)
+    mixer.music.set_volume(glob.MENU_VOLUME)
     mixer.music.play(-1)
 
     while True:

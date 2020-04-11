@@ -202,7 +202,7 @@ def choose_players():
 
     while True:
 
-        gui.screen.blit(gui.background, (0, 0))
+        gui.screen.blit(glob.game_background, (0, 0))
         gui.screen.blit(left1, (236, 318))
         gui.screen.blit(left2, (660, 318))
         gui.screen.blit(right1, (576, 318))

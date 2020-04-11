@@ -49,18 +49,21 @@ VOLUME_VALUES = {
                 '70_PERCENT': 0.7,
                 '100_PERCENT': 1,
                 }
+emi_fighter = [
+                pygame.image.load('images/enemy1.png'),
+                pygame.image.load('images/ply5.png'),
+                pygame.image.load('images/ply2.png'),
+                pygame.image.load('images/enm1_40px.png'),
+                pygame.image.load('images/enm2_40px.png'),
+               ]
 
 num_enemies = [
+                [], #zato sto global.Level ide krece od 1
                 [8, 10, 12],
                 [6, 10, 14],
                 [8, 12, 16]
                 ]
 
-emi_fighter = [
-                pygame.image.load('images/enemy1.png'),
-                pygame.image.load('images/ply5.png'),
-                pygame.image.load('images/ply2.png')
-               ] 
 
 destroyers = [
                 pygame.image.load('images/destroyer.png'),
@@ -80,8 +83,11 @@ LEVEL_IMAGES = ['', 'images/one.png', 'images/two.png', 'images/three.png']
 LEVEL = 1
 FIGHT = 0
 
-GAME_VOLUME = 0.5
-MENU_VOLUME = 0.5
+#TO DO
+#postavitii muziku na 0.5
+#ja sam se ja sad iskljucio da ne smara svaki put
+GAME_VOLUME = 0
+MENU_VOLUME = 0
 
 WINDOW_SIZE = (1300, 700)
 MENU_SIZE = (500, 450)
@@ -94,6 +100,7 @@ WALL_END_POS = (650, 40)
 WALL_WIDTH = 15
 NUM_PLAYERS = 'ONE_PLAYER'
 
+ENEMYS_IS_READY = False
 
 bullets_enm_list = pygame.sprite.Group()
 rockets_list = pygame.sprite.Group()
