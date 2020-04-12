@@ -80,7 +80,7 @@ stories = [
 #postavio sam LEVEL odmah na 1, da bi se lepo uklopilo sa make_enemies1,2,3
 LEVEL_IMAGES = ['', 'images/one.png', 'images/two.png', 'images/three.png']
 LEVEL = 1
-FIGHT = 0
+FIGHT = 3
 
 #TO DO
 #postavitii muziku na 0.5
@@ -99,7 +99,7 @@ WALL_END_POS = (650, 40)
 WALL_WIDTH = 15
 NUM_PLAYERS = 'ONE_PLAYER'
 
-ENEMYS_IS_READY = False
+ENEMIES_IS_READY = False
 
 bullets_enm_list = pygame.sprite.Group()
 rockets_list = pygame.sprite.Group()

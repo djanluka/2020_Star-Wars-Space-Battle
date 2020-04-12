@@ -156,6 +156,26 @@ class BulletEnemy(pygame.sprite.Sprite):
         self.rect.x += self.direction[0] * 10
         self.rect.y += self.direction[1] * 10
 
+
+class BulletDestroyer(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface([8, 8])
+        self.image.fill((255, 100, 100))
+        self.rect = self.image.get_rect()
+        self.direction = [0, 1]
+
+    def show_rocket(self, rocket):
+        if gui.main_menu.is_enabled() or gui.pause_menu.is_enabled():
+            return None
+
+        gui.screen.blit(rocket, (self.rect.x, self.rect.y))
+
+    def update(self):
+        self.rect.x += self.direction[0] * 10
+        self.rect.y += self.direction[1] * 10
+
+
 class Controler():
     def __init__(self):
         self.control = {}
