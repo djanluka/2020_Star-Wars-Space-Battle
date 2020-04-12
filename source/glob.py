@@ -50,15 +50,13 @@ VOLUME_VALUES = {
                 '100_PERCENT': 1,
                 }
 emi_fighter = [
-                pygame.image.load('images/enemy1.png'),
-                pygame.image.load('images/ply5.png'),
-                pygame.image.load('images/ply2.png'),
                 pygame.image.load('images/enm1_40px.png'),
                 pygame.image.load('images/enm2_40px.png'),
+                pygame.image.load('images/enm3_40px.png'),
                ]
 
 num_enemies = [
-                [], #zato sto global.Level ide krece od 1
+                'Nema enemy-ja za 0 level',
                 [8, 10, 12],
                 [6, 10, 14],
                 [8, 12, 16]
@@ -72,6 +70,7 @@ destroyers = [
              ]
 
 stories = [
+            'Nema slike za 0 level',
             pygame.image.load('images/story1.png'),
             pygame.image.load('images/story2.png'),
             pygame.image.load('images/story3.png')
