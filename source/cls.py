@@ -140,17 +140,41 @@ class Enemy(pygame.sprite.Sprite):
 class BulletEnemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface([5, 5])
-        self.image.fill((100, 255, 200))
+        #self.image = pygame.Surface([5, 5])
+        #self.image.fill((100, 255, 200))
+        self.image = pygame.image.load('images/rocket_enemy.png')
         self.rect = self.image.get_rect()
         self.direction = [0, 1]
-   
-    def show_rocket(self, rocket):
 
+    def set_direction(self, player_pos_x, player_pos_y, intensity):
+        self.direction[0] = (player_pos_x - self.rect.x) / intensity + 0.1
+        self.direction[1] = (player_pos_y - self.rect.y) / intensity + 0.1
+
+        #DODATO
+        #okretanje metka ka playeru
+        dir = self.direction[0]
+        if 0.1 <= dir and dir <= 0.3:
+            self.image = pygame.transform.rotate(self.image, 8)
+        elif 0.3 <= dir and dir <= 0.6:
+            self.image = pygame.transform.rotate(self.image, 30)
+        elif 0.6 <= dir and dir <= 0.8:
+            self.image = pygame.transform.rotate(self.image, 45)
+        elif dir >= 0.8:
+            self.image = pygame.transform.rotate(self.image, 55)
+        elif -0.3 <= dir and dir <= 0.1:
+            self.image = pygame.transform.rotate(self.image, -8)
+        elif -0.6 <= dir and dir <= -0.3:
+            self.image = pygame.transform.rotate(self.image, -30)
+        elif -0.8 <= dir and dir <= -0.6 :
+            self.image = pygame.transform.rotate(self.image, -45)
+        elif dir <= -0.8:
+            self.image = pygame.transform.rotate(self.image, -55)
+
+
+    def show_rocket(self, rocket):
         if gui.main_menu.is_enabled() or gui.pause_menu.is_enabled():
             return None
-
-        gui.screen.blit(rocket, (self.rect.x, self.rect.y))
+        gui.screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def update(self):
         self.rect.x += self.direction[0] * 10

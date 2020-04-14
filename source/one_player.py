@@ -17,6 +17,9 @@ timer_destroyer = 0
 timer_hidden = 0
 hidden_enemy = None
 
+#DODATO
+#preko ovog parametra pratim broj enemy-ja iz svake grupe
+enemies = [0, 0, 0, 0]
 
 def check_menu_events():
 
@@ -85,6 +88,22 @@ def draw_player():
             pygame.display.update()
             TIME.sleep(0.5)
 
+def go_to_next_level():
+    if glob.LEVEL == 3:
+        exit()
+    glob.LEVEL += 1
+    glob.FIGHT = 0
+    for r in glob.rockets_list:
+        glob.rockets_list.remove(r)
+        glob.all_sprites_list.remove(r)
+    for b in glob.bullets_enm_list:
+        glob.bullets_enm_list.remove(b)
+        glob.all_sprites_list.remove(b)
+
+    glob.all_sprites_list.update()
+    start_game_one_player()
+
+
 def draw_destroyer():
     global destroyer, timer_destroyer
     timer_destroyer += 3
@@ -104,19 +123,7 @@ def destroyer_battle():
 
     if destroyer.health <= 0:
         destroyer.is_ready = False
-        if glob.LEVEL == 3:
-            exit()
-        glob.LEVEL += 1
-        glob.FIGHT = 0
-        for r in glob.rockets_list:
-            glob.rockets_list.remove(r)
-            glob.all_sprites_list.remove(r)
-        for b in glob.bullets_enm_list:
-            glob.bullets_enm_list.remove(b)
-            glob.all_sprites_list.remove(b)
-
-        glob.all_sprites_list.update()
-        start_game_one_player()
+        go_to_next_level()
     else:
         draw_destroyer()
 
@@ -181,11 +188,10 @@ def enemies_fire_to_player():
 
     if fire_mode == 0:  # Napad neprijatelja: 400 ucestalost paljbe
         bul = cls.BulletEnemy()
-        bul.rect.x = rand_enm.rect.x + 32
-        bul.rect.y = rand_enm.rect.y + 32
+        bul.rect.x = rand_enm.rect.x + 20
+        bul.rect.y = rand_enm.rect.y + 20
         intensity = math.sqrt((bul.rect.x - player.position_x) ** 2 + (bul.rect.y - player.position_y) ** 2)
-        bul.direction[0] = (player.position_x - bul.rect.x) / intensity + 0.1
-        bul.direction[1] = (player.position_y - bul.rect.y) / intensity + 0.1
+        bul.set_direction(player.position_x, player.position_y, intensity)
         glob.bullets_enm_list.add(bul)
         glob.all_sprites_list.add(bul)
 
@@ -223,14 +229,6 @@ def destroyer_fire_to_player():
 
     glob.bullets_enm_list.draw(gui.screen)
 
-    '''
-    bul1 = cls.BulletEnemy()
-    bul1.rect.x = rand_enm.rect.x + 32
-    bul1.rect.y = rand_enm.rect.y + 32
-    glob.bullets_enm_list.add(bul1)
-    glob.all_sprites_list.add(bul1)
-    '''
-
 
 def check_bullets_player_collide():
     for bullet in glob.bullets_enm_list:
@@ -247,7 +245,7 @@ def check_bullets_player_collide():
 
 
 def check_rocket_to_enemise_colide():
-    global destroyer, timer_hidden, hidden_enemy
+    global destroyer, timer_hidden, hidden_enemy, enemies
 
     for r in glob.rockets_list:
         r.show_rocket()
@@ -263,13 +261,13 @@ def check_rocket_to_enemise_colide():
                 #if enm.is_hidden():
                  #   timer_hidden = 0
                  #   hidden_enemy = None
+                enemies[enm.enmType] -= 1
                 glob.rockets_list.remove(r)
                 glob.all_sprites_list.remove(r)
                 glob.enemies_list.remove(enm)
 
         # ako je destroyer spreman onda mozemo da pucamo na njega i da mu skidamo health-e
         if destroyer.is_ready:
-            print("usaoooo")
             # Obrada kolizije player vs destroyer
             if r.rect.x in range(destroyer.rect.x, destroyer.rect.x + 120):
                 dist = 120 - r.rect.x + destroyer.rect.x
@@ -305,6 +303,7 @@ def make_enemies1(number):
     for i in range(1, 5):
         for n in range(1, 20):
             enm = cls.Enemy(i-1)
+            enemies[enm.enmType] += 1
             enm.rect.y = -(30 * i + 60 * (i-1))
             distance = int((glob.WINDOW_SIZE[0] - 20*40) / 21)
             enm.rect.x = float(n * distance + n*40)
@@ -312,13 +311,12 @@ def make_enemies1(number):
             glob.all_sprites_list.add(enm)
 
 def make_enemies2(number):
+    global enemies
     ns = int(number / 4)
     for i in range(1, 5):
         for n in range(ns):
             enm = cls.Enemy(i-1)
-            angle_param = 360/(ns+1)
-            enm.rect.y = (60+enm.enmType)*(enm.enmType+1) + 60 * math.sin(n * angle_param)
-            enm.rect.x = 200 + 300 * (enm.enmType) + 60 * math.cos(n * angle_param)
+            enemies[enm.enmType] += 1
             glob.enemies_list.add(enm)
             glob.all_sprites_list.add(enm)
 
@@ -384,14 +382,18 @@ def fight_3():
 
 
 def fight_4():
-    n = len(glob.enemies_list) / 4
-    enemies = [0, 0, 0, 0]
+    global enemies
+    enms = [0, 0, 0, 0]
     r = 100
     for enm in glob.enemies_list:
-        angle_param = enemies[enm.enmType] * (360 / (n+1)) + game_timer / 100.0
-        enemies[enm.enmType] += 1
+        if enemies[enm.enmType] % 2 == 0:
+            step = enemies[enm.enmType]
+        else:
+            step = enemies[enm.enmType] + 1
+        angle_param = enms[enm.enmType] * (360 / step) + game_timer / 100.0
+        enms[enm.enmType] += 1
         enm.rect.y = r * math.sin(angle_param) - 100 * math.cos(game_timer/100)
-        enm.rect.x = 200 + 300*(enm.enmType) + r * math.cos(angle_param)
+        enm.rect.x = 200 + 300 * enm.enmType + r * math.cos(angle_param)
 
     glob.ENEMIES_IS_READY = True
 
@@ -408,16 +410,19 @@ def fight_5():
     glob.ENEMIES_IS_READY = True
 
 def fight_6():
-
-    n = len(glob.enemies_list) / 4
-    enemies = [0, 0, 0, 0]
+    global enemies
+    enms = [0, 0, 0, 0]
     r = 50
     param = game_timer / 100
     for enm in glob.enemies_list:
-        angle_param = enemies[enm.enmType] * (360 / (n+1)) + param
-        enemies[enm.enmType] += 1
+        if enemies[enm.enmType] % 2 == 0:
+            step = enemies[enm.enmType]
+        else:
+            step = enemies[enm.enmType] + 1
+        angle_param = enms[enm.enmType] * (360 / step) + param
+        enms[enm.enmType] += 1
         if enm.enmType % 2 == 0:
-            enm.rect.y = 140 - 80*math.sin(param) + r * math.sin(angle_param) - 60 * math.cos(param)
+            enm.rect.y = 140 - 80 * math.sin(param) + r * math.sin(angle_param) - 60 * math.cos(param)
             enm.rect.x = (200 + 300 * enm.enmType + r * math.cos(angle_param) + game_timer * 2) % glob.WINDOW_SIZE[0]
         else:
             enm.rect.y = 140 + 80*math.sin(param) + r * math.sin(angle_param) - 60 * math.cos(param)
@@ -535,10 +540,8 @@ def set_background():
 def set_background_num_enemies():
     #DODATO
     #iscrtavanje koliko nam je enmija ostalo da bismo presli na naredbi fight
+    global enemies
     font = pygameMenu.font.get_font(pygameMenu.font.FONT_PT_SERIF, 30)
-    enemies = [0, 0, 0, 0]
-    for enm in glob.enemies_list:
-        enemies[enm.enmType] += 1
     for i in range(1, 5):
         f = font.render(f':{enemies[i-1]}', 1, (200, 150, 0))
         gui.screen.blit(f, (970+80*(i-1), 655))
@@ -633,15 +636,3 @@ def start_game_one_player():
 
         glob.all_sprites_list.update()
         pygame.display.update()
-
-
-
-'''
-enm = cls.Enemy(i-1)
-            enm.rect.y = 0.0
-            distance = glob.WINDOW_SIZE[0] / number
-            enm.rect.x = float(n * distance + (distance - 64) / 2)
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
-
-'''

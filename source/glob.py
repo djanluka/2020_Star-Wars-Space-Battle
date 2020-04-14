@@ -121,7 +121,7 @@ pause_img_1 = pygame.image.load('images/pause1.png')
 pause_img_2 = pygame.image.load('images/pause2.png')
 
 x_wing = pygame.image.load('images/ply6.png')
-rocket = pygame.image.load('images/rocket-launch.png')
+rocket = pygame.image.load('images/rocket_player.png')
 
 
 def return_to_main_menu():
