@@ -291,7 +291,7 @@ def make_new_enemies():
     game_timer = 0
 
     if glob.LEVEL == 1:
-        make_enemies4(glob.num_enemies[glob.LEVEL][glob.FIGHT])
+        make_enemies1(glob.num_enemies[glob.LEVEL][glob.FIGHT])
     elif glob.LEVEL == 2:
         make_enemies2(glob.num_enemies[glob.LEVEL][glob.FIGHT])
     elif glob.LEVEL == 3:
@@ -299,31 +299,28 @@ def make_new_enemies():
 
     glob.FIGHT += 1
 
+
 def make_enemies1(number):
-    for n in range(number):
-        enm = cls.Enemy(0)
-        enm.rect.y = 0.0
-        distance = glob.WINDOW_SIZE[0] / number
-        enm.rect.x = float(n * distance + (distance - 64) / 2)
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+
+    for i in range(1, 5):
+        for n in range(1, 20):
+            enm = cls.Enemy(i-1)
+            enm.rect.y = -(30 * i + 60 * (i-1))
+            distance = int((glob.WINDOW_SIZE[0] - 20*40) / 21)
+            enm.rect.x = float(n * distance + n*40)
+            glob.enemies_list.add(enm)
+            glob.all_sprites_list.add(enm)
 
 def make_enemies2(number):
-    for n in range(number):
-        enm = cls.Enemy(0)
-        enm.rect.y = -50.0
-        distance = glob.WINDOW_SIZE[0] / number 
-        enm.rect.x = float(n * distance + (distance - 64) / 2)  
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
-
-    for n in range(number):
-        enm = cls.Enemy(1)
-        enm.rect.y = -150.0
-        distance = glob.WINDOW_SIZE[0] / number
-        enm.rect.x = float(n * distance + (distance - 64) / 2)
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+    ns = int(number / 4)
+    for i in range(1, 5):
+        for n in range(ns):
+            enm = cls.Enemy(i-1)
+            angle_param = 360/(ns+1)
+            enm.rect.y = (60+enm.enmType)*(enm.enmType+1) + 60 * math.sin(n * angle_param)
+            enm.rect.x = 200 + 300 * (enm.enmType) + 60 * math.cos(n * angle_param)
+            glob.enemies_list.add(enm)
+            glob.all_sprites_list.add(enm)
 
 def make_enemies3(number):
     for n in range(number):
@@ -350,80 +347,87 @@ def make_enemies3(number):
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
 
-def make_enemies4(number):
-
-    for i in range(1, 5):
-        for n in range(1, 20):
-            if i % 2 == 0:
-                enm = cls.Enemy(0)
-            else:
-                enm = cls.Enemy(1)
-            enm.rect.y = -(30 * i + 60 * (i-1))
-            distance = int((glob.WINDOW_SIZE[0] - 20*40) / 21)
-            enm.rect.x = float(n * distance + n*40)
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
-
-
 def fight_1():
-    if game_timer < 1000:
+    if game_timer < 500:
         for enm in glob.enemies_list:
-                enm.rect.x += 0
-                enm.rect.y = int(game_timer / 10) - 80
+            enm.rect.y += 2
     else:
         glob.ENEMIES_IS_READY = True
 
+
 def fight_2():
-    i = 0
+
+    if game_timer < 500:
+        for enm in glob.enemies_list:
+            enm.rect.y += 2
+    else:
+        glob.ENEMIES_IS_READY = True
+        for enm in glob.enemies_list:
+            if enm.enmType % 2 == 0:
+                enm.rect.x = (enm.rect.x-4) % glob.WINDOW_SIZE[0]
+            else:
+                enm.rect.x = (enm.rect.x+4) % glob.WINDOW_SIZE[0]
+
+def fight_3():
+    global hidden_enemy
+    if game_timer < 500:
+        for enm in glob.enemies_list:
+            enm.rect.y += 2
+    else:
+        glob.ENEMIES_IS_READY = True
+        hidden_enemy = True
+        for enm in glob.enemies_list:
+            if enm.enmType % 2 == 0:
+                enm.rect.x = (enm.rect.x - 4) % glob.WINDOW_SIZE[0]
+            else:
+                enm.rect.x = (enm.rect.x + 4) % glob.WINDOW_SIZE[0]
+
+
+def fight_4():
+    n = len(glob.enemies_list) / 4
+    enemies = [0, 0, 0, 0]
+    r = 100
     for enm in glob.enemies_list:
-        i += 1
-        if game_timer < 1080:
-            enm.rect.y = int(game_timer / 10) - 80
-            if i % 2 == 0:
-                enm.rect.y += 80
-        else:
-            enm.rect.x = (enm.rect.x+4) % 1500
+        angle_param = enemies[enm.enmType] * (360 / (n+1)) + game_timer / 100.0
+        enemies[enm.enmType] += 1
+        enm.rect.y = r * math.sin(angle_param) - 100 * math.cos(game_timer/100)
+        enm.rect.x = 200 + 300*(enm.enmType) + r * math.cos(angle_param)
 
     glob.ENEMIES_IS_READY = True
 
+def fight_5():
 
-def fight_3():
     n = len(glob.enemies_list.sprites())
-    r = 120
     i = 0
     for enm in glob.enemies_list:
         i += 1
         angle_param = i * (360 / n) + game_timer / 100.0
-        if game_timer < 1000:
-            enm.rect.y = r * math.sin(angle_param) + game_timer / 10
-            enm.rect.x = r * math.cos(angle_param) + 200.0
-        else:
-            enm.rect.y = r * math.sin(angle_param) + 100.0
-            enm.rect.x = r * math.cos(angle_param) + math.cos(game_timer / 100) * 400 + 600.0
+        enm.rect.y = 50*(enm.enmType+1) * math.sin(angle_param) + 180
+        enm.rect.x = 50*(enm.enmType+1) * math.cos(angle_param) + math.cos(game_timer / 100) * 400 + 600.0
+
     glob.ENEMIES_IS_READY = True
 
+def fight_6():
 
-def fight_4():
-    if game_timer < 600:
-        for enm in glob.enemies_list:
-                enm.rect.x += 0
-                enm.rect.y = enm.rect.y + 1
-    else:
-        glob.ENEMIES_IS_READY = True
-
-
-def fight_5():
+    n = len(glob.enemies_list) / 4
+    enemies = [0, 0, 0, 0]
+    r = 50
+    param = game_timer / 100
     for enm in glob.enemies_list:
-        if game_timer < 600:
-            enm.rect.y = enm.rect.y + 1
-        else:   
-            if enm.enmType == 0:
-                enm.rect.x = (enm.rect.x + 4) % 1500
-            else :
-                enm.rect.x = (enm.rect.x - 4) % 1500
+        angle_param = enemies[enm.enmType] * (360 / (n+1)) + param
+        enemies[enm.enmType] += 1
+        if enm.enmType % 2 == 0:
+            enm.rect.y = 140 - 80*math.sin(param) + r * math.sin(angle_param) - 60 * math.cos(param)
+            enm.rect.x = (200 + 300 * enm.enmType + r * math.cos(angle_param) + game_timer * 2) % glob.WINDOW_SIZE[0]
+        else:
+            enm.rect.y = 140 + 80*math.sin(param) + r * math.sin(angle_param) - 60 * math.cos(param)
+            enm.rect.x = (200 + 300 * enm.enmType + r * math.cos(angle_param) - game_timer*2) % glob.WINDOW_SIZE[0]
+
     glob.ENEMIES_IS_READY = True
 
 
+
+'''
 def fight_6():
    
     for enm in glob.enemies_list:
@@ -437,7 +441,7 @@ def fight_6():
                 enm.rect.x = (enm.rect.x - 4) % 1500
                 enm.rect.y = (340 - enm.rect.x/4) % 400
     glob.ENEMIES_IS_READY = True
-
+'''
 def fight_7():
     for enm in glob.enemies_list:
         if game_timer < 600:
@@ -473,42 +477,6 @@ def fight_9():
                 enm.rect.y = (400 - enm.rect.x/4) % 400
     glob.ENEMIES_IS_READY = True
 
-def fight_10():
-    if game_timer < 500:
-        for enm in glob.enemies_list:
-            enm.rect.y += 2
-    else:
-        glob.ENEMIES_IS_READY = True
-
-
-def fight_11():
-
-    if game_timer < 500:
-        for enm in glob.enemies_list:
-            enm.rect.y += 2
-    else:
-        glob.ENEMIES_IS_READY = True
-        for enm in glob.enemies_list:
-            if enm.enmType == 0:
-                enm.rect.x = (enm.rect.x-4) % glob.WINDOW_SIZE[0]
-            elif enm.enmType == 1:
-                enm.rect.x = (enm.rect.x+4) % glob.WINDOW_SIZE[0]
-
-def fight_12():
-    global hidden_enemy
-    if game_timer < 500:
-        for enm in glob.enemies_list:
-            enm.rect.y += 2
-    else:
-        glob.ENEMIES_IS_READY = True
-        hidden_enemy = True
-        for enm in glob.enemies_list:
-            if enm.enmType == 0:
-                enm.rect.x = (enm.rect.x - 4) % glob.WINDOW_SIZE[0]
-            elif enm.enmType == 1:
-                enm.rect.x = (enm.rect.x + 4) % glob.WINDOW_SIZE[0]
-
-
 def move_enemies1():
     if glob.FIGHT == 1:
         fight_1()
@@ -540,23 +508,12 @@ def move_enemies3():
         fight_9()
 
 
-def move_enemies4():
-    if glob.FIGHT == 1:
-        fight_10()
-
-    if glob.FIGHT == 2:
-        fight_11()
-
-    if glob.FIGHT == 3:
-        fight_12()
-
-
 def move_enemies():
 
     #Samo ako postoje neprijatelji
     if len(glob.enemies_list) > 0:
         if glob.LEVEL == 1:
-            move_enemies4()
+            move_enemies1()
         elif glob.LEVEL == 2:
             move_enemies2()
         elif glob.LEVEL == 3:
@@ -579,19 +536,13 @@ def set_background_num_enemies():
     #DODATO
     #iscrtavanje koliko nam je enmija ostalo da bismo presli na naredbi fight
     font = pygameMenu.font.get_font(pygameMenu.font.FONT_PT_SERIF, 30)
-    enm1 = 0
-    enm2 = 0
+    enemies = [0, 0, 0, 0]
     for enm in glob.enemies_list:
-        if enm.enmType == 0:
-            enm1 += 1
-        elif enm.enmType == 1:
-            enm2 += 1
-    enm1 = font.render(f':{enm1}', 1, (150, 150, 0))
-    enm2 = font.render(f':{enm2}', 1, (150, 150, 0))
-    gui.screen.blit(enm1, (1130, 655))
-    gui.screen.blit(enm2, (1210, 655))
-    gui.screen.blit(pygame.image.load('images/enm1_30px.png'), (1095, 660))
-    gui.screen.blit(pygame.image.load('images/enm2_30px.png'), (1175, 660))
+        enemies[enm.enmType] += 1
+    for i in range(1, 5):
+        f = font.render(f':{enemies[i-1]}', 1, (200, 150, 0))
+        gui.screen.blit(f, (970+80*(i-1), 655))
+        gui.screen.blit(glob.ENEMIES_IMG_30px[i-1], (935+80*(i-1), 660))
 
 # TO DO:
 # 1) izmeniti kretnja fight_8 fight_9 eventualno i fight_6
@@ -682,3 +633,15 @@ def start_game_one_player():
 
         glob.all_sprites_list.update()
         pygame.display.update()
+
+
+
+'''
+enm = cls.Enemy(i-1)
+            enm.rect.y = 0.0
+            distance = glob.WINDOW_SIZE[0] / number
+            enm.rect.x = float(n * distance + (distance - 64) / 2)
+            glob.enemies_list.add(enm)
+            glob.all_sprites_list.add(enm)
+
+'''

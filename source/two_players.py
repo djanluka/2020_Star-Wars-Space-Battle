@@ -15,30 +15,30 @@ player_2_health_bar_img = pygame.image.load('images/player2.png')
 PLAYER_1_IMG_256px = [pygame.image.load('images/PLY1.png'),
                       pygame.image.load('images/PLY2.png'),
                       pygame.image.load('images/PLY3.png'),
-                      pygame.image.load('images/PLY_L_4.png'),
+                      pygame.image.load('images/PLY4_L.png'),
                       pygame.image.load('images/PLY5.png'),
                       pygame.image.load('images/PLY6.png')]
 
 PLAYER_1_IMG_64px = [pygame.image.load('images/ply1.png'),
-                      pygame.image.load('images/ply2.png'),
-                      pygame.image.load('images/ply3.png'),
-                      pygame.image.load('images/ply_l_4.png'),
-                      pygame.image.load('images/ply5.png'),
-                      pygame.image.load('images/ply6.png')]
+                     pygame.image.load('images/ply2.png'),
+                     pygame.image.load('images/ply3.png'),
+                     pygame.image.load('images/ply4_l.png'),
+                     pygame.image.load('images/ply5.png'),
+                     pygame.image.load('images/ply6.png')]
 
 PLAYER_2_IMG_256px = [pygame.image.load('images/PLY1.png'),
                       pygame.image.load('images/PLY2.png'),
                       pygame.image.load('images/PLY3.png'),
-                      pygame.image.load('images/PLY_R_4.png'),
+                      pygame.image.load('images/PLY4_R.png'),
                       pygame.image.load('images/PLY5.png'),
                       pygame.image.load('images/PLY6.png')]
 
 PLAYER_2_IMG_64px = [pygame.image.load('images/ply1.png'),
-                      pygame.image.load('images/ply2.png'),
-                      pygame.image.load('images/ply3.png'),
-                      pygame.image.load('images/ply_r_4.png'),
-                      pygame.image.load('images/ply5.png'),
-                      pygame.image.load('images/ply6.png')]
+                     pygame.image.load('images/ply2.png'),
+                     pygame.image.load('images/ply3.png'),
+                     pygame.image.load('images/ply4_r.png'),
+                     pygame.image.load('images/ply5.png'),
+                     pygame.image.load('images/ply6.png')]
 NUM_IMG_PLAYER1 = 0
 NUM_IMG_PLAYER2 = 0
 

@@ -53,12 +53,13 @@ emi_fighter = [
                 pygame.image.load('images/enm1_40px.png'),
                 pygame.image.load('images/enm2_40px.png'),
                 pygame.image.load('images/enm3_40px.png'),
+                pygame.image.load('images/enm4_40px.png'),
                ]
 
 num_enemies = [
                 'Nema enemy-ja za 0 level',
-                [8, 10, 12],
-                [6, 10, 14],
+                [76, 76, 76],
+                [76, 76, 76],
                 [8, 12, 16]
                 ]
 
@@ -76,11 +77,18 @@ stories = [
             pygame.image.load('images/story3.png')
           ]
 
+ENEMIES_IMG_30px = [pygame.image.load('images/enm1_30px.png'),
+                    pygame.image.load('images/enm2_30px.png'),
+                    pygame.image.load('images/enm3_30px.png'),
+                    pygame.image.load('images/enm4_30px.png'),
+                    ]
+
+
 #IZMENJENO
 #postavio sam LEVEL odmah na 1, da bi se lepo uklopilo sa make_enemies1,2,3
 LEVEL_IMAGES = ['', 'images/one.png', 'images/two.png', 'images/three.png']
 LEVEL = 1
-FIGHT = 3
+FIGHT = 0
 
 #TO DO
 #postavitii muziku na 0.5
