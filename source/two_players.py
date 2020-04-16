@@ -8,6 +8,7 @@ import random
 
 player1 = None
 player2 = None
+end_game = False
 
 player_1_health_bar_img = pygame.image.load('images/player1.png')
 player_2_health_bar_img = pygame.image.load('images/player2.png')
@@ -42,6 +43,76 @@ PLAYER_2_IMG_64px = [pygame.image.load('images/ply1.png'),
 NUM_IMG_PLAYER1 = 0
 NUM_IMG_PLAYER2 = 0
 
+def choose_players():
+
+    global NUM_IMG_PLAYER1, NUM_IMG_PLAYER2
+
+    cont = cls.Controler()
+    left1 = pygame.image.load('images/left.png')
+    right1 = pygame.image.load('images/right.png')
+    left2 = pygame.image.load('images/left.png')
+    right2 = pygame.image.load('images/right.png')
+    play_img = pygame.image.load('images/play.png')
+    back_img = pygame.image.load('images/back.png')
+    play = True
+    size = len(PLAYER_1_IMG_256px)
+
+    while True:
+        gui.screen.blit(glob.game_background, (0, 0))
+        gui.screen.blit(left1, (236, 318))
+        gui.screen.blit(left2, (660, 318))
+        gui.screen.blit(right1, (576, 318))
+        gui.screen.blit(right2, (1000, 318))
+
+        if play:
+            gui.screen.blit(play_img, (500, 480))
+        else:
+            gui.screen.blit(back_img, (500, 480))
+
+        gui.screen.blit(PLAYER_1_IMG_256px[NUM_IMG_PLAYER1], (310, 222))
+        gui.screen.blit(PLAYER_2_IMG_256px[NUM_IMG_PLAYER2], (734, 222))
+
+        events = pygame.event.get()
+        for e in events:
+            if e.type == pygame.QUIT:
+                exit()
+            if e.type == pygame.KEYDOWN:
+                if e.key == pygame.K_ESCAPE:
+                    exit()
+
+            if e.type == pygame.MOUSEBUTTONDOWN:
+                if left1.get_rect(topleft=(236, 318)).collidepoint(pygame.mouse.get_pos()):
+                    NUM_IMG_PLAYER1 = (NUM_IMG_PLAYER1 - 1 + size) % size
+                elif left2.get_rect(topleft=(660, 318)).collidepoint(pygame.mouse.get_pos()):
+                    NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 - 1 + size) % size
+                elif right1.get_rect(topleft=(576, 318)).collidepoint(pygame.mouse.get_pos()):
+                    NUM_IMG_PLAYER1 = (NUM_IMG_PLAYER1 + 1 + size) % size
+                elif right2.get_rect(topleft=(1000, 318)).collidepoint(pygame.mouse.get_pos()):
+                    NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 + 1 + size) % size
+
+            if e.type == pygame.KEYDOWN:
+                if e.key == glob.TWO_CONTROL_LEFT_ORD1:
+                    NUM_IMG_PLAYER1 = (NUM_IMG_PLAYER1 - 1 + size) % size
+                elif e.key == glob.TWO_CONTROL_RIGHT_ORD1:
+                    NUM_IMG_PLAYER1 = (NUM_IMG_PLAYER1 + 1 + size) % size
+                elif e.key == glob.TWO_CONTROL_LEFT_ORD2:
+                    NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 - 1 + size) % size
+                elif e.key == glob.TWO_CONTROL_RIGHT_ORD2:
+                    NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 + 1 + size) % size
+                elif e.key == pygame.K_DOWN:
+                    play = False
+                elif e.key == pygame.K_UP:
+                    play = True
+                elif pygame.K_RETURN:
+                    if play is not True:
+                        print('menu')
+                        glob.return_to_main_menu()
+                        return
+                    else:
+                        return
+
+        pygame.display.update()
+        
 def check_menu_events():
     events = pygame.event.get()
     for e in events:
@@ -64,14 +135,14 @@ def check_menu_events():
 
 
 def draw_player(player, num_player):
-    if player.health > 0:
-        player.show()
-        player.show_health(num_player)
-
+    player.show()
+    player.show_health(num_player)
 
 def init_players():
 
-    global player1, player2
+    global player1, player2, end_game
+
+    end_game = False
     
     player1 = cls.twoPlayer()
     player1.position_x = 50
@@ -100,6 +171,10 @@ def init_players():
 def check_player_events(burst_fire1, burst_fire2, game_taimer):
 
     global player1, player2
+     
+        # Ako je igra gotova ne mogu se izvrsavati komande
+    if end_game :
+        return burst_fire1, burst_fire2
 
     cont = cls.Controler()
     movement = 4
@@ -156,7 +231,7 @@ def check_player_events(burst_fire1, burst_fire2, game_taimer):
     return burst_fire1, burst_fire2
 
 
-def check_rocket_colide():
+def check_rocket_collide():
 
     global player1, player2
 
@@ -184,109 +259,70 @@ def check_rocket_colide():
             glob.right_rockets_list.remove(bullet)
             glob.all_sprites_list.remove(bullet)
 
-def choose_players():
-
-    global NUM_IMG_PLAYER1, NUM_IMG_PLAYER2
-
-    cont = cls.Controler()
-    left1 = pygame.image.load('images/left.png')
-    right1 = pygame.image.load('images/right.png')
-    left2 = pygame.image.load('images/left.png')
-    right2 = pygame.image.load('images/right.png')
-    play_img = pygame.image.load('images/play.png')
-    back_img = pygame.image.load('images/back.png')
-    play = True
-    size = len(PLAYER_1_IMG_256px)
-
-
-
-    while True:
-
-        gui.screen.blit(glob.game_background, (0, 0))
-        gui.screen.blit(left1, (236, 318))
-        gui.screen.blit(left2, (660, 318))
-        gui.screen.blit(right1, (576, 318))
-        gui.screen.blit(right2, (1000, 318))
-
-        if play:
-            gui.screen.blit(play_img, (500, 480))
-        else:
-            gui.screen.blit(back_img, (500, 480))
-
-        gui.screen.blit(PLAYER_1_IMG_256px[NUM_IMG_PLAYER1], (310, 222))
-        gui.screen.blit(PLAYER_2_IMG_256px[NUM_IMG_PLAYER2], (734, 222))
-
-        events = pygame.event.get()
-        for e in events:
-            if e.type == pygame.QUIT:
-                exit()
-            if e.type == pygame.KEYDOWN:
-                if e.key == pygame.K_ESCAPE:
-                    exit()
-
-            if e.type == pygame.MOUSEBUTTONDOWN:
-                if left1.get_rect(topleft=(236, 318)).collidepoint(pygame.mouse.get_pos()):
-                    NUM_IMG_PLAYER1 = (NUM_IMG_PLAYER1 - 1 + size) % size
-                elif left2.get_rect(topleft=(660, 318)).collidepoint(pygame.mouse.get_pos()):
-                    NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 - 1 + size) % size
-                elif right1.get_rect(topleft=(576, 318)).collidepoint(pygame.mouse.get_pos()):
-                    NUM_IMG_PLAYER1 = (NUM_IMG_PLAYER1 + 1 + size) % size
-                elif right2.get_rect(topleft=(1000, 318)).collidepoint(pygame.mouse.get_pos()):
-                    NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 + 1 + size) % size
-
-            if e.type == pygame.KEYDOWN:
-                if e.key == glob.TWO_CONTROL_LEFT_ORD1:
-                    NUM_IMG_PLAYER1 = (NUM_IMG_PLAYER1 - 1 + size) % size
-                elif e.key == glob.TWO_CONTROL_RIGHT_ORD1:
-                    NUM_IMG_PLAYER1 = (NUM_IMG_PLAYER1 + 1 + size) % size
-                elif e.key == glob.TWO_CONTROL_LEFT_ORD2:
-                    NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 - 1 + size) % size
-                elif e.key == glob.TWO_CONTROL_RIGHT_ORD2:
-                    NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 + 1 + size) % size
-                elif e.key == pygame.K_DOWN:
-                    play = False
-                elif e.key == pygame.K_UP:
-                    play = True
-                elif pygame.K_RETURN:
-                    if play is not True:
-                        print('menu')
-                        glob.return_to_main_menu()
-                        return
-                    else:
-                        return
-
-        pygame.display.update()
-        
      
+def show_winner(ind):
+
+        # U zavisnisti od indikatora prikazujemo pobednika u partiji
+    if ind is 1 :
+        gui.screen.blit(PLAYER_1_IMG_256px[NUM_IMG_PLAYER1], (310, 222))
+    elif ind is 2 :    
+        gui.screen.blit(PLAYER_2_IMG_256px[NUM_IMG_PLAYER2], (734, 222))
+    else :
+        print("Wrong player coefficient")
+        
+    font = pygame.font.Font('freesansbold.ttf',115)
+    TextSurf = font.render("WINNER", True,(240,240,240))
+    TextRect = TextSurf.get_rect()
+    TextRect.center = ((glob.WINDOW_SIZE[0]/2),160)
+    gui.screen.blit(TextSurf, TextRect)
 
 
 def start_game_two_player():
-
-    global player1, player2
+    global player1, player2, end_game
 
     choose_players()
-
     init_players()
 
-    game_timer = 0  # Tajmer igrice
-    burst_fire1 = 0  # Tajmer rafala
-    burst_fire2 = 0  # Tajmer rafala
+    game_timer = 0  
+    burst_fire1 = 0  
+    burst_fire2 = 0  
+    winner = 0
 
     while True:
         game_timer += 3
+
         gui.screen.blit(glob.game_background, (0, 0))
         gui.screen.blit(glob.pause_img_2, glob.PAUSE_TWO_PLAYERS_POS)
         gui.screen.blit(player_1_health_bar_img, (20, 630))
         gui.screen.blit(player_2_health_bar_img, (glob.WINDOW_SIZE[0] - 20 - 64, 630))
 
+            # Prover desavanja u meniju
         check_menu_events()
-
+            
+            # Izvrsavanje kretanja i pucanja prema komandama igraca
         burst_fire1, burst_fire2 = check_player_events(burst_fire1, burst_fire2, game_timer)
+            
+            # Provera pogotka izmedju igraca 
+        check_rocket_collide()
+        
+            # Ovde se proverava da li je neki od igraca porazen i ako jeste
+            # postavlja se parametar kraja igre na True sto oznacava kraj partije
+        if player1.health > 0 and not end_game :
+            draw_player(player1, 1)
+        elif winner is 0:
+            winner = 2
+            end_game = True
 
-        check_rocket_colide()
+        if player2.health > 0 and not end_game:
+            draw_player(player2, 2)
+        elif winner is 0:
+            winner = 1
+            end_game = True
 
-        draw_player(player1, 1)
-        draw_player(player2, 2)
-
+            # Ako je igra gotovo poziva se fukcija koja prikazuje pobednika
+        if end_game :
+            show_winner(winner)
+                
+            # Vrsimo pomeranje objekata prema zadatom metodu 'update'
         glob.all_sprites_list.update()
         pygame.display.update()
