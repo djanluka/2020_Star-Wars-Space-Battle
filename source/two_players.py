@@ -91,13 +91,13 @@ def choose_players():
                     NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 + 1 + size) % size
 
             if e.type == pygame.KEYDOWN:
-                if e.key == glob.TWO_CONTROL_LEFT_ORD1:
+                if e.key == cont.Left1:
                     NUM_IMG_PLAYER1 = (NUM_IMG_PLAYER1 - 1 + size) % size
-                elif e.key == glob.TWO_CONTROL_RIGHT_ORD1:
+                elif e.key == cont.Right1:
                     NUM_IMG_PLAYER1 = (NUM_IMG_PLAYER1 + 1 + size) % size
-                elif e.key == glob.TWO_CONTROL_LEFT_ORD2:
+                elif e.key == cont.Left2:
                     NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 - 1 + size) % size
-                elif e.key == glob.TWO_CONTROL_RIGHT_ORD2:
+                elif e.key == cont.Right2:
                     NUM_IMG_PLAYER2 = (NUM_IMG_PLAYER2 + 1 + size) % size
                 elif e.key == pygame.K_DOWN:
                     play = False
@@ -112,7 +112,8 @@ def choose_players():
                         return
 
         pygame.display.update()
-        
+   
+
 def check_menu_events():
     events = pygame.event.get()
     for e in events:
@@ -137,6 +138,7 @@ def check_menu_events():
 def draw_player(player, num_player):
     player.show()
     player.show_health(num_player)
+
 
 def init_players():
 
@@ -166,6 +168,10 @@ def init_players():
         player2.image = pygame.transform.rotate(PLAYER_2_IMG_64px[NUM_IMG_PLAYER2], 90)
     else:
         player2.image = pygame.transform.rotate(PLAYER_2_IMG_64px[NUM_IMG_PLAYER2], -90)
+        
+    glob.left_rockets_list.empty()
+    glob.right_rockets_list.empty()
+    glob.all_sprites_list.empty()
 
 
 def check_player_events(burst_fire1, burst_fire2, game_taimer):
@@ -184,15 +190,15 @@ def check_player_events(burst_fire1, burst_fire2, game_taimer):
 
     pressed = pygame.key.get_pressed()
 
-    if pressed[cont.get_control('Left1')] and player1.position_y > left_margin:
+    if pressed[cont.Left1] and player1.position_y > left_margin:
         player1.position_y -= movement
 
-    if pressed[cont.get_control('Right1')] and player1.position_y < right_margin:
+    if pressed[cont.Right1] and player1.position_y < right_margin:
         player1.position_y += movement
 
     burst_fire1 += 1
 
-    if pressed[cont.get_control('Fire1')] and game_taimer > 100:
+    if pressed[cont.Fire1] and game_taimer > 100:
         # Metak se ispaljuje u svakom 50-tom ciklusu
         if burst_fire1 > 40:
             # Zvuk pri ispaljivanju metaka
@@ -207,15 +213,15 @@ def check_player_events(burst_fire1, burst_fire2, game_taimer):
             glob.left_rockets_list.add(rocket)
             burst_fire1 = 0
 
-    if pressed[cont.get_control('Left2')] and player2.position_y > left_margin:
+    if pressed[cont.Left2] and player2.position_y > left_margin:
         player2.position_y -= movement
 
-    if pressed[cont.get_control('Right2')] and player2.position_y < right_margin:
+    if pressed[cont.Right2] and player2.position_y < right_margin:
         player2.position_y += movement
 
     burst_fire2 += 1
 
-    if pressed[cont.get_control('Fire2')] and game_taimer > 100:
+    if pressed[cont.Fire2] and game_taimer > 100:
         if burst_fire2 > 40:
             rocket_sound = mixer.Sound('sounds/laser.wav')
             rocket_sound.play()
@@ -290,15 +296,24 @@ def start_game_two_player():
 
     while True:
         game_timer += 3
+        
+            # Prover desavanja u meniju
+        check_menu_events()
+            # Ako je u pause meniju ne izvrsava ostatak koda
+        if gui.pause_menu.is_enabled(): 
+            pygame.display.update()
+            continue
+            # Ako je u glavnom meniju zavrsava funkciju
+        if gui.main_menu.is_enabled(): 
+            pygame.display.update()
+            return
 
         gui.screen.blit(glob.game_background, (0, 0))
         gui.screen.blit(glob.pause_img_2, glob.PAUSE_TWO_PLAYERS_POS)
         gui.screen.blit(player_1_health_bar_img, (20, 630))
         gui.screen.blit(player_2_health_bar_img, (glob.WINDOW_SIZE[0] - 20 - 64, 630))
 
-            # Prover desavanja u meniju
-        check_menu_events()
-            
+        
             # Izvrsavanje kretanja i pucanja prema komandama igraca
         burst_fire1, burst_fire2 = check_player_events(burst_fire1, burst_fire2, game_timer)
             

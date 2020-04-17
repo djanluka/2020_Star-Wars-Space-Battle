@@ -49,20 +49,21 @@ VOLUME_VALUES = {
                 '70_PERCENT': 0.7,
                 '100_PERCENT': 1,
                 }
-emi_fighter = [
-                pygame.image.load('images/enm1_40px.png'),
-                pygame.image.load('images/enm2_40px.png'),
-                pygame.image.load('images/enm3_40px.png'),
-                pygame.image.load('images/enm4_40px.png'),
+fighters = [
+                pygame.image.load('images/enemy1.png'),
+                pygame.image.load('images/enemy2.png'),
+                pygame.image.load('images/enemy3.png'),
+                pygame.image.load('images/enemy4.png'),
                ]
 
 num_enemies = [
                 'Nema enemy-ja za 0 level',
+                [60, 60, 60],
                 [76, 76, 76],
-                [76, 76, 76],
-                [8, 12, 16]
+                [80, 80, 80]
                 ]
 
+enemies = [0, 0, 0, 0]
 
 destroyers = [
                 pygame.image.load('images/destroyer.png'),
@@ -77,16 +78,6 @@ stories = [
             pygame.image.load('images/story3.png')
           ]
 
-ENEMIES_IMG_30px = [pygame.image.load('images/enm1_30px.png'),
-                    pygame.image.load('images/enm2_30px.png'),
-                    pygame.image.load('images/enm3_30px.png'),
-                    pygame.image.load('images/enm4_30px.png'),
-                    ]
-
-
-#IZMENJENO
-#postavio sam LEVEL odmah na 1, da bi se lepo uklopilo sa make_enemies1,2,3
-LEVEL_IMAGES = ['', 'images/one.png', 'images/two.png', 'images/three.png']
 LEVEL = 1
 FIGHT = 0
 
@@ -122,6 +113,8 @@ pause_img_2 = pygame.image.load('images/pause2.png')
 
 x_wing = pygame.image.load('images/ply6.png')
 rocket = pygame.image.load('images/rocket_player.png')
+
+life_image = pygame.transform.scale(x_wing, (25,25))
 
 
 def return_to_main_menu():
