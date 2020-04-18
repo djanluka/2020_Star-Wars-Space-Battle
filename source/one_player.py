@@ -315,16 +315,11 @@ def make_enemies2(number):
             glob.all_sprites_list.add(enm)
 
 def make_enemies3(number):
-    
-    for i in range(1, 5):
-        for n in range(1, 20):
-            enm = cls.Enemy(i-1)
-            glob.enemies[enm.enmType] += 1
-            enm.rect.y = -(30 * i + 40 * (i-1))-100
-            distance = int((glob.WINDOW_SIZE[0] - 20*40) / 21)
-            enm.rect.x = float(n * distance + n*40)
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
+
+    if glob.FIGHT == 1:
+        glob.make_star()
+    elif glob.FIGHT == 2:
+        glob.make_wars()
 
 def fight_1():
     if game_timer < 500:
@@ -438,6 +433,9 @@ def fight_6():
 
 
 def fight_7():
+    
+
+    '''
     if game_timer < 500:
         
         for enm in glob.enemies_list:
@@ -451,7 +449,7 @@ def fight_7():
         for enm in glob.enemies_list:
             if enm.enmType < 3 :
                 enm.rect.y += 2
-
+    '''
 
 def fight_8():
     if game_timer < 500:
@@ -577,7 +575,7 @@ def init_game():
     timer_destroyer = 0
     burst_fire = 0
  
-    glob.FIGHT = 0
+    glob.FIGHT = 2
     glob.all_sprites_list.empty()
     glob.enemies_list.empty()
     glob.rockets_list.empty()

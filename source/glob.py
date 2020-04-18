@@ -2,6 +2,7 @@ import pygame
 from pygame import mixer
 from source import gui
 from source import glob
+from source import cls
 
 ABOUT = [
         'This star wars game like Galaga',
@@ -78,7 +79,7 @@ stories = [
             pygame.image.load('images/story3.png')
           ]
 
-LEVEL = 1
+LEVEL = 3
 FIGHT = 0
 
 #TO DO
@@ -123,3 +124,111 @@ def return_to_main_menu():
     mixer.music.load('sounds/menu_music.mp3')
     mixer.music.play(-1)
     mixer.music.set_volume(glob.MENU_VOLUME)
+
+def make_star():
+    #S
+    for i in [50, 200, 350]:
+        for n in range(5):
+            enm = cls.Enemy(0)
+            glob.enemies[enm.enmType] += 1
+            enm.rect.x = 100 + 50*n
+            enm.rect.y = -350 + i
+            glob.enemies_list.add(enm)
+            glob.all_sprites_list.add(enm)
+    for i in [100, 150]:
+        enm = cls.Enemy(0)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 100
+        enm.rect.y = -350 + i
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+    for i in [250, 300]:
+        enm = cls.Enemy(0)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 300
+        enm.rect.y = -350 + i
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+
+    #T
+    for i in range(5):
+        enm = cls.Enemy(1)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 383 + i*50
+        enm.rect.y = -350 + 50
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+    for i in range(12):
+        enm = cls.Enemy(1)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 483
+        enm.rect.y = -350 + 75 + i*25
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+
+    #A
+    for i in [666, 866]:
+        for n in range(7):
+            enm = cls.Enemy(2)
+            glob.enemies[enm.enmType] += 1
+            enm.rect.x = i
+            enm.rect.y = -350 + 50 + n*50
+            glob.enemies_list.add(enm)
+            glob.all_sprites_list.add(enm)
+    for i in [50, 200]:
+        for n in range(1, 4):
+            enm = cls.Enemy(2)
+            glob.enemies[enm.enmType] += 1
+            enm.rect.x = 666 + n*50
+            enm.rect.y = -350 + i
+            glob.enemies_list.add(enm)
+            glob.all_sprites_list.add(enm)
+
+    #R
+    for i in range(7):
+        enm = cls.Enemy(3)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 949
+        enm.rect.y = -350 + 50 + 50*i
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+    for i in [50, 200]:
+        for n in range(1, 5):
+            enm = cls.Enemy(3)
+            glob.enemies[enm.enmType] += 1
+            enm.rect.x = 949 + 50*n
+            enm.rect.y = -350 + i
+            glob.enemies_list.add(enm)
+            glob.all_sprites_list.add(enm)
+    for i in range(2):
+        enm = cls.Enemy(3)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 1149
+        enm.rect.y = -350 + 100 + 50*i
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+    for i in range(3):
+        enm = cls.Enemy(3)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 999 + 50 * i
+        enm.rect.y = -350 + 250 + 50 * i
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+
+    enm = cls.Enemy(3)
+    glob.enemies[enm.enmType] += 1
+    enm.rect.x = 1149
+    enm.rect.y = -350 + 350
+    glob.enemies_list.add(enm)
+    glob.all_sprites_list.add(enm)
+
+def make_wars():
+    #W
+    for i in [100, 300]:
+        for n in range(7):
+            enm = cls.Enemy(3)
+            glob.enemies[enm.enmType] += 1
+            enm.rect.x = i
+            enm.rect.y = 50 + n * 50
+            glob.enemies_list.add(enm)
+            glob.all_sprites_list.add(enm)
