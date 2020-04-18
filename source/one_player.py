@@ -618,7 +618,7 @@ def start_game_one_player():
                     if e.type == pygame.KEYDOWN:
                         if e.key == pygame.K_RETURN:
                             pressed_enter = True
-                gui.screen.blit(glob.stories[glob.LEVEL], (150, 20))
+                gui.screen.blit(glob.stories[glob.LEVEL], (0, -40))
                 pygame.display.update()
 
         

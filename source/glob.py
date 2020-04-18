@@ -72,7 +72,7 @@ destroyers = [
              ]
 
 stories = [
-            'Nema slike za 0 level',
+	    pygame.image.load('images/story0.png'),
             pygame.image.load('images/story1.png'),
             pygame.image.load('images/story2.png'),
             pygame.image.load('images/story3.png')
