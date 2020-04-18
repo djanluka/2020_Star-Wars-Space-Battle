@@ -58,7 +58,7 @@ fighters = [
 
 num_enemies = [
                 'Nema enemy-ja za 0 level',
-                [15, 19, 21],
+                [8, 10, 12],
                 [76, 76, 76],
                 [80, 80, 80]
                 ]
