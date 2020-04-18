@@ -268,9 +268,9 @@ def check_bullets_player_collide():
             if bullet.rect.y in range(player.position_y + 20, player.position_y + 64):
                 glob.bullets_enm_list.remove(bullet)
                 if destroyer.is_ready:
-                    player.health -= 15
+                    player.health -= 20
                 else:
-                    player.health -= 7
+                    player.health -= 25
 
         if bullet.rect.y > glob.WINDOW_SIZE[1] - 55:
             glob.bullets_enm_list.remove(bullet)
@@ -292,12 +292,14 @@ def make_new_enemies():
 
 def make_enemies1(number):
 
+    num = glob.num_enemies[1][glob.FIGHT]
+
     for i in range(1, 5):
-        for n in range(1, 20):
+        for n in range(1, num):
             enm = cls.Enemy(i-1)
             glob.enemies[enm.enmType] += 1
             enm.rect.y = -(30 * i + 40 * (i-1))-100
-            distance = int((glob.WINDOW_SIZE[0] - 20*40) / 21)
+            distance = int((glob.WINDOW_SIZE[0] - num*40) / num)
             enm.rect.x = float(n * distance + n*40)
             glob.enemies_list.add(enm)
             glob.all_sprites_list.add(enm)
@@ -545,6 +547,23 @@ def set_background_num_enemies():
         gui.screen.blit(f, (970+80*(i-1), 655))
         gui.screen.blit(pygame.transform.scale(glob.fighters[i-1], (25,25)), (935+80*(i-1), 660))
         
+def add_life():
+    global player, game_timer
+
+    font = pygame.font.Font('freesansbold.ttf',75)
+    TextSurf = font.render("Extra LIFE", True,(180,150,0))
+    TextRect = TextSurf.get_rect()
+    TextRect.center = ((glob.WINDOW_SIZE[0]/2),160)
+    
+    
+    if game_timer in range(50, 360):
+        gui.screen.blit(TextSurf, TextRect)
+        gui.screen.blit(pygame.transform.scale(glob.x_wing,(200-int(0.5*game_timer),200-int(0.5*game_timer))),
+        (360 - 1*game_timer + 150, glob.WINDOW_SIZE[1] - 580 + 1.5*game_timer ))
+        #pygame.display.update()
+
+    if game_timer == 360:
+        player.lives_number += 1
         
         
 def init_game():
@@ -602,7 +621,7 @@ def start_game_one_player():
             glob.LEVEL = 1
             pygame.display.update()
             return
-    
+
         game_timer += 3
         set_background()
         
@@ -659,6 +678,9 @@ def start_game_one_player():
 
         # Funkcija za iscrtavanje player-a  ( X-Wing )
         draw_player()
+ 
+            # Funkcija dodaje dodatni zivot na pocetku svakog fajta
+        add_life()
 
         glob.all_sprites_list.update()
         pygame.display.update()

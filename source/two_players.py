@@ -277,7 +277,7 @@ def show_winner(ind):
         print("Wrong player coefficient")
         
     font = pygame.font.Font('freesansbold.ttf',115)
-    TextSurf = font.render("WINNER", True,(240,240,240))
+    TextSurf = font.render("WINNER", True,(150,200,0))
     TextRect = TextSurf.get_rect()
     TextRect.center = ((glob.WINDOW_SIZE[0]/2),160)
     gui.screen.blit(TextSurf, TextRect)

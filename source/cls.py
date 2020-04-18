@@ -8,7 +8,7 @@ class Player():
         self.position_x = int(glob.WINDOW_SIZE[0]/2)
         self.position_y = int(glob.WINDOW_SIZE[1] - 120)
         self.health = 100
-        self.lives_number = 3
+        self.lives_number = 0
         self.image = glob.x_wing
    
     def show_health(self):
