@@ -79,7 +79,7 @@ stories = [
             pygame.image.load('images/story3.png')
           ]
 
-LEVEL = 3
+LEVEL = 1
 FIGHT = 0
 
 #TO DO
@@ -127,7 +127,9 @@ def return_to_main_menu():
 
 def make_star():
 
-    #S
+    '''
+    S
+    '''
     for i in [50, 200, 350]:
         for n in range(5):
             enm = cls.Enemy(0)
@@ -151,7 +153,9 @@ def make_star():
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
 
-    #T
+    '''
+    T
+    '''
     for i in range(5):
         enm = cls.Enemy(1)
         glob.enemies[enm.enmType] += 1
@@ -167,7 +171,9 @@ def make_star():
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
 
-    #A
+    '''
+    A
+    '''
     for i in [666, 866]:
         for n in range(7):
             enm = cls.Enemy(2)
@@ -185,7 +191,9 @@ def make_star():
             glob.enemies_list.add(enm)
             glob.all_sprites_list.add(enm)
 
-    #R
+    '''
+    R
+    '''
     for i in range(7):
         enm = cls.Enemy(3)
         glob.enemies[enm.enmType] += 1
@@ -224,7 +232,9 @@ def make_star():
     glob.all_sprites_list.add(enm)
 
 def make_wars():
-    #W
+    '''
+    W
+    '''
     for i in [100, 300]:
         for n in range(7):
             enm = cls.Enemy(3)
@@ -256,7 +266,9 @@ def make_wars():
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
 
-    #A
+    '''
+    A
+    '''
     for i in [383, 583]:
         for n in range(7):
             enm = cls.Enemy(2)
@@ -274,8 +286,9 @@ def make_wars():
             glob.enemies_list.add(enm)
             glob.all_sprites_list.add(enm)
 
-    #R
-
+    '''
+    R
+    '''
     for i in range(7):
         enm = cls.Enemy(1)
         glob.enemies[enm.enmType] += 1
@@ -313,7 +326,9 @@ def make_wars():
     glob.enemies_list.add(enm)
     glob.all_sprites_list.add(enm)
 
-    #S
+    '''
+    S
+    '''
     for i in [50, 200, 350]:
         for n in range(5):
             enm = cls.Enemy(0)
