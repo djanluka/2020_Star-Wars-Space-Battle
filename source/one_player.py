@@ -126,10 +126,19 @@ def draw_destroyer():
     destroyer.rect.x = glob.WINDOW_SIZE[0] / 2 - 64
     destroyer.rect.y = (int(timer_destroyer / 5) - 240 if timer_destroyer < 1400 else 40)
 
+
+    font = pygame.font.Font('freesansbold.ttf',30)
+    TextSurf = font.render(glob.boss_name[glob.LEVEL], True,(0,0,240))
+    TextRect = TextSurf.get_rect()
+    TextRect.center = (glob.WINDOW_SIZE[0]-200,25)
+
     if destroyer.health > 0:
         destroyer.show()
         if timer_destroyer > 1000:
-            pygame.draw.rect(gui.screen, (200, 10, 10), (150, 10, destroyer.health * 10, 20))
+            pygame.draw.rect(gui.screen, (40, 40, 40), (0,10,glob.WINDOW_SIZE[0], 30))
+            gui.screen.blit(glob.bosses[glob.LEVEL], (10,0))
+            gui.screen.blit(TextSurf, TextRect)
+            pygame.draw.rect(gui.screen, (0, 0, 240), (300, 15, destroyer.health * 5, 20))
         if timer_destroyer > 1200:
             destroyer.is_ready = True
             destroyer_fire_to_player()
@@ -178,12 +187,12 @@ def enemies_fire_to_player():
     frequency = int(500 / num_enemies)
 
     #Ogranicnje frekvencije paljbe
-    if frequency < 80:
-        frequency = 80
+    if frequency < 48:
+        frequency = 48
 
-    frequency -= glob.LEVEL * 10
+    frequency -= glob.LEVEL * 9
     
-    fire_mode = game_timer % frequency
+    fire_mode = game_timer % (3*frequency)
     
 
     if fire_mode == 0:  # Napad neprijatelja: 400 ucestalost paljbe
@@ -216,7 +225,7 @@ def destroyer_fire_to_player():
         return
 
         # Ucestalost pucnja zavisi od levela
-    if timer_destroyer % (150 - glob.LEVEL * 30) == 0:
+    if timer_destroyer % (210 - glob.LEVEL * 30) == 0:
         for i in range(3):
             bul = cls.BulletDestroyer()
             bul.rect.x = destroyer.rect.x + 32*(i+1)
@@ -271,9 +280,9 @@ def make_enemies1(number):
 
 def make_enemies2(number):
    
-    ns = int(number / 4)
+    num = int(glob.num_enemies[2][glob.FIGHT] / 4)
     for i in range(1, 5):
-        for n in range(ns):
+        for n in range(num):
             enm = cls.Enemy(i-1)
             glob.enemies[enm.enmType] += 1
             glob.enemies_list.add(enm)
@@ -397,12 +406,12 @@ def fight_7():
             glob.ENEMIES_IS_READY = True
 
         if dir == 'left':
-            hidden_enemy = True
+            #hidden_enemy = True
             enm.rect.x = (enm.rect.x - 10) % glob.WINDOW_SIZE[0]
         elif dir == 'right':
             enm.rect.x = (enm.rect.x + 10) % glob.WINDOW_SIZE[0]
         elif dir == 'circle':
-            hidden_enemy = False
+            #hidden_enemy = False
             enm.rect.y -= (7 * circle_step)
 
 def fight_8():
@@ -420,12 +429,12 @@ def fight_8():
             glob.ENEMIES_IS_READY = True
 
         if dir == 'left':
-            hidden_enemy = True
+            #hidden_enemy = True
             enm.rect.x = (enm.rect.x - 10) % glob.WINDOW_SIZE[0]
         elif dir == 'right':
             enm.rect.x = (enm.rect.x + 10) % glob.WINDOW_SIZE[0]
         elif dir == 'circle':
-            hidden_enemy = False
+            #hidden_enemy = False
             enm.rect.y -= (7 * circle_step)
 
 
@@ -554,6 +563,18 @@ def init_game():
 # TO DO:
 # 5) promeniti background muziku
 
+# Ogi: 
+#   enemy3, ply5, destroyer1, destroyer2, desrtoyer3 
+#   (za destrojerere mism da je ok da ih napravis samo 
+#   u razlicitim bojama ili tako nesto,ali da se ne
+#   menja njihov oblik zbog kolizije)
+#   Radio sam nesto za prikaz destroyer health ali mi se ne
+#   svidja previse, popgledaj to ako mozes
+
+# Borisa: 
+#   iskljucio sam hide na 3. lvl jer su vise bili sakriveni nego prikazani,
+#   ok je hide ali bas na kratko, ovako oni te izrokju, a ti pojma nemas de su.
+# 
 
 def start_game_one_player():
 

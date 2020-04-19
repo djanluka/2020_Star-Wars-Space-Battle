@@ -60,11 +60,25 @@ fighters = [
 num_enemies = [
                 'Nema enemy-ja za 0 level',
                 [8, 10, 12],
-                [76, 76, 76],
-                [80, 80, 80]
+                [32, 40, 48],
+                [None, None, None] # Broj enemy-ja na levelu 3 ne zavisi od ovih brojeva
                 ]
 
 enemies = [0, 0, 0, 0]
+
+bosses = [
+            "",
+            pygame.image.load('images/boss2.jpg'),
+            pygame.image.load('images/boss2.jpg'),
+            pygame.image.load('images/boss2.jpg')
+            ]
+
+boss_name = [
+            "",
+            "Grand MoffTarkin",
+            "Grand MoffTarkin",
+            "Grand MoffTarkin"
+            ]
 
 destroyers = [
                 pygame.image.load('images/destroyer.png'),
@@ -116,7 +130,7 @@ x_wing = pygame.image.load('images/ply6.png')
 rocket = pygame.image.load('images/rocket_player.png')
 
 life_image = pygame.transform.scale(x_wing, (25,25))
-
+blue_sw = pygame.image.load('images/blue.jpg')
 
 def return_to_main_menu():
     mixer.music.stop()
