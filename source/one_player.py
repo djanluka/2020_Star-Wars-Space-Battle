@@ -184,7 +184,7 @@ def enemies_fire_to_player():
     num_enemies = len(glob.enemies_list.sprites())
 
     #Da ne gadjaju svi metkovi direktno u playera
-    frequency = int(500 / num_enemies)
+    frequency = int(300 / num_enemies)
 
     #Ogranicnje frekvencije paljbe
     if frequency < 48:
