@@ -26,4 +26,4 @@ python3 main.py
 ```
 ___
 
-![](https://github.com/matf-pp/2020_Star-Wars-Space-Battle/blob/master/Screenshots/version-01-2.png)
+![](https://github.com/matf-pp/2020_Star-Wars-Space-Battle/blob/master/Screenshots/version-01-03.png)
