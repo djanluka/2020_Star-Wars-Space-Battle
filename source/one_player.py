@@ -318,6 +318,7 @@ def make_enemies3(number):
 
     if glob.FIGHT == 1:
         glob.make_star()
+        print()
     elif glob.FIGHT == 2:
         glob.make_wars()
 
@@ -431,9 +432,33 @@ def fight_6():
     glob.ENEMIES_IS_READY = True
 '''
 
-
+direction = ['left', 'right', 'circle']
+iter = 0
+dir = ''
+circle_step = 1
 def fight_7():
-    
+    global game_timer, direction, dir, iter, circle_step, hidden_enemy
+    if game_timer % 300 == 0:
+        circle_step *= (-1)
+    if game_timer % 1200 == 0:
+        dir = direction[iter]
+        iter = (iter + 1) % len(direction)
+
+    for enm in glob.enemies_list:
+        if game_timer < 500:
+            enm.rect.y += 2
+        else:
+            glob.ENEMIES_IS_READY = True
+
+        if dir == 'left':
+            hidden_enemy = True
+            enm.rect.x = (enm.rect.x - 10) % glob.WINDOW_SIZE[0]
+        elif dir == 'right':
+            enm.rect.x = (enm.rect.x + 10) % glob.WINDOW_SIZE[0]
+        elif dir == 'circle':
+            hidden_enemy = False
+            enm.rect.y -= (7 * circle_step)
+
 
     '''
     if game_timer < 500:
@@ -452,34 +477,52 @@ def fight_7():
     '''
 
 def fight_8():
-    if game_timer < 500:
-        
-        for enm in glob.enemies_list:
-            if enm.enmType >= 2 :
-                enm.rect.y += 2
-    else:
-        glob.ENEMIES_IS_READY = True
-        
-    if game_timer > 2500 and game_timer < 3000:
-        
-        for enm in glob.enemies_list:
-            if enm.enmType < 2 :
-                enm.rect.y += 2
+    global game_timer, direction, dir, iter, circle_step, hidden_enemy
+    if game_timer % 300 == 0:
+        circle_step *= (-1)
+    if game_timer % 1200 == 0:
+        dir = direction[iter]
+        iter = (iter + 1) % len(direction)
+
+    for enm in glob.enemies_list:
+        if game_timer < 500:
+            enm.rect.y += 2
+        else:
+            glob.ENEMIES_IS_READY = True
+
+        if dir == 'left':
+            hidden_enemy = True
+            enm.rect.x = (enm.rect.x - 10) % glob.WINDOW_SIZE[0]
+        elif dir == 'right':
+            enm.rect.x = (enm.rect.x + 10) % glob.WINDOW_SIZE[0]
+        elif dir == 'circle':
+            hidden_enemy = False
+            enm.rect.y -= (7 * circle_step)
+
 
 def fight_9():
-    if game_timer < 500:
-        
-        for enm in glob.enemies_list:
-            if enm.enmType >= 1 :
-                enm.rect.y += 2
-    else:
-        glob.ENEMIES_IS_READY = True
-        
-    if game_timer > 2500 and game_timer < 3000:
-        
-        for enm in glob.enemies_list:
-            if enm.enmType < 1 :
-                enm.rect.y += 2
+    global game_timer, direction, dir, iter, circle_step, hidden_enemy
+    if game_timer % 300 == 0:
+        circle_step *= (-1)
+    if game_timer % 1200 == 0:
+        dir = direction[iter]
+        iter = (iter + 1) % len(direction)
+
+    for enm in glob.enemies_list:
+        if game_timer < 500:
+            enm.rect.y += 2
+        else:
+            glob.ENEMIES_IS_READY = True
+
+        if dir == 'left':
+            hidden_enemy = True
+            enm.rect.x = (enm.rect.x - 10) % glob.WINDOW_SIZE[0]
+        elif dir == 'right':
+            enm.rect.x = (enm.rect.x + 10) % glob.WINDOW_SIZE[0]
+        elif dir == 'circle':
+            hidden_enemy = False
+            enm.rect.y -= (7 * circle_step)
+
 
 def move_enemies1():
     if glob.FIGHT == 1:
@@ -574,8 +617,8 @@ def init_game():
     game_timer = 0
     timer_destroyer = 0
     burst_fire = 0
- 
-    glob.FIGHT = 2
+
+    glob.FIGHT = 0
     glob.all_sprites_list.empty()
     glob.enemies_list.empty()
     glob.rockets_list.empty()
@@ -602,7 +645,7 @@ def init_game():
 
 def start_game_one_player():
 
-    global player, destroyer, game_timer, timer_destroyer, burst_fire
+    global player, destroyer, game_timer, timer_destroyer, burst_fire, hidden_enemy
 
     init_game()
     next_level = True  # da znamo da li igramo igricu ili isrctavamo prelazak nivoa
@@ -651,6 +694,7 @@ def start_game_one_player():
             move_enemies()
         else:
             glob.ENEMIES_IS_READY = False
+            hidden_enemy = False
             game_timer = 0
             if glob.FIGHT < 3:
                 make_new_enemies()
