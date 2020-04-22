@@ -160,17 +160,30 @@ def destroyer_battle():
 def set_hidden_enemys():
     global timer_hidden, hidden_enemy
 
-    if hidden_enemy is True: #glob.LEVEL == 1 and glob.FIGHT == 3:
-        if timer_hidden == 0:
-            for enm in glob.enemies_list:
-                enm.hidden = True
+    if glob.LEVEL == 1:
+        if hidden_enemy is True:
+            if timer_hidden == 0:
+                for enm in glob.enemies_list:
+                    enm.hidden = True
+                    timer_hidden += 1
+            elif timer_hidden < 150:  # odokativna duzina koliko je nevidljiv
                 timer_hidden += 1
-        elif timer_hidden < 150:  # odokativna duzina koliko je nevidljiv
-            timer_hidden += 1
-        else:
-            timer_hidden = -150
-            for enm in glob.enemies_list:
-                enm.hidden = False
+            else:
+                timer_hidden = -150
+                for enm in glob.enemies_list:
+                    enm.hidden = False
+    elif glob.LEVEL == 3:
+        if hidden_enemy is True:
+            if timer_hidden == 0:
+                for enm in glob.enemies_list:
+                    enm.hidden = True
+                    timer_hidden += 1
+            elif timer_hidden < 150:  # odokativna duzina koliko je nevidljiv
+                timer_hidden += 1
+            else:
+                timer_hidden = -220
+                for enm in glob.enemies_list:
+                    enm.hidden = False
 
 
 def enemies_fire_to_player():
@@ -290,10 +303,12 @@ def make_enemies2(number):
 
 def make_enemies3(number):
 
-    if glob.FIGHT == 1:
+    if glob.FIGHT == 0:
         glob.make_star()
-    elif glob.FIGHT == 2:
+    elif glob.FIGHT == 1:
         glob.make_wars()
+    elif glob.FIGHT == 2:
+        glob.make_end()
 
 def fight_1():
     if game_timer < 500:
@@ -439,7 +454,8 @@ def fight_8():
 
 
 def fight_9():
-    global game_timer, direction, dir, iter, circle_step, hidden_enemy
+
+    global game_timer, direction, dir, iter, circle_step, hidden_enemy, timer_hidden
     if game_timer % 300 == 0:
         circle_step *= (-1)
     if game_timer % 1200 == 0:
@@ -454,6 +470,7 @@ def fight_9():
 
         if dir == 'left':
             hidden_enemy = True
+            timer_hidden = -10
             enm.rect.x = (enm.rect.x - 10) % glob.WINDOW_SIZE[0]
         elif dir == 'right':
             enm.rect.x = (enm.rect.x + 10) % glob.WINDOW_SIZE[0]

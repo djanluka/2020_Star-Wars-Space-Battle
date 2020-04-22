@@ -115,24 +115,26 @@ class BulletEnemy(pygame.sprite.Sprite):
         self.direction[0] = (player_pos_x - self.rect.x) / intensity + 0.1
         self.direction[1] = (player_pos_y - self.rect.y) / intensity + 0.1
 
-            #DODATO
-            #okretanje metka ka playeru
         dir = self.direction[0]
-        if 0.1 <= dir and dir <= 0.3:
+        if 0.1 <= dir and dir <= 0.2:
             self.image = pygame.transform.rotate(self.image, 8)
-        elif 0.3 <= dir and dir <= 0.6:
+        elif 0.2 < dir and dir <= 0.4:
+            self.image = pygame.transform.rotate(self.image, 18)
+        elif 0.4 < dir and dir <= 0.6:
             self.image = pygame.transform.rotate(self.image, 30)
-        elif 0.6 <= dir and dir <= 0.8:
+        elif 0.6 < dir and dir <= 0.8:
             self.image = pygame.transform.rotate(self.image, 45)
-        elif dir >= 0.8:
+        elif dir > 0.8:
             self.image = pygame.transform.rotate(self.image, 55)
-        elif -0.3 <= dir and dir <= 0.1:
+        elif -0.2 < dir and dir <= 0.1:
             self.image = pygame.transform.rotate(self.image, -8)
-        elif -0.6 <= dir and dir <= -0.3:
+        elif -0.4 <= dir and dir < -0.2:
+            self.image = pygame.transform.rotate(self.image, -18)
+        elif -0.6 <= dir and dir < -0.4:
             self.image = pygame.transform.rotate(self.image, -30)
-        elif -0.8 <= dir and dir <= -0.6 :
+        elif -0.8 <= dir and dir < -0.6 :
             self.image = pygame.transform.rotate(self.image, -45)
-        elif dir <= -0.8:
+        elif dir < -0.8:
             self.image = pygame.transform.rotate(self.image, -55)
 
 

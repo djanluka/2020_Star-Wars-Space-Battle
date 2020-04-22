@@ -367,3 +367,109 @@ def make_wars():
         glob.all_sprites_list.add(enm)
 
 
+def make_end():
+
+    '''
+    E
+    '''
+    for i in range(7):
+        enm = cls.Enemy(2)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 100
+        enm.rect.y = -350 + 50 + 50 * i
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+    for i in [50, 200, 350]:
+        for n in range(4):
+            enm = cls.Enemy(2)
+            glob.enemies[enm.enmType] += 1
+            enm.rect.x = 150 + 50*n
+            enm.rect.y = -350 + i
+            glob.enemies_list.add(enm)
+            glob.all_sprites_list.add(enm)
+
+    '''
+    N
+    '''
+    for i in [383, 583]:
+        for n in range(7):
+            enm = cls.Enemy(3)
+            glob.enemies[enm.enmType] += 1
+            enm.rect.x = i
+            enm.rect.y = -350 + 50 + n*50
+            glob.enemies_list.add(enm)
+            glob.all_sprites_list.add(enm)
+    for i in range(5):
+        enm = cls.Enemy(3)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 433 + 25*i
+        enm.rect.y = -350 + 150 + i * 25
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+
+    '''
+    D
+    '''
+    for i in range(7):
+        enm = cls.Enemy(0)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 666
+        enm.rect.y = -350 + 50 + 50 * i
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+    for i in range(4):
+        enm = cls.Enemy(0)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 866
+        enm.rect.y = -350 + 125 + 50 * i
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+    for i in range(4):
+        enm = cls.Enemy(0)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 716 + 50*i
+        enm.rect.y = -350 + 60 + 10 * i
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+    for i in range(4):
+        enm = cls.Enemy(0)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 716 + 50 * i
+        enm.rect.y = -350 + 340 - 10 * i
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+
+    '''
+    !
+    '''
+    for i in range(5):
+        enm = cls.Enemy(1)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 949 + 50 * i
+        enm.rect.y = -350 + 50
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+    for i in range(5):
+        enm = cls.Enemy(1)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 949 + 25 * i
+        enm.rect.y = -350 + 50 + 50*i
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+    for i in range(5):
+        enm = cls.Enemy(1)
+        glob.enemies[enm.enmType] += 1
+        enm.rect.x = 949+200 - 25 * i
+        enm.rect.y = -350 + 50 + 50*i
+        glob.enemies_list.add(enm)
+        glob.all_sprites_list.add(enm)
+    for i in [949+75, 949+75+50]:
+        for n in [325, 350]:
+            enm = cls.Enemy(1)
+            glob.enemies[enm.enmType] += 1
+            enm.rect.x = i
+            enm.rect.y = -350 + n
+            glob.enemies_list.add(enm)
+            glob.all_sprites_list.add(enm)
+
+
