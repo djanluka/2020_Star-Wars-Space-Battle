@@ -125,20 +125,20 @@ def draw_destroyer():
     timer_destroyer += 3
     destroyer.rect.x = glob.WINDOW_SIZE[0] / 2 - 64
     destroyer.rect.y = (int(timer_destroyer / 5) - 240 if timer_destroyer < 1400 else 40)
-
-
-    font = pygame.font.Font('freesansbold.ttf',30)
-    TextSurf = font.render(glob.boss_name[glob.LEVEL], True,(0,0,240))
-    TextRect = TextSurf.get_rect()
-    TextRect.center = (glob.WINDOW_SIZE[0]-200,25)
+    
+    color = (255,120,0)
+    font = pygameMenu.font.get_font(pygameMenu.font.FONT_PT_SERIF, 30)
+    name = font.render(glob.boss_name[glob.LEVEL], 1, color)
+    health = font.render('Health:', 1, color)
 
     if destroyer.health > 0:
         destroyer.show()
         if timer_destroyer > 1000:
             pygame.draw.rect(gui.screen, (40, 40, 40), (0,10,glob.WINDOW_SIZE[0], 30))
             gui.screen.blit(glob.bosses[glob.LEVEL], (10,0))
-            gui.screen.blit(TextSurf, TextRect)
-            pygame.draw.rect(gui.screen, (0, 0, 240), (300, 15, destroyer.health * 5, 20))
+            gui.screen.blit(name, (glob.WINDOW_SIZE[0]-280,5))
+            gui.screen.blit(health, (75,5))
+            pygame.draw.rect(gui.screen, color, (300, 15, destroyer.health * 6, 20))
         if timer_destroyer > 1200:
             destroyer.is_ready = True
             destroyer_fire_to_player()
@@ -238,7 +238,7 @@ def destroyer_fire_to_player():
         return
 
         # Ucestalost pucnja zavisi od levela
-    if timer_destroyer % (210 - glob.LEVEL * 30) == 0:
+    if timer_destroyer % (180 - glob.LEVEL * 30) == 0:
         for i in range(3):
             bul = cls.BulletDestroyer()
             bul.rect.x = destroyer.rect.x + 32*(i+1)
@@ -354,6 +354,12 @@ def fight_3():
 
 
 def fight_4():
+    
+    if game_timer < 500 :
+        glob.ENEMIES_IS_READY = False
+    else:
+        glob.ENEMIES_IS_READY = True
+
     global enemies
     enms = [0, 0, 0, 0]
     r = 100
@@ -367,9 +373,13 @@ def fight_4():
         enm.rect.y = r * math.sin(angle_param) - 100 * math.cos(game_timer/100)
         enm.rect.x = 200 + 300 * enm.enmType + r * math.cos(angle_param)
 
-    glob.ENEMIES_IS_READY = True
 
 def fight_5():
+    
+    if game_timer < 500 :
+        glob.ENEMIES_IS_READY = False
+    else:
+        glob.ENEMIES_IS_READY = True
 
     n = len(glob.enemies_list.sprites())
     i = 0
@@ -379,9 +389,14 @@ def fight_5():
         enm.rect.y = 50*(enm.enmType+1) * math.sin(angle_param) + 180
         enm.rect.x = 50*(enm.enmType+1) * math.cos(angle_param) + math.cos(game_timer / 100) * 400 + 600.0
 
-    glob.ENEMIES_IS_READY = True
 
 def fight_6():
+
+    if game_timer < 500 :
+        glob.ENEMIES_IS_READY = False
+    else:
+        glob.ENEMIES_IS_READY = True
+
     global enemies
     enms = [0, 0, 0, 0]
     r = 50
@@ -400,7 +415,6 @@ def fight_6():
             enm.rect.y = 140 + 80*math.sin(param) + r * math.sin(angle_param) - 60 * math.cos(param)
             enm.rect.x = (200 + 300 * enm.enmType + r * math.cos(angle_param) - game_timer*2) % glob.WINDOW_SIZE[0]
 
-    glob.ENEMIES_IS_READY = True
 
 direction = ['left', 'right', 'circle']
 iter = 0
@@ -421,12 +435,10 @@ def fight_7():
             glob.ENEMIES_IS_READY = True
 
         if dir == 'left':
-            #hidden_enemy = True
             enm.rect.x = (enm.rect.x - 10) % glob.WINDOW_SIZE[0]
         elif dir == 'right':
             enm.rect.x = (enm.rect.x + 10) % glob.WINDOW_SIZE[0]
         elif dir == 'circle':
-            #hidden_enemy = False
             enm.rect.y -= (7 * circle_step)
 
 def fight_8():
@@ -444,12 +456,10 @@ def fight_8():
             glob.ENEMIES_IS_READY = True
 
         if dir == 'left':
-            #hidden_enemy = True
             enm.rect.x = (enm.rect.x - 10) % glob.WINDOW_SIZE[0]
         elif dir == 'right':
             enm.rect.x = (enm.rect.x + 10) % glob.WINDOW_SIZE[0]
         elif dir == 'circle':
-            #hidden_enemy = False
             enm.rect.y -= (7 * circle_step)
 
 
@@ -462,6 +472,11 @@ def fight_9():
         dir = direction[iter]
         iter = (iter + 1) % len(direction)
 
+    if (game_timer % 200) < 180 :
+        hidden_enemy = True
+    else:
+        hidden_enemy = False
+
     for enm in glob.enemies_list:
         if game_timer < 500:
             enm.rect.y += 2
@@ -469,13 +484,11 @@ def fight_9():
             glob.ENEMIES_IS_READY = True
 
         if dir == 'left':
-            hidden_enemy = True
-            timer_hidden = -10
+            #timer_hidden = -10
             enm.rect.x = (enm.rect.x - 10) % glob.WINDOW_SIZE[0]
         elif dir == 'right':
             enm.rect.x = (enm.rect.x + 10) % glob.WINDOW_SIZE[0]
         elif dir == 'circle':
-            hidden_enemy = False
             enm.rect.y -= (7 * circle_step)
 
 
@@ -580,19 +593,6 @@ def init_game():
 # TO DO:
 # 5) promeniti background muziku
 
-# Ogi: 
-#   enemy3, ply5, destroyer1, destroyer2, desrtoyer3 
-#   (za destrojerere mism da je ok da ih napravis samo 
-#   u razlicitim bojama ili tako nesto,ali da se ne
-#   menja njihov oblik zbog kolizije)
-#   Radio sam nesto za prikaz destroyer health ali mi se ne
-#   svidja previse, popgledaj to ako mozes
-
-# Borisa: 
-#   iskljucio sam hide na 3. lvl jer su vise bili sakriveni nego prikazani,
-#   ok je hide ali bas na kratko, ovako oni te izrokju, a ti pojma nemas de su.
-# 
-
 def start_game_one_player():
 
     global player, destroyer, game_timer, timer_destroyer, burst_fire, hidden_enemy
@@ -620,18 +620,21 @@ def start_game_one_player():
             if glob.LEVEL == 4:
                 glob.return_to_main_menu()
                 return
-            next_level = False
             pressed_enter = False
-            while not pressed_enter:
-                events = pygame.event.get()
-                for e in events:
-                    if e.type == pygame.KEYDOWN:
-                        if e.key == pygame.K_RETURN:
-                            pressed_enter = True
-                gui.screen.blit(glob.stories[glob.LEVEL], (0, -40))
-                pygame.display.update()
-
-        
+            
+            events = pygame.event.get()
+            for e in events:
+                if e.type == pygame.KEYDOWN:
+                    if e.key == pygame.K_RETURN:
+                        pressed_enter = True
+            gui.screen.blit(glob.stories[glob.LEVEL], (0, -40))
+            pygame.display.update() 
+            
+            if not pressed_enter:
+                game_timer = 0
+                continue
+            
+            next_level = False
 
         if player.lives_number < 0:
             glob.return_to_main_menu()

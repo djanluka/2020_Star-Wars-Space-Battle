@@ -83,7 +83,7 @@ class Destroyer(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.health = 100
         self.is_ready = False
-        self.image = glob.destroyers[self.dstType]
+        self.image = glob.destroyers[glob.LEVEL-1]
 
     def show(self):
         gui.screen.blit(self.image, (self.rect.x, self.rect.y))

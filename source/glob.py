@@ -59,7 +59,7 @@ fighters = [
 
 num_enemies = [
                 'Nema enemy-ja za 0 level',
-                [8, 10, 12],
+                [11, 13, 15],
                 [32, 40, 48],
                 [None, None, None] # Broj enemy-ja na levelu 3 ne zavisi od ovih brojeva
                 ]
@@ -68,22 +68,22 @@ enemies = [0, 0, 0, 0]
 
 bosses = [
             "",
-            pygame.image.load('images/boss2.jpg'),
-            pygame.image.load('images/boss2.jpg'),
-            pygame.image.load('images/boss2.jpg')
+            pygame.image.load('images/boss1.png'),
+            pygame.image.load('images/boss2.png'),
+            pygame.image.load('images/boss3.png')
             ]
 
 boss_name = [
             "",
             "Grand MoffTarkin",
-            "Grand MoffTarkin",
-            "Grand MoffTarkin"
+            "Darth Vader",
+            "Darth Sidious"
             ]
 
 destroyers = [
-                pygame.image.load('images/destroyer.png'),
-                pygame.image.load('images/destroyer.png'),
-                pygame.image.load('images/destroyer.png')
+                pygame.image.load('images/destroyer1.png'),
+                pygame.image.load('images/destroyer2.png'),
+                pygame.image.load('images/destroyer3.png')
              ]
 
 stories = [
