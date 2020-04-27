@@ -58,8 +58,8 @@ def check_player_events():
 
     if pressed[cont.Fire] and (glob.ENEMIES_IS_READY or destroyer.is_ready):
         # Metak se ispaljuje u svakom 20-tom ciklusu 
-        # Promenio na 5 da bi se brze prelazila igrica tokom testiranja
-        if burst_fire > 5:
+        # Promenio na 2 da bi se brze prelazila igrica tokom testiranja
+        if burst_fire > 2:
             # Zvuk pri ispaljivanju metaka
             rocket_sound = mixer.Sound('sounds/laser.wav')
             rocket_sound.play()
@@ -619,11 +619,12 @@ def start_game_one_player():
         set_background()
         
         if next_level:
+            
             if glob.LEVEL == 4:
-                glob.return_to_main_menu()
+                glob.victory()
                 return
             pressed_enter = False
-            
+
             events = pygame.event.get()
             for e in events:
                 if e.type == pygame.KEYDOWN:
@@ -637,6 +638,7 @@ def start_game_one_player():
                 continue
             
             next_level = False
+
 
         if player.lives_number < 0:
             glob.return_to_main_menu()

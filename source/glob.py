@@ -83,14 +83,16 @@ boss_name = [
 destroyers = [
                 pygame.image.load('images/destroyer1.png'),
                 pygame.image.load('images/destroyer2.png'),
+                pygame.image.load('images/destroyer3.png'),
                 pygame.image.load('images/destroyer3.png')
              ]
 
 stories = [
-	    pygame.image.load('images/story0.png'),
+	    	pygame.image.load('images/story0.png'),
             pygame.image.load('images/story1.png'),
             pygame.image.load('images/story2.png'),
-            pygame.image.load('images/story3.png')
+            pygame.image.load('images/story3.png'),
+            pygame.image.load('images/story4.png')
           ]
 
 #storiji koji se prikazuju posle poraza u levelu odgovarajuceg bossa
@@ -145,6 +147,25 @@ rocket = pygame.image.load('images/rocket_player.png')
 
 life_image = pygame.transform.scale(x_wing, (25,25))
 blue_sw = pygame.image.load('images/blue.jpg')
+
+#prikazivanje pobednickog storija
+def victory():
+
+	pressed_enter = False
+
+	gui.screen.blit(glob.stories[glob.LEVEL], (0, -40))
+	pygame.display.update()
+
+	
+	while not pressed_enter:
+		events = pygame.event.get()
+		for e in events:
+	            if e.type == pygame.KEYDOWN:
+	                if e.key == pygame.K_RETURN:
+	                    pressed_enter = True
+	                    break
+
+	return_to_main_menu()
 
 def return_to_main_menu():
     mixer.music.stop()
