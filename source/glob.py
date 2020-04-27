@@ -93,12 +93,14 @@ stories = [
             pygame.image.load('images/story3.png')
           ]
 
+#storiji koji se prikazuju posle poraza u levelu odgovarajuceg bossa
 defeat = [
                 pygame.image.load('images/defeat_boss1.png'),
                 pygame.image.load('images/defeat_boss2.png'),
                 pygame.image.load('images/defeat_boss3.png')
          ]
 
+#storiji koji se prikazuju pre odgovarajuceg boss-a
 boss_stories = [
 	                pygame.image.load('images/story_boss1.png'),
 	                pygame.image.load('images/story_boss2.png'),
