@@ -93,6 +93,18 @@ stories = [
             pygame.image.load('images/story3.png')
           ]
 
+defeat = [
+                pygame.image.load('images/defeat_boss1.png'),
+                pygame.image.load('images/defeat_boss2.png'),
+                pygame.image.load('images/defeat_boss3.png')
+         ]
+
+boss_stories = [
+	                pygame.image.load('images/story_boss1.png'),
+	                pygame.image.load('images/story_boss2.png'),
+	                pygame.image.load('images/story_boss3.png')
+         		]
+
 LEVEL = 1
 FIGHT = 0
 
