@@ -141,6 +141,19 @@ def draw_destroyer():
             gui.screen.blit(health, (75,5))
             pygame.draw.rect(gui.screen, color, (300, 15, destroyer.health * 6, 20))
         if timer_destroyer > 1200:
+
+            pressed_enter = False
+      
+            while not pressed_enter and not destroyer.is_ready:
+                gui.screen.blit(glob.boss_stories[glob.LEVEL-1], (0, -40))
+                pygame.display.update()
+                events = pygame.event.get()
+                for e in events:
+                        if e.type == pygame.KEYDOWN:
+                            if e.key == pygame.K_RETURN:
+                                pressed_enter = True
+                                break
+
             destroyer.is_ready = True
             destroyer_fire_to_player()
 
