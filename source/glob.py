@@ -96,7 +96,7 @@ stories = [
           ]
 
 #storiji koji se prikazuju posle poraza u levelu odgovarajuceg bossa
-defeat = [
+defeat_stories = [
                 pygame.image.load('images/defeat_boss1.png'),
                 pygame.image.load('images/defeat_boss2.png'),
                 pygame.image.load('images/defeat_boss3.png')
@@ -166,6 +166,28 @@ def victory():
 	                    break
 
 	return_to_main_menu()
+
+
+#iscrtavanje poraza od odgovarajuceg bossa
+def defeat():
+
+	pressed_enter = False
+
+	gui.screen.blit(glob.defeat_stories[glob.LEVEL-1], (0, -40))
+	pygame.display.update()
+
+	
+	while not pressed_enter:
+		events = pygame.event.get()
+		for e in events:
+	            if e.type == pygame.KEYDOWN:
+	                if e.key == pygame.K_RETURN:
+	                    pressed_enter = True
+	                    break
+
+	return_to_main_menu()
+
+
 
 def return_to_main_menu():
     mixer.music.stop()

@@ -142,6 +142,7 @@ def draw_destroyer():
             pygame.draw.rect(gui.screen, color, (300, 15, destroyer.health * 6, 20))
         if timer_destroyer > 1200:
 
+            #iscrtavanje pred-bossovskog storija i cekanje na ENTER
             pressed_enter = False
       
             while not pressed_enter and not destroyer.is_ready:
@@ -654,7 +655,7 @@ def start_game_one_player():
 
 
         if player.lives_number < 0:
-            glob.return_to_main_menu()
+            glob.defeat()
             return
 
         # Ako ima nepriajtelja, neka ispaljuju metkove i neka se krecu:
