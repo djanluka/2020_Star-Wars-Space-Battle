@@ -37,9 +37,9 @@ TWO_CONTROL_FIRE2 = 'KEY_UP'
 
 CONTROLS_TEXT = [
                 'First player:                                                                                            Second player:',
-                f'To left : {CONTROL_LEFT}                                                                                                                  To left : 4',
-                f'To right : {CONTROL_RIGHT}                                                                                                               To left : 6',
-                f'To shoot : {CONTROL_FIRE}                                                                                                        To shoot : 8'
+                f'To left : {CONTROL_LEFT}                                                                                                                  To left : <',
+                f'To right : {CONTROL_RIGHT}                                                                                                               To left : >',
+                f'To shoot : {CONTROL_FIRE}                                                                                                        To shoot : ^'
                 ]
 
 VOLUME_VALUES = {
@@ -88,7 +88,7 @@ destroyers = [
              ]
 
 stories = [
-	    	pygame.image.load('images/story0.png'),
+            pygame.image.load('images/story0.png'),
             pygame.image.load('images/story1.png'),
             pygame.image.load('images/story2.png'),
             pygame.image.load('images/story3.png'),
@@ -97,26 +97,23 @@ stories = [
 
 #storiji koji se prikazuju posle poraza u levelu odgovarajuceg bossa
 defeat_stories = [
-                pygame.image.load('images/defeat_boss1.png'),
-                pygame.image.load('images/defeat_boss2.png'),
-                pygame.image.load('images/defeat_boss3.png')
-         ]
+                    pygame.image.load('images/defeat_boss1.png'),
+                    pygame.image.load('images/defeat_boss2.png'),
+                    pygame.image.load('images/defeat_boss3.png')
+                 ]
 
 #storiji koji se prikazuju pre odgovarajuceg boss-a
 boss_stories = [
-	                pygame.image.load('images/story_boss1.png'),
-	                pygame.image.load('images/story_boss2.png'),
-	                pygame.image.load('images/story_boss3.png')
-         		]
+                pygame.image.load('images/story_boss1.png'),
+                pygame.image.load('images/story_boss2.png'),
+                pygame.image.load('images/story_boss3.png')
+                ]
 
 LEVEL = 1
 FIGHT = 0
 
-#TO DO
-#postavitii muziku na 0.5
-#ja sam se ja sad iskljucio da ne smara svaki put
-GAME_VOLUME = 0
-MENU_VOLUME = 0
+GAME_VOLUME = 0.5
+MENU_VOLUME = 0.5
 
 WINDOW_SIZE = (1300, 700)
 MENU_SIZE = (500, 450)
@@ -206,21 +203,21 @@ def make_star():
             enm = cls.Enemy(0)
             glob.enemies[enm.enmType] += 1
             enm.rect.x = 100 + 50*n
-            enm.rect.y = -350  + i
+            enm.rect.y = -350 + i
             glob.enemies_list.add(enm)
             glob.all_sprites_list.add(enm)
     for i in [100, 150]:
         enm = cls.Enemy(0)
         glob.enemies[enm.enmType] += 1
         enm.rect.x = 100
-        enm.rect.y = -350  + i
+        enm.rect.y = -350 + i
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
     for i in [250, 300]:
         enm = cls.Enemy(0)
         glob.enemies[enm.enmType] += 1
         enm.rect.x = 300
-        enm.rect.y = -350  + i
+        enm.rect.y = -350 + i
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
 
@@ -231,14 +228,14 @@ def make_star():
         enm = cls.Enemy(1)
         glob.enemies[enm.enmType] += 1
         enm.rect.x = 383 + i*50
-        enm.rect.y = -350  + 50
+        enm.rect.y = -350 + 50
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
     for i in range(12):
         enm = cls.Enemy(1)
         glob.enemies[enm.enmType] += 1
         enm.rect.x = 483
-        enm.rect.y = -350  + 75 + i*25
+        enm.rect.y = -350 + 75 + i*25
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
 
@@ -250,7 +247,7 @@ def make_star():
             enm = cls.Enemy(2)
             glob.enemies[enm.enmType] += 1
             enm.rect.x = i
-            enm.rect.y = -350  + 50 + n*50
+            enm.rect.y = -350 + 50 + n*50
             glob.enemies_list.add(enm)
             glob.all_sprites_list.add(enm)
     for i in [50, 200]:
@@ -258,7 +255,7 @@ def make_star():
             enm = cls.Enemy(2)
             glob.enemies[enm.enmType] += 1
             enm.rect.x = 666 + n*50
-            enm.rect.y = -350  + i
+            enm.rect.y = -350 + i
             glob.enemies_list.add(enm)
             glob.all_sprites_list.add(enm)
 
@@ -269,7 +266,7 @@ def make_star():
         enm = cls.Enemy(3)
         glob.enemies[enm.enmType] += 1
         enm.rect.x = 949
-        enm.rect.y = -350  + 50 + 50*i
+        enm.rect.y = -350 + 50 + 50*i
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
     for i in [50, 200]:
@@ -277,28 +274,28 @@ def make_star():
             enm = cls.Enemy(3)
             glob.enemies[enm.enmType] += 1
             enm.rect.x = 949 + 50*n
-            enm.rect.y = -350  + i
+            enm.rect.y = -350 + i
             glob.enemies_list.add(enm)
             glob.all_sprites_list.add(enm)
     for i in range(2):
         enm = cls.Enemy(3)
         glob.enemies[enm.enmType] += 1
         enm.rect.x = 1149
-        enm.rect.y = -350  + 100 + 50*i
+        enm.rect.y = -350 + 100 + 50*i
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
     for i in range(3):
         enm = cls.Enemy(3)
         glob.enemies[enm.enmType] += 1
         enm.rect.x = 999 + 50 * i
-        enm.rect.y = -350  + 250 + 50 * i
+        enm.rect.y = -350 + 250 + 50 * i
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
 
     enm = cls.Enemy(3)
     glob.enemies[enm.enmType] += 1
     enm.rect.x = 1149
-    enm.rect.y = -350  + 350
+    enm.rect.y = -350 + 350
     glob.enemies_list.add(enm)
     glob.all_sprites_list.add(enm)
 
@@ -379,7 +376,7 @@ def make_wars():
         enm = cls.Enemy(1)
         glob.enemies[enm.enmType] += 1
         enm.rect.x = 866
-        enm.rect.y = -350+ 100 + 50 * i
+        enm.rect.y = -350 + 100 + 50 * i
         glob.enemies_list.add(enm)
         glob.all_sprites_list.add(enm)
     for i in range(3):

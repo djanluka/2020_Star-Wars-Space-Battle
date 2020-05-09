@@ -97,9 +97,9 @@ def check_rocket_to_enemise_collide():
                 if r.rect.y < destroyer.rect.y + 3 * dist + 40:
                     glob.rockets_list.remove(r)
                     glob.all_sprites_list.remove(r)
-                    # Zvuk eksplozije kada metak pogodi protivnika
-                    #explosion_sound = mixer.Sound('sounds/explosion.wav')
-                    #explosion_sound.play()
+                    #Zvuk eksplozije kada metak pogodi protivnika
+                    explosion_sound = mixer.Sound('sounds/explosion.wav')
+                    explosion_sound.play()
                     destroyer.health -= 7
 
         if r.rect.y < -20:
@@ -233,7 +233,7 @@ def enemies_fire_to_player():
         glob.bullets_enm_list.add(bul)
         glob.all_sprites_list.add(bul)
 
-    # Svaki drugi ispaljuje metka u pravcu (0,1)
+    # Svaki drugi ispaljuje metak u pravcu (0,1)
     if fire_mode * 2 == frequency:
         bul = cls.BulletEnemy()
         bul.rect.x = rand_enm.rect.x + 32
@@ -274,9 +274,9 @@ def check_bullets_player_collide():
             if bullet.rect.y in range(player.position_y + 20, player.position_y + 64):
                 glob.bullets_enm_list.remove(bullet)
                 if destroyer.is_ready:
-                    player.health -= 20
-                else:
                     player.health -= 25
+                else:
+                    player.health -= 20
 
         if bullet.rect.y > glob.WINDOW_SIZE[1] - 55:
             glob.bullets_enm_list.remove(bullet)
@@ -371,7 +371,7 @@ def fight_3():
 
 def fight_4():
     
-    if game_timer < 500 :
+    if game_timer < 500:
         glob.ENEMIES_IS_READY = False
     else:
         glob.ENEMIES_IS_READY = True
@@ -392,7 +392,7 @@ def fight_4():
 
 def fight_5():
     
-    if game_timer < 500 :
+    if game_timer < 500:
         glob.ENEMIES_IS_READY = False
     else:
         glob.ENEMIES_IS_READY = True
@@ -408,7 +408,7 @@ def fight_5():
 
 def fight_6():
 
-    if game_timer < 500 :
+    if game_timer < 500:
         glob.ENEMIES_IS_READY = False
     else:
         glob.ENEMIES_IS_READY = True
@@ -437,6 +437,7 @@ iter = 0
 dir = ''
 circle_step = 1
 def fight_7():
+
     global game_timer, direction, dir, iter, circle_step, hidden_enemy
     if game_timer % 300 == 0:
         circle_step *= (-1)
@@ -458,6 +459,7 @@ def fight_7():
             enm.rect.y -= (7 * circle_step)
 
 def fight_8():
+
     global game_timer, direction, dir, iter, circle_step, hidden_enemy
     if game_timer % 300 == 0:
         circle_step *= (-1)
@@ -606,9 +608,6 @@ def init_game():
     glob.bullets_enm_list.empty()
     
 
-# TO DO:
-# 5) promeniti background muziku
-
 def start_game_one_player():
 
     global player, destroyer, game_timer, timer_destroyer, burst_fire, hidden_enemy
@@ -617,13 +616,13 @@ def start_game_one_player():
     next_level = True  # da znamo da li igramo igricu ili isrctavamo prelazak nivoa
   
     while True:
-            # Funkcija za proveru dogadjaja u meniju
+        # Funkcija za proveru dogadjaja u meniju
         check_menu_events()
-            # U narednih nekoliko linija se prebacuje mod igre u menu mode
+        # U narednih nekoliko linija se prebacuje mod igre u menu mode
         if gui.pause_menu.is_enabled(): 
             pygame.display.update()
             continue
-            # Ako ukljucimo glavni meni, pocinjemo novu partiju
+        # Ako ukljucimo glavni meni, pocinjemo novu partiju
         if gui.main_menu.is_enabled(): 
             glob.LEVEL = 1
             pygame.display.update()
@@ -658,7 +657,7 @@ def start_game_one_player():
             glob.defeat()
             return
 
-        # Ako ima nepriajtelja, neka ispaljuju metkove i neka se krecu:
+        # Ako ima neprijatelja, neka ispaljuju metkove i neka se krecu:
         num_enemies = len(glob.enemies_list.sprites())
         if num_enemies > 0:
             enemies_fire_to_player()
