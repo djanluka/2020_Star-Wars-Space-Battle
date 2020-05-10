@@ -7,7 +7,7 @@ import pygameMenu
 main_menu = None
 pause_menu = None
 screen = pygame.display.set_mode((1300,700))
-background = pygame.image.load('images/background.jpg')
+background = pygame.image.load('images/background.png')
 
 star_wars_logo = pygame.image.load('images/blue.jpg')
 pygame.display.set_caption('STAR WARS GAME')

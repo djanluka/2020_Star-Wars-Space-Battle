@@ -5,7 +5,7 @@ from source import glob
 from source import cls
 
 ABOUT = [
-        'This star wars game like Galaga',
+        'This Star Wars Galaga-like game',
         'is made by MATF students:',
         'Boris Cvitak',
         'Ognjen Stamenkovic',
@@ -117,7 +117,7 @@ MENU_VOLUME = 0.5
 
 WINDOW_SIZE = (1300, 700)
 MENU_SIZE = (500, 450)
-START_WARS_LOGO_POS = (100, 600)
+START_WARS_LOGO_POS = (1200, 600)
 PAUSE_ONE_PLAYER_POS = (1265, 665)
 PAUSE_TWO_PLAYERS_POS = (634, 5)
 BLACK_COLOR = (0, 0, 0)
