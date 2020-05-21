@@ -4,13 +4,13 @@
 
 ___
 
-### :memo: Opis igrice:
+### :memo: Opis igrice
 
 Igrica nalik na Galagu implementirana koristeći Python i biblioteku Pygame.
 Uzivajte u igri!
 ___
 
-### :video_game: Komande igrice:
+### :video_game: Komande igrice
 
 <kbd>w</kbd> ispaljuje metak <br>
 <kbd>s</kbd> idi levo <br>
@@ -19,7 +19,7 @@ ___
 Sve komande se mogu mejnati!
 ___
 
-### :wrench: Pokretanje igrice:
+### :wrench: Pokretanje igrice
 
 Igricu pokrecete tako sto iskopirate blok sledecih naredbi u vas terminal 
 ```shell
