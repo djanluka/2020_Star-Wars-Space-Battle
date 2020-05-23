@@ -71,128 +71,8 @@ def reset_game():
     mixer.music.set_volume(glob.MENU_VOLUME)
     main_menu.enable()
 
-def createPauseMenu():
-    global main_menu
-    global pause_menu
-
-    # Change_controls submenu
-    change_controls_submenu = pygameMenu.TextMenu(screen,
-                                                  window_width=glob.WINDOW_SIZE[0] - 600,
-                                                  window_height=glob.WINDOW_SIZE[1] - 100,
-                                                  font=pygameMenu.font.FONT_FRANCHISE,
-                                                  font_size=30,
-                                                  text_align=pygameMenu.locals.ALIGN_CENTER,
-                                                  title='STAR WARS MENU',
-                                                  bgfun=main_background,
-                                                  menu_width=glob.MENU_SIZE[0],
-                                                  menu_height=glob.MENU_SIZE[1]
-                                                  )
-    change_controls_submenu.add_line('If command exists, you must remove it and insert the new')
-    change_controls_submenu.add_line('otherwise you have to click and insert the new!')
-    change_controls_submenu.add_text_input('To left : ', onchange=change_control_left, maxchar=1)
-    change_controls_submenu.add_text_input('To right : ', onchange=change_control_right, maxchar=1)
-    change_controls_submenu.add_text_input('To shoot : ', onchange=change_control_shoot, maxchar=1)
-    change_controls_submenu.add_option('Back', pygameMenu.events.BACK)
-    # Controls subemenu u settings
-    controls_submenu = pygameMenu.TextMenu(screen,
-                                           window_width=glob.WINDOW_SIZE[0] - 600,
-                                           window_height=glob.WINDOW_SIZE[1] - 100,
-                                           font=pygameMenu.font.FONT_FRANCHISE,
-                                           title='STAR WARS MENU',
-                                           bgfun=main_background,
-                                           menu_width=glob.MENU_SIZE[0],
-                                           menu_height=glob.MENU_SIZE[1]
-                                           )
-    controls_submenu.add_line(glob.CONTROLS_TEXT[0])
-    controls_submenu.add_line(glob.CONTROLS_TEXT[1])
-    controls_submenu.add_line(glob.CONTROLS_TEXT[2])
-    controls_submenu.add_line(glob.CONTROLS_TEXT[3])
-    controls_submenu.add_option('Change controls', change_controls_submenu)
-    controls_submenu.add_option('Back', pygameMenu.events.BACK)
-
-
-    # Settings menu(SOUND, CONTROLS)
-    settings_menu = pygameMenu.Menu(screen,
-                                    window_width=glob.WINDOW_SIZE[0] - 600,
-                                    window_height=glob.WINDOW_SIZE[1] - 100,
-                                    font=pygameMenu.font.FONT_FRANCHISE,
-                                    title='STAR WARS MENU',
-                                    bgfun=main_background,
-                                    menu_width=glob.MENU_SIZE[0],
-                                    menu_height=glob.MENU_SIZE[1]
-                                    )
-    settings_menu.add_selector('Sound volume',
-                               [('50 %', '50_PERCENT'),
-                                ('70 %', '70_PERCENT'),
-                                ('100 %', '100_PERCENT'),
-                                ('0 %', '0_PERCENT'),
-                                ('10 %', '10_PERCENT'),
-                                ('30 %', '30_PERCENT'),
-                                ],
-                               onchange=change_volume_game
-                               )
-    settings_menu.add_option('Controls', controls_submenu)
-    settings_menu.add_option('Back', pygameMenu.events.BACK)
-
-    # Pause menu
-    pause_menu = pygameMenu.Menu(screen,
-                                 window_width=glob.WINDOW_SIZE[0] - 600,
-                                 window_height=glob.WINDOW_SIZE[1] - 100,
-                                 font=pygameMenu.font.FONT_FRANCHISE,
-                                 title='STAR WARS MENU',
-                                 bgfun=main_background,
-                                 menu_width=glob.MENU_SIZE[0],
-                                 menu_height=glob.MENU_SIZE[1] )
-    pause_menu.add_option('Continue', continue_game)
-    pause_menu.add_option('Settings', settings_menu)
-    pause_menu.add_option('Reset', reset_game)
-
-def createMenu():
-    global main_menu
-    global pause_menu
-    global controls_submenu
-
-    # DODATO
-    # Change_controls submenu
-    change_controls_submenu = pygameMenu.TextMenu(screen,
-                                                  window_width=glob.WINDOW_SIZE[0] - 600,
-                                                  window_height=glob.WINDOW_SIZE[1] - 100,
-                                                  font=pygameMenu.font.FONT_FRANCHISE,
-                                                  font_size=30,
-                                                  text_align=pygameMenu.locals.ALIGN_CENTER,
-                                                  title='STAR WARS MENU',
-                                                  bgfun=main_background,
-                                                  menu_width=glob.MENU_SIZE[0],
-                                                  menu_height=glob.MENU_SIZE[1]
-                                                  )
-    change_controls_submenu.add_line('If command exists, you must remove it and insert the new')
-    change_controls_submenu.add_line('otherwise you have to click and insert the new!')
-    change_controls_submenu.add_text_input('To left : ', onchange=change_control_left, maxchar=1,)
-    change_controls_submenu.add_text_input('To right : ', onchange=change_control_right, maxchar=1)
-    change_controls_submenu.add_text_input('To shoot : ', onchange=change_control_shoot, maxchar=1)
-    change_controls_submenu.add_option('Back', pygameMenu.events.BACK)
-
-
-    # Controls (spisak kontrola)
-    controls_submenu = pygameMenu.TextMenu(screen,
-                                           window_width=glob.WINDOW_SIZE[0] - 600,
-                                           window_height=glob.WINDOW_SIZE[1] - 100,
-                                           font=pygameMenu.font.FONT_FRANCHISE,
-                                           title='STAR WARS MENU',
-                                           bgfun=main_background,
-                                           menu_width=glob.MENU_SIZE[0],
-                                           menu_height=glob.MENU_SIZE[1]
-                                           )
-    controls_submenu.add_line(glob.CONTROLS_TEXT[0])
-    controls_submenu.add_line(glob.CONTROLS_TEXT[1])
-    controls_submenu.add_line(glob.CONTROLS_TEXT[2])
-    controls_submenu.add_line(glob.CONTROLS_TEXT[3])
-    controls_submenu.add_option('Change controls', change_controls_submenu)
-    controls_submenu.add_option('Back', pygameMenu.events.BACK)
-
-
-    # Play menu (START , 1/2 PLAYER, CONTROLS, BACK)
-    play_menu = pygameMenu.Menu(screen,
+def text_menu_func():
+    return pygameMenu.TextMenu(screen,
                                 window_width=glob.WINDOW_SIZE[0] - 600,
                                 window_height=glob.WINDOW_SIZE[1] - 100,
                                 font=pygameMenu.font.FONT_FRANCHISE,
@@ -201,25 +81,21 @@ def createMenu():
                                 menu_width=glob.MENU_SIZE[0],
                                 menu_height=glob.MENU_SIZE[1]
                                 )
-    play_menu.add_option('Start', start.start_game)
-    play_menu.add_selector('',
-                           [('1-player', 'ONE_PLAYER'),
-                            ('2-players', 'TWO_PLAYERS')],
-                           onchange=change_player
-                           )
-    play_menu.add_option('Controls', controls_submenu)
-    play_menu.add_option('Back', pygameMenu.events.BACK)
 
-    # Settings menu(SOUND, CONTROLS)
-    settings_menu = pygameMenu.Menu(screen,
-                                    window_width=glob.WINDOW_SIZE[0] - 600,
-                                    window_height=glob.WINDOW_SIZE[1] - 100,
-                                    font=pygameMenu.font.FONT_FRANCHISE,
-                                    title='STAR WARS MENU',
-                                    bgfun=main_background,
-                                    menu_width=glob.MENU_SIZE[0],
-                                    menu_height=glob.MENU_SIZE[1]
-                                    )
+def menu_func():
+    return pygameMenu.Menu(screen, window_width = glob.WINDOW_SIZE[0] - 600,
+                                window_height = glob.WINDOW_SIZE[1] - 100,
+                                font = pygameMenu.font.FONT_FRANCHISE,
+                                title = 'STAR WARS MENU',
+                                bgfun = main_background,
+                                menu_width = glob.MENU_SIZE[0],
+                                menu_height = glob.MENU_SIZE[1])
+
+def text_menu_align_func():
+    return pygameMenu.TextMenu(screen, window_width=glob.WINDOW_SIZE[0] - 600, window_height=glob.WINDOW_SIZE[1] - 100,font=pygameMenu.font.FONT_FRANCHISE,font_size=30,text_align=pygameMenu.locals.ALIGN_CENTER,title='STAR WARS MENU',bgfun=main_background,menu_width=glob.MENU_SIZE[0],menu_height=glob.MENU_SIZE[1])
+
+def set_settings_menu(controls_submenu):
+    settings_menu = menu_func() 
     settings_menu.add_selector('Sound volume',
                                [('50 %', '50_PERCENT'),
                                 ('70 %', '70_PERCENT'),
@@ -232,32 +108,76 @@ def createMenu():
                                )
     settings_menu.add_option('Controls', controls_submenu)
     settings_menu.add_option('Back', pygameMenu.events.BACK)
+    return settings_menu
 
+def set_controls_submenus():
+    change_controls_submenu = text_menu_align_func()
+    change_controls_submenu.add_line('If command exists, you must remove it and insert the new')
+    change_controls_submenu.add_line('otherwise you have to click and insert the new!')
+    change_controls_submenu.add_text_input('To left : ', onchange=change_control_left, maxchar=1,)
+    change_controls_submenu.add_text_input('To right : ', onchange=change_control_right, maxchar=1)
+    change_controls_submenu.add_text_input('To shoot : ', onchange=change_control_shoot, maxchar=1)
+    change_controls_submenu.add_option('Back', pygameMenu.events.BACK)
+
+
+    # Controls (spisak kontrola)
+    controls_submenu = text_menu_func()
+    controls_submenu.add_line(glob.CONTROLS_TEXT[0])
+    controls_submenu.add_line(glob.CONTROLS_TEXT[1])
+    controls_submenu.add_line(glob.CONTROLS_TEXT[2])
+    controls_submenu.add_line(glob.CONTROLS_TEXT[3])
+    controls_submenu.add_option('Change controls', change_controls_submenu)
+    controls_submenu.add_option('Back', pygameMenu.events.BACK)
+    
+    return change_controls_submenu, controls_submenu
+
+def createPauseMenu():
+    global main_menu
+    global pause_menu
+
+    # Change_controls submenu
+    change_controls_submenu, controls_submenu = set_controls_submenus()
+
+    # Settings menu(SOUND, CONTROLS)
+    settings_menu = set_settings_menu(controls_submenu)
+
+    # Pause menu
+    pause_menu = menu_func()
+    pause_menu.add_option('Continue', continue_game)
+    pause_menu.add_option('Settings', settings_menu)
+    pause_menu.add_option('Reset', reset_game)
+
+def createMenu():
+    global main_menu
+    global pause_menu
+    global controls_submenu
+
+    # Change_controls submenu
+    change_controls_submenu, controls_submenu = set_controls_submenus()
+
+    # Play menu (START , 1/2 PLAYER, CONTROLS, BACK)
+    play_menu = menu_func()
+    play_menu.add_option('Start', start.start_game)
+    play_menu.add_selector('',
+                           [('1-player', 'ONE_PLAYER'),
+                            ('2-players', 'TWO_PLAYERS')],
+                           onchange=change_player
+                           )
+    play_menu.add_option('Controls', controls_submenu)
+    play_menu.add_option('Back', pygameMenu.events.BACK)
+
+    # Settings menu(SOUND, CONTROLS)
+    settings_menu = set_settings_menu(controls_submenu)
+    
     # About menu
-    about_menu = pygameMenu.TextMenu(screen,
-                                     window_width=glob.WINDOW_SIZE[0] - 600,
-                                     window_height=glob.WINDOW_SIZE[1] - 100,
-                                     font=pygameMenu.font.FONT_FRANCHISE,
-                                     title='STAR WARS MENU',
-                                     bgfun=main_background,
-                                     menu_width=glob.MENU_SIZE[0],
-                                     menu_height=glob.MENU_SIZE[1]
-                                     )
+    about_menu = text_menu_func()
     for about in glob.ABOUT:
         about_menu.add_line(about)
     about_menu.add_line(pygameMenu.locals.TEXT_NEWLINE)
     about_menu.add_option('Return to menu', pygameMenu.events.BACK)
 
     # Main menu (PLAY, SETTINGS, ABOUT, EXIT)
-    main_menu = pygameMenu.Menu(screen,
-                                window_width=glob.WINDOW_SIZE[0] - 600,
-                                window_height=glob.WINDOW_SIZE[1] - 100,
-                                font=pygameMenu.font.FONT_FRANCHISE,
-                                title='STAR WARS MENU',
-                                bgfun=main_background,
-                                menu_width=glob.MENU_SIZE[0],
-                                menu_height=glob.MENU_SIZE[1]
-                                )
+    main_menu = menu_func()
     main_menu.add_option('Play', play_menu)
     main_menu.add_option('Settings', settings_menu)
     main_menu.add_option('About', about_menu)
