@@ -1,4 +1,4 @@
-### 2020_Star-Wars-Space-Battle-
+# 2020_Star-Wars-Space-Battle-
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7dfc38663a2546049731cd28bb9f8019)](https://app.codacy.com/gh/matf-pp/2020_Star-Wars-Space-Battle?utm_source=github.com&utm_medium=referral&utm_content=matf-pp/2020_Star-Wars-Space-Battle&utm_campaign=Badge_Grade_Dashboard)
 
