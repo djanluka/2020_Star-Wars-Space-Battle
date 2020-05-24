@@ -1,6 +1,6 @@
 from source import glob
 from source import gui
-import random
+
 import pygame
 
 class Player():
@@ -10,7 +10,7 @@ class Player():
         self.health = 100
         self.lives_number = 0
         self.image = glob.x_wing
-   
+
     def show_health(self):
         for i in range(self.lives_number):
             gui.screen.blit(glob.life_image, (150 + i*35, glob.WINDOW_SIZE[1]-40))
