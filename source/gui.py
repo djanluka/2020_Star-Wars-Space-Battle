@@ -14,8 +14,8 @@ pygame.display.set_caption('STAR WARS GAME')
 controls_submenu = None
 
 def main_background():
-        # Funckija koja iscrtava pozadinu dok je main(pause)_menu ukljucen
-    star_wars_logo = pygame.image.load('images/blue.jpg')   
+      # Funckija koja iscrtava pozadinu dok je main(pause)_menu ukljucen
+    star_wars_logo = pygame.image.load('images/blue.jpg')
     if star_wars_logo.get_rect(topleft=glob.START_WARS_LOGO_POS).collidepoint(pygame.mouse.get_pos()):
         star_wars_logo = pygame.image.load('images/yellow.png')
     else:
@@ -95,7 +95,7 @@ def text_menu_align_func():
     return pygameMenu.TextMenu(screen, window_width=glob.WINDOW_SIZE[0] - 600, window_height=glob.WINDOW_SIZE[1] - 100,font=pygameMenu.font.FONT_FRANCHISE,font_size=30,text_align=pygameMenu.locals.ALIGN_CENTER,title='STAR WARS MENU',bgfun=main_background,menu_width=glob.MENU_SIZE[0],menu_height=glob.MENU_SIZE[1])
 
 def set_settings_menu(controls_submenu):
-    settings_menu = menu_func() 
+    settings_menu = menu_func()
     settings_menu.add_selector('Sound volume',
                                [('50 %', '50_PERCENT'),
                                 ('70 %', '70_PERCENT'),
@@ -128,7 +128,7 @@ def set_controls_submenus():
     controls_submenu.add_line(glob.CONTROLS_TEXT[3])
     controls_submenu.add_option('Change controls', change_controls_submenu)
     controls_submenu.add_option('Back', pygameMenu.events.BACK)
-    
+
     return change_controls_submenu, controls_submenu
 
 def createPauseMenu():
@@ -136,7 +136,7 @@ def createPauseMenu():
     global pause_menu
 
     # Change_controls submenu
-    change_controls_submenu, controls_submenu = set_controls_submenus()
+    change_controls_submenu, _ = set_controls_submenus()
 
     # Settings menu(SOUND, CONTROLS)
     settings_menu = set_settings_menu(controls_submenu)
