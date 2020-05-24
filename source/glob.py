@@ -161,14 +161,12 @@ def check_enter_signal():
 def victory():
     gui.screen.blit(glob.stories[glob.LEVEL], (0, -40))
     pygame.display.update()
-
     check_enter_signal()
 
 # Iscrtavanje poraza od odgovarajuceg bossa
 def defeat():
     gui.screen.blit(glob.defeat_stories[glob.LEVEL-1], (0, -40))
     pygame.display.update()	
-
     check_enter_signal()
 
 def return_to_main_menu():
@@ -195,7 +193,7 @@ def make_star():
         enm_possitin(0, 100, -350+i)
     for i in [250, 300]:
         enm_possitin(0, 300, -350+i)
-       
+
     # T
     for i in range(5):
         enm_possitin(1, 383 + i*50, -350+50)
