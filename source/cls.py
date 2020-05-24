@@ -3,10 +3,9 @@ from source import gui
 import pygame
 
 class Player():
-    
+
     ''' Player class '''
     def __init__(self):
-        
         ''' Player constructor'''
         self.position_x = int(glob.WINDOW_SIZE[0]/2)
         self.position_y = int(glob.WINDOW_SIZE[1] - 120)
@@ -93,7 +92,6 @@ class Destroyer(pygame.sprite.Sprite):
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, enmType):
-        
         ''' Enemy constructor '''
         super().__init__()
         self.enmType = enmType
