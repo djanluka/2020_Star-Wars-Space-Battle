@@ -1,9 +1,10 @@
 from source import glob
 from source import gui
-
+import random
 import pygame
 
 class Player():
+    ''' Player class '''
     def __init__(self):
         self.position_x = int(glob.WINDOW_SIZE[0]/2)
         self.position_y = int(glob.WINDOW_SIZE[1] - 120)
@@ -16,8 +17,8 @@ class Player():
             gui.screen.blit(glob.life_image, (150 + i*35, glob.WINDOW_SIZE[1]-40))
 
         pygame.draw.rect(gui.screen, (200, 150, 0), (glob.WINDOW_SIZE[0]-400, glob.WINDOW_SIZE[1]-35, -self.health * 6, 20))
-    
-    def show(self):
+
+    def show_player(self):
         gui.screen.blit(self.image, (self.position_x, self.position_y))
 
 class twoPlayer():
@@ -36,7 +37,7 @@ class twoPlayer():
         if num_player == 1:
             pygame.draw.rect(gui.screen, (180, 0, 0), (20+64, glob.WINDOW_SIZE[1]-40, self.health * 4,20))
     
-    def show(self):
+    def show_players(self):
         gui.screen.blit(self.image, (self.position_x, self.position_y))
 
 class Rocket(pygame.sprite.Sprite):
@@ -49,7 +50,7 @@ class Rocket(pygame.sprite.Sprite):
         gui.screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def update(self):
-        self.rect.y -= 10
+        self.rect.y = self.rect.y - 10
         
 class leftRocket(pygame.sprite.Sprite):
     def __init__(self):
@@ -57,7 +58,7 @@ class leftRocket(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(glob.rocket, -90)
         self.rect = self.image.get_rect()
 
-    def show_rocket(self):
+    def show_left_rocket(self):
         gui.screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def update(self):
@@ -85,11 +86,11 @@ class Destroyer(pygame.sprite.Sprite):
         self.is_ready = False
         self.image = glob.destroyers[glob.LEVEL-1]
 
-    def show(self):
+    def show_destroyer(self):
         gui.screen.blit(self.image, (self.rect.x, self.rect.y))
 
-
 class Enemy(pygame.sprite.Sprite):
+    ''' Enemy class '''
     def __init__(self, enmType):
         super().__init__()
         self.enmType = enmType
@@ -115,24 +116,24 @@ class BulletEnemy(pygame.sprite.Sprite):
         self.direction[0] = (player_pos_x - self.rect.x) / intensity + 0.1
         self.direction[1] = (player_pos_y - self.rect.y) / intensity + 0.1
 
-        dir = self.direction[0]
-        if 0.1 <= dir and dir <= 0.2:
+        direct = self.direction[0]
+        if 0.1 <= direct and direct <= 0.2:
             self.image = pygame.transform.rotate(self.image, 8)
-        elif 0.2 < dir and dir <= 0.4:
+        elif 0.2 < direct and direct <= 0.4:
             self.image = pygame.transform.rotate(self.image, 18)
-        elif 0.4 < dir and dir <= 0.6:
+        elif 0.4 < direct and direct <= 0.6:
             self.image = pygame.transform.rotate(self.image, 30)
-        elif 0.6 < dir and dir <= 0.8:
+        elif 0.6 < direct and direct <= 0.8:
             self.image = pygame.transform.rotate(self.image, 45)
         elif dir > 0.8:
             self.image = pygame.transform.rotate(self.image, 55)
-        elif -0.2 < dir and dir <= 0.1:
+        elif -0.2 < direct and direct <= 0.1:
             self.image = pygame.transform.rotate(self.image, -8)
-        elif -0.4 <= dir and dir < -0.2:
+        elif -0.4 <= direct and direct < -0.2:
             self.image = pygame.transform.rotate(self.image, -18)
-        elif -0.6 <= dir and dir < -0.4:
+        elif -0.6 <= direct and direct < -0.4:
             self.image = pygame.transform.rotate(self.image, -30)
-        elif -0.8 <= dir and dir < -0.6 :
+        elif -0.8 <= direct and direct < -0.6 :
             self.image = pygame.transform.rotate(self.image, -45)
         elif dir < -0.8:
             self.image = pygame.transform.rotate(self.image, -55)
