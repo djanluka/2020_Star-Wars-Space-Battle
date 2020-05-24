@@ -109,7 +109,7 @@ def check_rocket_to_enemise_collide():
 def draw_player():
 
     if player.health > 0:
-        player.show()
+        player.show_player()
         player.show_health()
     else:
         if player.lives_number >= 0:
@@ -133,7 +133,7 @@ def draw_destroyer():
     health = font.render('Health:', 1, color)
 
     if destroyer.health > 0:
-        destroyer.show()
+        destroyer.show_destroyer()
         if timer_destroyer > 1000:
             pygame.draw.rect(gui.screen, (40, 40, 40), (0,10,glob.WINDOW_SIZE[0], 30))
             gui.screen.blit(glob.bosses[glob.LEVEL], (10,0))
@@ -203,7 +203,6 @@ def set_hidden_enemys():
 
 
 def enemies_fire_to_player():
-    
     #Ako nema neprijatelja ne pucamo
     if glob.ENEMIES_IS_READY is False or player.health <= 0:
         glob.bullets_enm_list.draw(gui.screen)
@@ -433,17 +432,17 @@ def fight_6():
 
 
 direction = ['left', 'right', 'circle']
-iter = 0
-dir = ''
+iterat = 0
+direct= ''
 circle_step = 1
 def fight_7():
 
-    global game_timer, direction, dir, iter, circle_step, hidden_enemy
+    global game_timer, direction, direct,iterat, circle_step, hidden_enemy
     if game_timer % 300 == 0:
         circle_step *= (-1)
     if game_timer % 1200 == 0:
-        dir = direction[iter]
-        iter = (iter + 1) % len(direction)
+        direct= direction[iterat]
+        iterat = (iterat + 1) % len(direction)
 
     for enm in glob.enemies_list:
         if game_timer < 500:
@@ -451,21 +450,21 @@ def fight_7():
         else:
             glob.ENEMIES_IS_READY = True
 
-        if dir == 'left':
+        if direct== 'left':
             enm.rect.x = (enm.rect.x - 10) % glob.WINDOW_SIZE[0]
-        elif dir == 'right':
+        elif direct== 'right':
             enm.rect.x = (enm.rect.x + 10) % glob.WINDOW_SIZE[0]
-        elif dir == 'circle':
+        elif direct== 'circle':
             enm.rect.y -= (7 * circle_step)
 
 def fight_8():
 
-    global game_timer, direction, dir, iter, circle_step, hidden_enemy
+    global game_timer, direction, direct, iterat, circle_step, hidden_enemy
     if game_timer % 300 == 0:
         circle_step *= (-1)
     if game_timer % 1200 == 0:
-        dir = direction[iter]
-        iter = (iter + 1) % len(direction)
+        direct= direction[iterat]
+        iterat = (iterat + 1) % len(direction)
 
     for enm in glob.enemies_list:
         if game_timer < 500:
@@ -473,22 +472,22 @@ def fight_8():
         else:
             glob.ENEMIES_IS_READY = True
 
-        if dir == 'left':
+        if direct== 'left':
             enm.rect.x = (enm.rect.x - 10) % glob.WINDOW_SIZE[0]
-        elif dir == 'right':
+        elif direct== 'right':
             enm.rect.x = (enm.rect.x + 10) % glob.WINDOW_SIZE[0]
-        elif dir == 'circle':
+        elif direct== 'circle':
             enm.rect.y -= (7 * circle_step)
 
 
 def fight_9():
 
-    global game_timer, direction, dir, iter, circle_step, hidden_enemy, timer_hidden
+    global game_timer, direction, direct, iterat, circle_step, hidden_enemy, timer_hidden
     if game_timer % 300 == 0:
         circle_step *= (-1)
     if game_timer % 1200 == 0:
-        dir = direction[iter]
-        iter = (iter + 1) % len(direction)
+        direct= direction[iterat]
+        iterat = (iterat + 1) % len(direction)
 
     if (game_timer % 200) < 180 :
         hidden_enemy = True
@@ -501,12 +500,12 @@ def fight_9():
         else:
             glob.ENEMIES_IS_READY = True
 
-        if dir == 'left':
+        if direct== 'left':
             #timer_hidden = -10
             enm.rect.x = (enm.rect.x - 10) % glob.WINDOW_SIZE[0]
-        elif dir == 'right':
+        elif direct== 'right':
             enm.rect.x = (enm.rect.x + 10) % glob.WINDOW_SIZE[0]
-        elif dir == 'circle':
+        elif direct== 'circle':
             enm.rect.y -= (7 * circle_step)
 
 

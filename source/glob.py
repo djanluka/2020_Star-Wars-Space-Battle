@@ -166,7 +166,7 @@ def victory():
 # Iscrtavanje poraza od odgovarajuceg bossa
 def defeat():
     gui.screen.blit(glob.defeat_stories[glob.LEVEL-1], (0, -40))
-    pygame.display.update()	
+    pygame.display.update()
     check_enter_signal()
 
 def return_to_main_menu():

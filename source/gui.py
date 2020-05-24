@@ -136,7 +136,7 @@ def createPauseMenu():
     global pause_menu
 
     # Change_controls submenu
-    _, _ = set_controls_submenus()
+    _, controls_submenu = set_controls_submenus()
 
     # Settings menu(SOUND, CONTROLS)
     settings_menu = set_settings_menu(controls_submenu)

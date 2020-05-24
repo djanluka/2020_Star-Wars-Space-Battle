@@ -3,10 +3,7 @@ from source import gui
 import pygame
 
 class Player():
-
-    ''' Player class '''
     def __init__(self):
-        ''' Player constructor'''
         self.position_x = int(glob.WINDOW_SIZE[0]/2)
         self.position_y = int(glob.WINDOW_SIZE[1] - 120)
         self.health = 100
@@ -71,7 +68,7 @@ class rightRocket(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(glob.rocket, 90)
         self.rect = self.image.get_rect()
 
-    def show_rocket(self):
+    def show_right_rocket(self):
         gui.screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def update(self):
@@ -92,7 +89,6 @@ class Destroyer(pygame.sprite.Sprite):
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, enmType):
-        ''' Enemy constructor '''
         super().__init__()
         self.enmType = enmType
         self.image = pygame.transform.scale(glob.fighters[enmType], (50,50))
@@ -105,6 +101,10 @@ class Enemy(pygame.sprite.Sprite):
     def show(self):
         if not self.hidden:
             gui.screen.blit(self.image, (self.rect.x, self.rect.y))
+
+def move_bullet_update(self):
+    self.rect.x += self.direction[0] * 10
+    self.rect.y += self.direction[1] * 10
 
 class BulletEnemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -140,13 +140,11 @@ class BulletEnemy(pygame.sprite.Sprite):
             self.image = pygame.transform.rotate(self.image, -55)
 
 
-    def show_rocket(self, rocket):
+    def show_bullet(self, rocket):
         gui.screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def update(self):
-        self.rect.x += self.direction[0] * 10
-        self.rect.y += self.direction[1] * 10
-
+        move_bullet_update(self)
 
 class BulletDestroyer(pygame.sprite.Sprite):
     def __init__(self):
@@ -156,13 +154,11 @@ class BulletDestroyer(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.direction = [0, 1]
 
-    def show_rocket(self, rocket):
+    def show_destroyer_rocket(self, rocket):
         gui.screen.blit(rocket, (self.rect.x, self.rect.y))
 
     def update(self):
-        self.rect.x += self.direction[0] * 10
-        self.rect.y += self.direction[1] * 10
-
+        move_bullet_update(self)
 
 class Controler():
     def __init__(self):

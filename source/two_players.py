@@ -136,7 +136,7 @@ def check_menu_events():
 
 
 def draw_player(player, num_player):
-    player.show()
+    player.show_players()
     player.show_health(num_player)
 
 
@@ -145,7 +145,6 @@ def init_players():
     global player1, player2, end_game
 
     end_game = False
-    
     player1 = cls.twoPlayer()
     player1.position_x = 50
     player1.position_y = glob.WINDOW_SIZE[1] / 2
@@ -242,7 +241,7 @@ def check_rocket_collide():
     global player1, player2
 
     for bullet in glob.left_rockets_list:
-        bullet.show_rocket()
+        bullet.show_left_rocket()
         if bullet.rect.x in range(int(player2.position_x), int(player2.position_x + 64)):
             if bullet.rect.y in range(int(player2.position_y), int(player2.position_y + 64)):
                 glob.left_rockets_list.remove(bullet)
@@ -254,7 +253,7 @@ def check_rocket_collide():
             glob.all_sprites_list.remove(bullet)
 
     for bullet in glob.right_rockets_list:
-        bullet.show_rocket()
+        bullet.show_right_rocket()
         if bullet.rect.x in range(int(player1.position_x), int(player1.position_x + 64)):
             if bullet.rect.y in range(int(player1.position_y), int(player1.position_y + 64)):
                 glob.right_rockets_list.remove(bullet)
@@ -271,11 +270,11 @@ def show_winner(ind):
         # U zavisnisti od indikatora prikazujemo pobednika u partiji
     if ind == 1 :
         gui.screen.blit(PLAYER_1_IMG_256px[NUM_IMG_PLAYER1], (310, 222))
-    elif ind == 2 :    
+    elif ind == 2:
         gui.screen.blit(PLAYER_2_IMG_256px[NUM_IMG_PLAYER2], (734, 222))
     else :
         print("Wrong player coefficient")
-        
+
     font = pygame.font.Font('freesansbold.ttf',115)
     TextSurf = font.render("WINNER", True,(180,150,0))
     TextRect = TextSurf.get_rect()
@@ -296,7 +295,7 @@ def start_game_two_player():
 
     while True:
         game_timer += 3
-        
+
             # Prover desavanja u meniju
         check_menu_events()
             # Ako je u pause meniju ne izvrsava ostatak koda
