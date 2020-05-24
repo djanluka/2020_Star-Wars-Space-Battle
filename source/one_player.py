@@ -18,7 +18,7 @@ timer_hidden = 0
 hidden_enemy = None
 
 def check_menu_events():
-    
+
     events = pygame.event.get()
     for e in events:
         if e.type == pygame.QUIT:
@@ -57,7 +57,7 @@ def check_player_events():
     burst_fire += 1
 
     if pressed[cont.Fire] and (glob.ENEMIES_IS_READY or destroyer.is_ready):
-        # Metak se ispaljuje u svakom 20-tom ciklusu 
+        # Metak se ispaljuje u svakom 20-tom ciklusu
         # Promenio na 2 da bi se brze prelazila igrica tokom testiranja
         if burst_fire > 2:
             # Zvuk pri ispaljivanju metaka
@@ -73,7 +73,7 @@ def check_player_events():
             burst_fire = 0
 
 def check_rocket_to_enemise_collide():
-    global destroyer, timer_hidden, hidden_enemy, enemies
+    global destroyer, timer_hidden, hidden_enemy
 
     for r in glob.rockets_list:
         r.show_rocket()
@@ -298,7 +298,7 @@ def make_enemies1(number):
     num = glob.num_enemies[1][glob.FIGHT]
 
     for i in range(1, 5):
-        for n in range(1, num):
+        for _ in range(1, num):
             enm = cls.Enemy(i-1)
             glob.enemies[enm.enmType] += 1
             enm.rect.y = -(30 * i + 40 * (i-1))-100
@@ -376,7 +376,7 @@ def fight_4():
     else:
         glob.ENEMIES_IS_READY = True
 
-    global enemies
+    #global enemies
     enms = [0, 0, 0, 0]
     r = 100
     for enm in glob.enemies_list:
@@ -619,11 +619,11 @@ def start_game_one_player():
         # Funkcija za proveru dogadjaja u meniju
         check_menu_events()
         # U narednih nekoliko linija se prebacuje mod igre u menu mode
-        if gui.pause_menu.is_enabled(): 
+        if gui.pause_menu.is_enabled():
             pygame.display.update()
             continue
         # Ako ukljucimo glavni meni, pocinjemo novu partiju
-        if gui.main_menu.is_enabled(): 
+        if gui.main_menu.is_enabled():
             glob.LEVEL = 1
             pygame.display.update()
             return
@@ -644,7 +644,7 @@ def start_game_one_player():
                     if e.key == pygame.K_RETURN:
                         pressed_enter = True
             gui.screen.blit(glob.stories[glob.LEVEL], (0, -40))
-            pygame.display.update() 
+            pygame.display.update()
             
             if not pressed_enter:
                 game_timer = 0
