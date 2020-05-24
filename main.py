@@ -3,7 +3,7 @@ from source import gui
 from source import glob
 import pygame
 
-def main():  
+def main():
     pygame.init()
     gui.play()
 
