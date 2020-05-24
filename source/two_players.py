@@ -3,8 +3,8 @@ from source import gui
 from source import glob
 from pygame import mixer
 import pygame
-import math
-import random
+
+
 
 player1 = None
 player2 = None
@@ -112,7 +112,7 @@ def choose_players():
                         return
 
         pygame.display.update()
-   
+
 
 def check_menu_events():
     events = pygame.event.get()
@@ -269,9 +269,9 @@ def check_rocket_collide():
 def show_winner(ind):
 
         # U zavisnisti od indikatora prikazujemo pobednika u partiji
-    if ind is 1 :
+    if ind == 1 :
         gui.screen.blit(PLAYER_1_IMG_256px[NUM_IMG_PLAYER1], (310, 222))
-    elif ind is 2 :    
+    elif ind == 2 :    
         gui.screen.blit(PLAYER_2_IMG_256px[NUM_IMG_PLAYER2], (734, 222))
     else :
         print("Wrong player coefficient")
@@ -289,9 +289,9 @@ def start_game_two_player():
     choose_players()
     init_players()
 
-    game_timer = 0  
-    burst_fire1 = 0  
-    burst_fire2 = 0  
+    game_timer = 0
+    burst_fire1 = 0
+    burst_fire2 = 0
     winner = 0
 
     while True:
@@ -300,11 +300,11 @@ def start_game_two_player():
             # Prover desavanja u meniju
         check_menu_events()
             # Ako je u pause meniju ne izvrsava ostatak koda
-        if gui.pause_menu.is_enabled(): 
+        if gui.pause_menu.is_enabled():
             pygame.display.update()
             continue
             # Ako je u glavnom meniju zavrsava funkciju
-        if gui.main_menu.is_enabled(): 
+        if gui.main_menu.is_enabled():
             pygame.display.update()
             return
 
@@ -317,20 +317,20 @@ def start_game_two_player():
             # Izvrsavanje kretanja i pucanja prema komandama igraca
         burst_fire1, burst_fire2 = check_player_events(burst_fire1, burst_fire2, game_timer)
             
-            # Provera pogotka izmedju igraca 
+            # Provera pogotka izmedju igraca
         check_rocket_collide()
         
             # Ovde se proverava da li je neki od igraca porazen i ako jeste
             # postavlja se parametar kraja igre na True sto oznacava kraj partije
         if player1.health > 0 and not end_game :
             draw_player(player1, 1)
-        elif winner is 0:
+        elif winner == 0:
             winner = 2
             end_game = True
 
         if player2.health > 0 and not end_game:
             draw_player(player2, 2)
-        elif winner is 0:
+        elif winner == 0:
             winner = 1
             end_game = True
 
