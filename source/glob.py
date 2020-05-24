@@ -145,46 +145,31 @@ rocket = pygame.image.load('images/rocket_player.png')
 life_image = pygame.transform.scale(x_wing, (25,25))
 blue_sw = pygame.image.load('images/blue.jpg')
 
-#prikazivanje pobednickog storija
+def check_enter_signal():
+    pressed_enter = False
+    while not pressed_enter:
+        events = pygame.event.get()
+        for e in events:
+            if e.type == pygame.KEYDOWN:
+                if e.key == pygame.K_RETURN:
+                    pressed_enter = True
+                    break
+
+    return_to_main_menu()
+
+# Prikazivanje pobednickog storija
 def victory():
+    gui.screen.blit(glob.stories[glob.LEVEL], (0, -40))
+    pygame.display.update()
 
-	pressed_enter = False
+    check_enter_signal()
 
-	gui.screen.blit(glob.stories[glob.LEVEL], (0, -40))
-	pygame.display.update()
-
-	
-	while not pressed_enter:
-		events = pygame.event.get()
-		for e in events:
-	            if e.type == pygame.KEYDOWN:
-	                if e.key == pygame.K_RETURN:
-	                    pressed_enter = True
-	                    break
-
-	return_to_main_menu()
-
-
-#iscrtavanje poraza od odgovarajuceg bossa
+# Iscrtavanje poraza od odgovarajuceg bossa
 def defeat():
+    gui.screen.blit(glob.defeat_stories[glob.LEVEL-1], (0, -40))
+    pygame.display.update()	
 
-	pressed_enter = False
-
-	gui.screen.blit(glob.defeat_stories[glob.LEVEL-1], (0, -40))
-	pygame.display.update()
-
-	
-	while not pressed_enter:
-		events = pygame.event.get()
-		for e in events:
-	            if e.type == pygame.KEYDOWN:
-	                if e.key == pygame.K_RETURN:
-	                    pressed_enter = True
-	                    break
-
-	return_to_main_menu()
-
-
+    check_enter_signal()
 
 def return_to_main_menu():
     mixer.music.stop()
@@ -193,337 +178,121 @@ def return_to_main_menu():
     mixer.music.play(-1)
     mixer.music.set_volume(glob.MENU_VOLUME)
 
-def make_star():
+def enm_possitin(enm_type, x, y):
+    enm = cls.Enemy(enm_type)
+    glob.enemies[enm.enmType] += 1
+    enm.rect.x = x
+    enm.rect.y = y
+    glob.enemies_list.add(enm)
+    glob.all_sprites_list.add(enm)
 
-    '''
-    S
-    '''
+def make_star():
+    # S
     for i in [50, 200, 350]:
         for n in range(5):
-            enm = cls.Enemy(0)
-            glob.enemies[enm.enmType] += 1
-            enm.rect.x = 100 + 50*n
-            enm.rect.y = -350 + i
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
+            enm_possitin(0, 100+50*n, -350+i)
     for i in [100, 150]:
-        enm = cls.Enemy(0)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 100
-        enm.rect.y = -350 + i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(0, 100, -350+i)
     for i in [250, 300]:
-        enm = cls.Enemy(0)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 300
-        enm.rect.y = -350 + i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
-
-    '''
-    T
-    '''
+        enm_possitin(0, 300, -350+i)
+       
+    # T
     for i in range(5):
-        enm = cls.Enemy(1)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 383 + i*50
-        enm.rect.y = -350 + 50
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(1, 383 + i*50, -350+50)
     for i in range(12):
-        enm = cls.Enemy(1)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 483
-        enm.rect.y = -350 + 75 + i*25
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(1, 483, -350 + 75 + i*25)
 
-    '''
-    A
-    '''
+    # A
     for i in [666, 866]:
         for n in range(7):
-            enm = cls.Enemy(2)
-            glob.enemies[enm.enmType] += 1
-            enm.rect.x = i
-            enm.rect.y = -350 + 50 + n*50
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
+            enm_possitin(2, i, -350 + 50 + n*50)
     for i in [50, 200]:
         for n in range(1, 4):
-            enm = cls.Enemy(2)
-            glob.enemies[enm.enmType] += 1
-            enm.rect.x = 666 + n*50
-            enm.rect.y = -350 + i
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
+            enm_possitin(2, 666 + n*50, -350 + i)
 
-    '''
-    R
-    '''
+    # R
     for i in range(7):
-        enm = cls.Enemy(3)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 949
-        enm.rect.y = -350 + 50 + 50*i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(3, 949, -350 + 50 + 50*i)
     for i in [50, 200]:
         for n in range(1, 5):
-            enm = cls.Enemy(3)
-            glob.enemies[enm.enmType] += 1
-            enm.rect.x = 949 + 50*n
-            enm.rect.y = -350 + i
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
+            enm_possitin(3, 949 + 50*n, -350 +i)
     for i in range(2):
-        enm = cls.Enemy(3)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 1149
-        enm.rect.y = -350 + 100 + 50*i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(3, 1149, -250 + 50*i)
     for i in range(3):
-        enm = cls.Enemy(3)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 999 + 50 * i
-        enm.rect.y = -350 + 250 + 50 * i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(3, 999 + 50*i, -100 + 50*i)
 
-    enm = cls.Enemy(3)
-    glob.enemies[enm.enmType] += 1
-    enm.rect.x = 1149
-    enm.rect.y = -350 + 350
-    glob.enemies_list.add(enm)
-    glob.all_sprites_list.add(enm)
+    enm_possitin(3, 1149, 0)
 
 def make_wars():
-    '''
-    W
-    '''
+    # W
     for i in [100, 300]:
         for n in range(7):
-            enm = cls.Enemy(3)
-            glob.enemies[enm.enmType] += 1
-            enm.rect.x = i
-            enm.rect.y = -350 + 50 + n*50
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
-    enm = cls.Enemy(3)
-    glob.enemies[enm.enmType] += 1
-    enm.rect.x = 200
-    enm.rect.y = -350 + 225
-    glob.enemies_list.add(enm)
-    glob.all_sprites_list.add(enm)
-
+            enm_possitin(3, i, -300 + 50*n)
+    enm_possitin(3, 200, 225 - 350)
     for i in [150, 250]:
-        enm = cls.Enemy(3)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = i
-        enm.rect.y = -350 + 325
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
-
+        enm_possitin(3, i, -350 + 225)
     for i in [170, 230]:
-        enm = cls.Enemy(3)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = i
-        enm.rect.y = -350 + 275
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(3, i, -350 + 275)
 
-    '''
-    A
-    '''
+    # A
     for i in [383, 583]:
         for n in range(7):
-            enm = cls.Enemy(2)
-            glob.enemies[enm.enmType] += 1
-            enm.rect.x = i
-            enm.rect.y = -350 + 50 + n*50
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
+            enm_possitin(2, i, -350 + 50 + n*50)
     for i in [50, 200]:
         for n in range(1, 4):
-            enm = cls.Enemy(2)
-            glob.enemies[enm.enmType] += 1
-            enm.rect.x = 383 + n*50
-            enm.rect.y = -350 + i
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
+            enm_possitin(2, 383 + n*50, -350 + i)
 
-    '''
-    R
-    '''
+    # R
     for i in range(7):
-        enm = cls.Enemy(1)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 666
-        enm.rect.y = -350 + 50 + 50 * i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(1, 666, -300 + 50*i)
     for i in [50, 200]:
         for n in range(1, 5):
-            enm = cls.Enemy(1)
-            glob.enemies[enm.enmType] += 1
-            enm.rect.x = 666 + 50 * n
-            enm.rect.y = -350 + i
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
+            enm_possitin(1, 666 + 50*n, -350 + i)
     for i in range(2):
-        enm = cls.Enemy(1)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 866
-        enm.rect.y = -350 + 100 + 50 * i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(1, 866 , -250 + 50*i)
     for i in range(3):
-        enm = cls.Enemy(1)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 716 + 50 * i
-        enm.rect.y = -350 + 250 + 50 * i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(1, 716 + 50*i , -100 + 50*i)
 
-    enm = cls.Enemy(1)
-    glob.enemies[enm.enmType] += 1
-    enm.rect.x = 866
-    enm.rect.y = -350 + 350
-    glob.enemies_list.add(enm)
-    glob.all_sprites_list.add(enm)
+    enm_possitin(1, 866 , 0)
 
-    '''
-    S
-    '''
+    # S
     for i in [50, 200, 350]:
         for n in range(5):
-            enm = cls.Enemy(0)
-            glob.enemies[enm.enmType] += 1
-            enm.rect.x = 949 + 50*n
-            enm.rect.y = -350 + i
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
+            enm_possitin(0, 949 + 50*n , -350 + i)
     for i in [100, 150]:
-        enm = cls.Enemy(0)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 949
-        enm.rect.y = -350 + i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(0, 949 , -350 + i)
     for i in [250, 300]:
-        enm = cls.Enemy(0)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 1149
-        enm.rect.y = -350 + i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
-
+        enm_possitin(0, 1149 , -350 + i)
 
 def make_end():
-
-    '''
-    E
-    '''
+    # E
     for i in range(7):
-        enm = cls.Enemy(2)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 100
-        enm.rect.y = -350 + 50 + 50 * i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(2, 100 , -300 + 50*i)
     for i in [50, 200, 350]:
         for n in range(4):
-            enm = cls.Enemy(2)
-            glob.enemies[enm.enmType] += 1
-            enm.rect.x = 150 + 50*n
-            enm.rect.y = -350 + i
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
-
-    '''
-    N
-    '''
+            enm_possitin(2, 150 + n*50 , -350 + i)
+    # N
     for i in [383, 583]:
         for n in range(7):
-            enm = cls.Enemy(3)
-            glob.enemies[enm.enmType] += 1
-            enm.rect.x = i
-            enm.rect.y = -350 + 50 + n*50
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
+            enm_possitin(3, i , -300 + n*50)
     for i in range(5):
-        enm = cls.Enemy(3)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 433 + 25*i
-        enm.rect.y = -350 + 150 + i * 25
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
-
-    '''
-    D
-    '''
+        enm_possitin(3, 433 + 25*i , -200 + 25*i)
+    # D
     for i in range(7):
-        enm = cls.Enemy(0)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 666
-        enm.rect.y = -350 + 50 + 50 * i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(0, 666 , -300 + 50*i)
     for i in range(4):
-        enm = cls.Enemy(0)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 866
-        enm.rect.y = -350 + 125 + 50 * i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(0, 866 , -175 + 50 * i)
     for i in range(4):
-        enm = cls.Enemy(0)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 716 + 50*i
-        enm.rect.y = -350 + 60 + 10 * i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(0, 716 + 50*i , -290 + 10 * i)
     for i in range(4):
-        enm = cls.Enemy(0)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 716 + 50 * i
-        enm.rect.y = -350 + 340 - 10 * i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
-
-    '''
-    !
-    '''
+        enm_possitin(0, 716 + 50*i , -10 + 10 * i)
+    # !
     for i in range(5):
-        enm = cls.Enemy(1)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 949 + 50 * i
-        enm.rect.y = -350 + 50
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(1, 949 + 50 * i, -300)
     for i in range(5):
-        enm = cls.Enemy(1)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 949 + 25 * i
-        enm.rect.y = -350 + 50 + 50*i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(1, 949 + 25 * i, -300 + 50 * i)
     for i in range(5):
-        enm = cls.Enemy(1)
-        glob.enemies[enm.enmType] += 1
-        enm.rect.x = 949+200 - 25 * i
-        enm.rect.y = -350 + 50 + 50*i
-        glob.enemies_list.add(enm)
-        glob.all_sprites_list.add(enm)
+        enm_possitin(1, 1149 - 25 * i, -300 + 50 * i)
     for i in [949+75, 949+75+50]:
         for n in [325, 350]:
-            enm = cls.Enemy(1)
-            glob.enemies[enm.enmType] += 1
-            enm.rect.x = i
-            enm.rect.y = -350 + n
-            glob.enemies_list.add(enm)
-            glob.all_sprites_list.add(enm)
-
-
+            enm_possitin(1, i, -350 + n)
