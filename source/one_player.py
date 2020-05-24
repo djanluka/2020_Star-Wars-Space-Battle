@@ -144,7 +144,7 @@ def draw_destroyer():
 
             #iscrtavanje pred-bossovskog storija i cekanje na ENTER
             pressed_enter = False
-      
+
             while not pressed_enter and not destroyer.is_ready:
                 gui.screen.blit(glob.boss_stories[glob.LEVEL-1], (0, -40))
                 pygame.display.update()
@@ -298,7 +298,7 @@ def make_enemies1(number):
     num = glob.num_enemies[1][glob.FIGHT]
 
     for i in range(1, 5):
-        for _ in range(1, num):
+        for n in range(1, num):
             enm = cls.Enemy(i-1)
             glob.enemies[enm.enmType] += 1
             enm.rect.y = -(30 * i + 40 * (i-1))-100
