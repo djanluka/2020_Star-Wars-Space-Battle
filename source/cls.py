@@ -1,11 +1,13 @@
 from source import glob
 from source import gui
-import random
 import pygame
 
 class Player():
+    
     ''' Player class '''
     def __init__(self):
+        
+        ''' Player constructor'''
         self.position_x = int(glob.WINDOW_SIZE[0]/2)
         self.position_y = int(glob.WINDOW_SIZE[1] - 120)
         self.health = 100
@@ -27,7 +29,7 @@ class twoPlayer():
         self.position_y = int(glob.WINDOW_SIZE[1] - 120)
         self.health = 100
         self.image = glob.x_wing
-   
+
     def show_health(self, num_player):
         if gui.main_menu.is_enabled() or gui.pause_menu.is_enabled():
             return None
@@ -90,8 +92,9 @@ class Destroyer(pygame.sprite.Sprite):
         gui.screen.blit(self.image, (self.rect.x, self.rect.y))
 
 class Enemy(pygame.sprite.Sprite):
-    ''' Enemy class '''
     def __init__(self, enmType):
+        
+        ''' Enemy constructor '''
         super().__init__()
         self.enmType = enmType
         self.image = pygame.transform.scale(glob.fighters[enmType], (50,50))
@@ -125,7 +128,7 @@ class BulletEnemy(pygame.sprite.Sprite):
             self.image = pygame.transform.rotate(self.image, 30)
         elif 0.6 < direct and direct <= 0.8:
             self.image = pygame.transform.rotate(self.image, 45)
-        elif dir > 0.8:
+        elif direct > 0.8:
             self.image = pygame.transform.rotate(self.image, 55)
         elif -0.2 < direct and direct <= 0.1:
             self.image = pygame.transform.rotate(self.image, -8)
@@ -135,7 +138,7 @@ class BulletEnemy(pygame.sprite.Sprite):
             self.image = pygame.transform.rotate(self.image, -30)
         elif -0.8 <= direct and direct < -0.6 :
             self.image = pygame.transform.rotate(self.image, -45)
-        elif dir < -0.8:
+        elif direct < -0.8:
             self.image = pygame.transform.rotate(self.image, -55)
 
 
