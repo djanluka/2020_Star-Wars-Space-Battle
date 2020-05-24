@@ -126,7 +126,7 @@ def draw_destroyer():
     timer_destroyer += 3
     destroyer.rect.x = glob.WINDOW_SIZE[0] / 2 - 64
     destroyer.rect.y = (int(timer_destroyer / 5) - 240 if timer_destroyer < 1400 else 40)
-    
+
     color = (255,120,0)
     font = pygameMenu.font.get_font(pygameMenu.font.FONT_PT_SERIF, 30)
     name = font.render(glob.boss_name[glob.LEVEL], 1, color)
@@ -311,7 +311,7 @@ def make_enemies2(number):
    
     num = int(glob.num_enemies[2][glob.FIGHT] / 4)
     for i in range(1, 5):
-        for n in range(num):
+        for _ in range(num):
             enm = cls.Enemy(i-1)
             glob.enemies[enm.enmType] += 1
             glob.enemies_list.add(enm)
@@ -413,7 +413,7 @@ def fight_6():
     else:
         glob.ENEMIES_IS_READY = True
 
-    global enemies
+    #global enemies
     enms = [0, 0, 0, 0]
     r = 50
     param = game_timer / 100
