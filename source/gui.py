@@ -136,7 +136,7 @@ def createPauseMenu():
     global pause_menu
 
     # Change_controls submenu
-    change_controls_submenu, _ = set_controls_submenus()
+    _, _ = set_controls_submenus()
 
     # Settings menu(SOUND, CONTROLS)
     settings_menu = set_settings_menu(controls_submenu)
@@ -153,7 +153,7 @@ def createMenu():
     global controls_submenu
 
     # Change_controls submenu
-    change_controls_submenu, controls_submenu = set_controls_submenus()
+    _, controls_submenu = set_controls_submenus()
 
     # Play menu (START , 1/2 PLAYER, CONTROLS, BACK)
     play_menu = menu_func()
@@ -168,7 +168,7 @@ def createMenu():
 
     # Settings menu(SOUND, CONTROLS)
     settings_menu = set_settings_menu(controls_submenu)
-    
+
     # About menu
     about_menu = text_menu_func()
     for about in glob.ABOUT:
